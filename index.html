@@ -422,7 +422,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
         var x = Math.floor(c * cw + cw / 2), y = Math.floor(r * ch + ch / 2);
         if (data[(y * W + x) * 4 + 3] < 128) continue;
         var word = WORDS[wi % WORDS.length];
-        cells.push({ x: c * cw, y: r * ch + ch * 0.8, t: word[ci], hue: (data[(y * W + x) * 4] + 5) % 6, ox: 0, oy: 0, vx: 0, vy: 0, wait: Math.random() * 900, span: 700 + Math.random() * 800, sx: 0, sy: 0, jx: (Math.random() - 0.5) * cw * 0.9, jy: (Math.random() - 0.5) * ch * 0.7, rot: (Math.random() - 0.5) * 0.7, k: Math.random() < 0.18 ? 2 : Math.random() < 0.3 ? 0 : 1 });
+        cells.push({ x: c * cw, y: r * ch + ch * 0.8, t: word[ci], hue: (data[(y * W + x) * 4] + 5) % 6, ox: 0, oy: 0, vx: 0, vy: 0, wait: (c * 37 + r * 91) % 450, span: 1100, sx: 0, sy: 0, jx: 0, jy: 0, rot: 0, k: 1 });
         // Each letter starts out beyond the edge, on the line from the centre through its place.
         var cell = cells[cells.length - 1], turn = Math.atan2(y - H / 2, x - W / 2) + (((c * 17 + r * 29) % 60) - 30) / 100, far = Math.sqrt(CW * CW + CH * CH) * (1 + ((c * 7 + r * 13) % 40) / 100);
         cell.sx = Math.cos(turn) * far; cell.sy = Math.sin(turn) * far;
@@ -435,7 +435,6 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
     var hues = [1, 2, 3, 4, 5, 6].map(function (n) { return token('--word-' + n); }), t = now - start, moving = false, stirred = false;
     ctx.clearRect(-offX, -offY, CW, CH);
     ctx.textBaseline = 'alphabetic';
-    // Letters come in three sizes, each a little off its place and slightly turned, so the words look hand-set.
     var SCALE = [0.78, 1, 1.4], mono = token('--font-outlier');
     for (var k = 0; k < 3; k++) {
       ctx.font = '500 ' + fs * SCALE[k] + 'px ' + mono;
@@ -449,7 +448,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
         ctx.globalAlpha = e;
         ctx.fillStyle = hues[c.hue];
         ctx.setTransform(DPR, 0, 0, DPR, (offX + c.x + c.jx + (1 - e) * c.sx) * DPR, (offY + c.y + c.jy + (1 - e) * c.sy) * DPR);
-        ctx.rotate(c.rot + (1 - e) * 2.5);
+        
         ctx.fillText(c.t, 0, 0);
       }
     }
