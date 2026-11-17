@@ -131,6 +131,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 .items li{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,7fr);column-gap:var(--gap-columns);row-gap:0.125rem;align-items:baseline;padding-block:var(--space-sm)}
 .items .name{font-weight:600}
 .items .line{color:var(--color-ink-2)}
+.tag{display:inline-block;margin-left:var(--space-sm);padding:0 0.375rem;border:var(--rule-hair) solid var(--color-rule-2);font-size:0.75rem;color:var(--color-muted);vertical-align:0.1em;white-space:nowrap}
 .skills{margin:0 0 var(--space-2xl);display:flex;flex-direction:column;row-gap:0.3125rem}
 .skills ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:0.3125rem}
 .skills li{flex:1 1 auto;display:flex}
@@ -167,7 +168,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
   var W = 0, H = 0, fs = 0, cw = 0, ch = 0, cols = 0, rows = 0, zb, ib, kb, shades = [], hues = [], lights = [], snow = [];
   var raf = 0, ready = false, leaving = false, burst = null, t0 = performance.now(), stream = [], greet = [], gfs = 7, treeSize = 0;
   var GREETING = 'Miri Merry Christmas 2026';
-  var WORDS = ['InterviewPrepAgent', 'Python', 'StepsBeforeCrashes', 'FastAPI', 'OpenDuckMini', 'SolarPro', '3DDSGDroneNavigation', 'IsaacLab', 'DisasterLibraryWhitepaper', 'PPO', 'SigmaEngine', 'Claude', 'DeepReportPipeline', 'RaspberryPi', 'PaperReviewDeck', 'ROS2', 'CareerLog', 'Jetson', 'ObjectFinderBot', 'CLIP', 'LightGBM', 'PoissonGLM', 'IFC', 'BIM', 'ONNX', 'Codex', 'Java', 'SceneGraph', 'SpatialStatistics', 'PublicData'];
+  var WORDS = ['InterviewPrepAgent', 'Python', 'StepsBeforeCrashes', 'FastAPI', 'OpenDuckMini', 'SolarPro', '3DDSGDroneNavigation', 'IsaacLab', 'DisasterLibraryWhitepaper', 'PPO', 'SigmaEngine', 'Claude', 'DeepReportPipeline', 'RaspberryPi', 'PaperReviewDeck', 'ROS2', 'CareerLog', 'Jetson', 'ObjectFinderBot', 'CLIP', 'LightGBM', 'PoissonGLM', 'IFC', 'BIM', 'ONNX', 'Codex', 'Java', 'SceneGraph', 'SpatialStatistics', 'PublicData', 'BrandingInSeongsu', 'Revit', 'Pathfinder', 'FDS', 'EvacuationSimulation', 'DigitalMedia', 'Grasshopper', 'Rhino', 'QGIS', 'ThankYouPlaque', 'Illustrator', 'FirstWrongStep', 'FewShot', 'SymPy', 'SQLite', 'IbulAnbu', 'ImpactBridge', 'Enactus', 'PMDecisionMaking', 'PRD', 'DataEngineering', 'Docker', 'PostgreSQL'];
 
   function token(n) { return getComputedStyle(root).getPropertyValue(n).trim(); }
   function setup() {
@@ -322,7 +323,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 </div>
 </header>
 
-<section class="sec fade" aria-label="Projects">
+<section class="sec fade" id="work" aria-label="Projects">
 <div class="wrap">
 <ul class="groups">
 <li class="group"><span class="field">LLM systems</span><ul class="items">
@@ -335,11 +336,24 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 <li class="group"><span class="field">Data</span><ul class="items">
 <li><a class="name" href="https://github.com/isopink/steps-before-crashes">Steps Before Crashes</a><span class="line">The ten Seoul dongs to inspect first for elderly pedestrian crashes.</span></li>
 <li><a class="name" href="https://github.com/isopink/disaster-library-whitepaper">Disaster Library Whitepaper</a><span class="line">Old newspapers turned into disaster-prep handbooks for nearby libraries.</span></li>
+<li><a class="name" href="projects/data-engineering-fundamentals/">Fundamentals of Data Engineering</a><span class="line">A 16-week society course on Python, Docker, databases and Databricks.<span class="tag">Coursework</span></span></li>
+</ul></li>
+<li class="group"><span class="field">Startup</span><ul class="items">
+<li><a class="name" href="projects/first-wrong-step/">First wrong step</a><span class="line">Few-shot marking of handwritten CSAT math from the first wrong line.</span></li>
+<li><a class="name" href="projects/ibul-anbu/">Ibul Anbu</a><span class="line">In-home bedding pickup, wash and remake for older parents, paid by children.</span></li>
+<li><a class="name" href="projects/impact-bridge/">Impact Bridge</a><span class="line">Links social enterprises short on marketing staff with student marketing societies.</span></li>
+<li><a class="name" href="projects/pm-decision-making/">PM decision making</a><span class="line">A course on defining problems and scoping MVPs as a product manager.<span class="tag">Coursework</span></span></li>
 </ul></li>
 <li class="group"><span class="field">Robotics</span><ul class="items">
 <li><a class="name" href="https://github.com/isopink/open-duck-mini-v2">Open Duck Mini v2</a><span class="line">A 3D-printed biped that walks on a Raspberry Pi.</span></li>
 <li><a class="name" href="https://github.com/isopink/object-finder-bot">Object Finder Bot</a><span class="line">A course robot that finds a named object in a room.</span></li>
 <li><a class="name" href="https://github.com/isopink/3ddsg-drone-navigation">3DDSG Drone Navigation</a><span class="line">Indoor drone flight on a scene graph built from the building’s IFC model.</span></li>
+</ul></li>
+<li class="group"><span class="field">Architecture</span><ul class="items">
+<li><a class="name" href="projects/branding-in-seongsu/">Branding in Seongsu</a><span class="line">A shared leather craft hub for Seongsu-dong&#x27;s disappearing craftsmen.</span></li>
+<li><a class="name" href="projects/gangil-evacuation-simulation/">Gangil 4F evacuation simulation</a><span class="line">Smoke arrival against evacuation time on one civic building floor.</span></li>
+<li><a class="name" href="projects/digital-media-ii/">Digital Media II</a><span class="line">Course work from Rhino Python to a data-driven Seoul game board.</span></li>
+<li><a class="name" href="projects/thank-you-plaque/">Thank-you plaque</a><span class="line">A vertical plaque of thanks from students to their professor.</span></li>
 </ul></li>
 </ul>
 </div>
@@ -357,7 +371,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 
 <script>
 (function () {
-  var WORDS = ['InterviewPrepAgent', 'Python', 'StepsBeforeCrashes', 'FastAPI', 'OpenDuckMini', 'SolarPro', '3DDSGDroneNavigation', 'IsaacLab', 'DisasterLibraryWhitepaper', 'PPO', 'SigmaEngine', 'Claude', 'DeepReportPipeline', 'RaspberryPi', 'PaperReviewDeck', 'ROS2', 'CareerLog', 'Jetson', 'ObjectFinderBot', 'CLIP', 'LightGBM', 'PoissonGLM', 'IFC', 'BIM', 'ONNX', 'Codex', 'Java', 'SceneGraph', 'SpatialStatistics', 'PublicData'];
+  var WORDS = ['InterviewPrepAgent', 'Python', 'StepsBeforeCrashes', 'FastAPI', 'OpenDuckMini', 'SolarPro', '3DDSGDroneNavigation', 'IsaacLab', 'DisasterLibraryWhitepaper', 'PPO', 'SigmaEngine', 'Claude', 'DeepReportPipeline', 'RaspberryPi', 'PaperReviewDeck', 'ROS2', 'CareerLog', 'Jetson', 'ObjectFinderBot', 'CLIP', 'LightGBM', 'PoissonGLM', 'IFC', 'BIM', 'ONNX', 'Codex', 'Java', 'SceneGraph', 'SpatialStatistics', 'PublicData', 'BrandingInSeongsu', 'Revit', 'Pathfinder', 'FDS', 'EvacuationSimulation', 'DigitalMedia', 'Grasshopper', 'Rhino', 'QGIS', 'ThankYouPlaque', 'Illustrator', 'FirstWrongStep', 'FewShot', 'SymPy', 'SQLite', 'IbulAnbu', 'ImpactBridge', 'Enactus', 'PMDecisionMaking', 'PRD', 'DataEngineering', 'Docker', 'PostgreSQL'];
   var canvas = document.getElementById('mark');
   var ctx = canvas.getContext('2d'), mark = canvas.parentElement, offX = 0, offY = 0, CW = 0, CH = 0;
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

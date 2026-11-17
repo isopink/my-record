@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Digital Media II</title>
+<meta name="description" content="Course work from Rhino Python to a data-driven Seoul game board.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{
+--color-paper:oklch(13% 0.004 250);--color-paper-2:oklch(18% 0.005 250);
+--color-ink:oklch(96% 0.003 250);--color-ink-2:oklch(86% 0.004 250);--color-muted:oklch(72% 0.005 250);
+--color-rule:oklch(96% 0.003 250 / 0.9);--color-rule-2:oklch(96% 0.003 250 / 0.2);
+--color-accent-ink:oklch(13% 0.004 250);--color-focus:oklch(96% 0.003 250);
+--font-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;--font-mono:"IBM Plex Mono",ui-monospace,monospace;
+--text-display:clamp(2.25rem,5vw,4rem);--text-section:clamp(1.5rem,2.4vw,2rem);--text-lead:1.25rem;--text-md:1rem;--text-sm:0.875rem;
+--space-xs:0.5rem;--space-sm:0.75rem;--space-md:1rem;--space-lg:1.5rem;--space-xl:2rem;--space-2xl:3rem;--space-3xl:4.5rem;
+--container:72rem;--gutter:clamp(1rem,4.4vw,4rem);
+color-scheme:dark;
+}
+html,body{overflow-x:clip}
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-paper);color:var(--color-ink);font-family:var(--font-body);font-size:var(--text-md);line-height:1.6}
+a{color:var(--color-ink);text-decoration-thickness:1px;text-underline-offset:0.2em}
+a:hover{text-decoration-color:transparent}
+a:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
+::selection{background:var(--color-ink);color:var(--color-accent-ink)}
+.wrap{max-width:var(--container);margin-inline:auto;padding-left:max(var(--gutter),env(safe-area-inset-left,0px));padding-right:max(var(--gutter),env(safe-area-inset-right,0px))}
+.top{padding-block:var(--space-xl) var(--space-2xl);display:flex;flex-direction:column;align-items:flex-start;row-gap:var(--space-md)}
+.back{display:inline-flex;align-items:center;min-height:3rem;font-size:var(--text-sm);font-weight:500}
+.field{margin:var(--space-md) 0 0;font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.kind{margin-left:var(--space-sm);padding:0 0.375rem;border:1px solid var(--color-rule-2);font-size:0.75rem}
+h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;letter-spacing:-0.022em;text-wrap:balance;overflow-wrap:break-word;min-width:0}
+.paper-title{font-size:clamp(1.75rem,3.4vw,2.75rem);line-height:1.15;max-width:30ch}
+.lead{margin:0;max-width:40ch;font-size:var(--text-lead);line-height:1.4;color:var(--color-ink-2);text-wrap:pretty}
+.facts{margin:var(--space-md) 0 0;width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-md) var(--space-xl);border-top:1px solid var(--color-rule-2);padding-top:var(--space-md)}
+.facts dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.facts dd{margin:0;font-size:0.9375rem;color:var(--color-ink-2)}
+.actions{display:flex;flex-wrap:wrap;gap:var(--space-sm)}
+.actions:empty{display:none}
+.btn{display:inline-flex;align-items:center;height:3rem;padding-inline:var(--space-lg);border:1px solid var(--color-ink);font-weight:500;text-decoration:none;white-space:nowrap}
+.btn:first-child{background:var(--color-ink);color:var(--color-accent-ink)}
+.fig{margin:0;display:flex;flex-direction:column;row-gap:var(--space-xs)}
+.fig img{display:block;width:100%;height:auto;border:1px solid var(--color-rule-2);background:var(--color-paper-2)}
+.fig figcaption{font-size:var(--text-sm);color:var(--color-muted)}
+.fig img{max-height:80svh;object-fit:contain}
+.fig.lead{align-items:center}
+.fig.lead img{width:auto;max-width:100%;max-height:78svh}
+.kv{margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-sm) var(--space-xl)}
+.kv dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.kv dd{margin:0;color:var(--color-ink-2);font-size:0.9375rem}
+@media (max-width:48rem){.kv{grid-template-columns:minmax(0,1fr)}}
+.toc{position:sticky;top:0;z-index:2;margin-top:var(--space-2xl);display:flex;flex-wrap:wrap;column-gap:var(--space-xl);background:var(--color-paper);border-block:1px solid var(--color-rule-2);font-size:var(--text-sm);font-weight:500}
+.toc a{display:inline-flex;align-items:center;min-height:3rem;text-decoration:none;color:var(--color-ink-2)}
+.toc a:hover{color:var(--color-ink)}
+.part{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,9fr);column-gap:var(--space-2xl);padding-block:var(--space-3xl);border-bottom:1px solid var(--color-rule-2);scroll-margin-top:3.5rem}
+.part h2{margin:0;font-size:var(--text-section);font-weight:600;line-height:1.15;letter-spacing:-0.015em}
+.part-body{min-width:0;display:flex;flex-direction:column;row-gap:var(--space-lg)}
+.part-body p,.part-body li{max-width:68ch;color:var(--color-ink-2)}
+.part-body p{margin:0}
+.part-body > p:first-child{font-size:1.125rem;line-height:1.5;color:var(--color-ink)}
+.part-body ol,.part-body ul{margin:0;padding-left:1.25em;display:flex;flex-direction:column;row-gap:var(--space-sm)}
+.part-body h3{margin:var(--space-md) 0 0;font-size:1.125rem;font-weight:600}
+.part-body code{font-family:var(--font-mono);font-size:0.8125rem;color:var(--color-muted);overflow-wrap:anywhere}
+.part-body blockquote{margin:0;padding-left:var(--space-md);border-left:1px solid var(--color-rule-2);color:var(--color-ink-2)}
+.tablebox{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:0.9375rem;font-variant-numeric:tabular-nums}
+th,td{padding:var(--space-sm) var(--space-md) var(--space-sm) 0;border-bottom:1px solid var(--color-rule-2);text-align:left;vertical-align:top}
+th{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+td:first-child{font-weight:600;color:var(--color-ink);white-space:nowrap}
+.paper .part-body > p:first-child{font-size:var(--text-md);color:var(--color-ink-2)}
+.intro p{max-width:68ch;color:var(--color-ink-2)}
+.foot{padding-block:var(--space-2xl)}
+@media (max-width:48rem){
+.part{grid-template-columns:minmax(0,1fr);row-gap:var(--space-lg);padding-block:var(--space-2xl)}
+.facts{grid-template-columns:minmax(0,1fr)}
+td:first-child{white-space:normal}
+}
+</style>
+</head>
+<body>
+<header class="wrap top">
+<a class="back" href="../../index.html#work">All work</a>
+<p class="field">Architecture</p>
+<h1>Digital Media II</h1>
+<p class="lead">A semester of parametric exercises ending in a data-driven game model.</p>
+<dl class="facts"><div><dt>Shown at</dt><dd>Digital Media II course, UOSARCH, fall 2024</dd></div><div><dt>Period</dt><dd>2024-09 to 2024-12</dd></div><div><dt>Role</dt><dd>Coursework.</dd></div><div><dt>Built with</dt><dd>Rhino 7, Grasshopper (Weaverbird, Kangaroo2, Chromodoris, LunchBox, @it), GhPython, QGIS</dd></div></dl>
+<div class="actions"></div>
+</header>
+<div class="wrap"><figure class="fig lead"><img src="img/01-lead.jpg" alt="Console-shaped model with blue and red grips and coloured blocks on a district map" loading="eager"><figcaption>The final game-board model, built as a handheld console</figcaption></figure></div>
+<nav class="wrap toc" aria-label="Sections"><a href="#overview">Overview</a><a href="#problem-define">Problem define</a><a href="#solution">Solution</a><a href="#process">Process</a><a href="#lesson">Lesson</a></nav>
+<main class="wrap">
+<section class="part" id="overview"><h2>Overview</h2><div class="part-body"><p>Coursework for Digital Media II, a course on carrying a parametric design through digital tools to a finished result. The final piece is &quot;Seoul Legacy: The Architect&#x27;s Gambit&quot;, a team game concept with a physical game-board model.</p>
+<dl class="kv"><div><dt>Course</dt><dd>Digital Media II, UOSARCH, fall 2024</dd></div><div><dt>Final result</dt><dd>a physical model shaped like a handheld console, with one district of Seoul in coloured blocks</dd></div><div><dt>Midterm</dt><dd>&quot;A Tension Is all you Need&quot;, a 70-floor parametric tower, individual</dd></div></dl></div></section>
+<section class="part" id="problem-define"><h2>Problem define</h2><div class="part-body"><p>The final brief asked how Seoul&#x27;s traffic, density and lack of green space could be shown as play, using real city data. The levels had to come from data, not be drawn by hand.</p>
+<ul><li>7.9542 trillion won: Seoul traffic congestion cost, about 44% of the national urban total, as quoted on <code>디미 죄종발표자료/슬라이드4.JPG</code> (outside source, not measured by the team)</li><li>426: stages (dong) in the game structure (<code>디미 죄종발표자료/슬라이드22.JPG</code>, &quot;스테이지 (426개)&quot;)</li></ul></div></section>
+<section class="part" id="solution"><h2>Solution</h2><div class="part-body"><p>Each dong gets a level from 1 to 10 per category by comparing counts, locations and density of public data, weighted by the age mix of residents. The model shows each category as a colour and each level as block height.</p>
+<div class="tablebox"><table><thead><tr><th scope="col">Value with unit</th><th scope="col">What it measures (10 words or fewer)</th></tr></thead><tbody><tr><td>1 to 10</td><td>Level range per dong per category</td></tr><tr><td>6</td><td>Quality-of-life categories used as parameters</td></tr><tr><td>11</td><td>Shapefiles read into the Grasshopper calculator</td></tr></tbody></table></div>
+<p>The six categories: culture and leisure, public wifi, traffic, air quality, safety, green space. Age weights (1 to 3) are set for three groups, 0 to 19, 20 to 59 and 60 and over; safety is not weighted.</p><figure class="fig"><img src="img/02-solution-data-levels.jpg" alt="Six coloured choropleth maps of Seoul above a parameter diagram and a weight table" loading="lazy"><figcaption>Six data maps feed a 1 to 10 level per dong</figcaption></figure></div></section>
+<section class="part" id="process"><h2>Process</h2><div class="part-body"><ol><li>Scripting. Rhino Python basics, a calculator and a 369 game, then Grasshopper sets, maths, data trees and image sampling, weeks 2 to 6. <code>w02/*.py</code>, <code>w04</code> to</li><li>Tower. Midterm parametric tower: stacked circles scaled by Graph Mapper, a GhPython wrap keeping four parameters within 0 to 1, attractor-scaled panels.</li><li>Fabrication. <code>디미cnc/CNC.gh</code>,</li><li>Data. Seoul shapefiles mapped in QGIS, read into Grasshopper with @it, turned into levels by list arithmetic; model wired with LEDs. <code>계산 알고리즘.gh</code>,</li></ol><figure class="fig"><img src="img/03-process-definition.jpg" alt="Purple Grasshopper group with two graph mapper curves, sliders and a Python node" loading="lazy"><figcaption>Midterm definition: graph mappers and a Python wrap</figcaption></figure><figure class="fig"><img src="img/04-process-variation.jpg" alt="Four white tower masses above four small curve graphs" loading="lazy"><figcaption>Changing the Graph Mapper curve changes the tower mass</figcaption></figure><figure class="fig"><img src="img/05-process-tower-render.jpg" alt="Glazed twisting tower with a diagonal frame between white block buildings" loading="lazy"><figcaption>Midterm tower rendered among context blocks at dusk</figcaption></figure><figure class="fig"><img src="img/06-process-cnc.jpg" alt="Cream milled block with rows of diamond-shaped pockets" loading="lazy"><figcaption>The week 10 CNC-milled panel with diamond pockets</figcaption></figure></div></section>
+<section class="part" id="lesson"><h2>Lesson</h2><div class="part-body"><p>The parameters were mastered on the tower; the final game was never built as software. The final piece exists as screens, a panel, a trailer and a model, so the level rule was never tested by play.</p></div></section>
+</main>
+<footer class="wrap foot"><a class="back" href="../../index.html#work">All work</a></footer>
+</body>
+</html>

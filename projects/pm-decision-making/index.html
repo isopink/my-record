@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PM decision making</title>
+<meta name="description" content="A course on defining problems and scoping MVPs as a product manager.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{
+--color-paper:oklch(13% 0.004 250);--color-paper-2:oklch(18% 0.005 250);
+--color-ink:oklch(96% 0.003 250);--color-ink-2:oklch(86% 0.004 250);--color-muted:oklch(72% 0.005 250);
+--color-rule:oklch(96% 0.003 250 / 0.9);--color-rule-2:oklch(96% 0.003 250 / 0.2);
+--color-accent-ink:oklch(13% 0.004 250);--color-focus:oklch(96% 0.003 250);
+--font-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;--font-mono:"IBM Plex Mono",ui-monospace,monospace;
+--text-display:clamp(2.25rem,5vw,4rem);--text-section:clamp(1.5rem,2.4vw,2rem);--text-lead:1.25rem;--text-md:1rem;--text-sm:0.875rem;
+--space-xs:0.5rem;--space-sm:0.75rem;--space-md:1rem;--space-lg:1.5rem;--space-xl:2rem;--space-2xl:3rem;--space-3xl:4.5rem;
+--container:72rem;--gutter:clamp(1rem,4.4vw,4rem);
+color-scheme:dark;
+}
+html,body{overflow-x:clip}
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-paper);color:var(--color-ink);font-family:var(--font-body);font-size:var(--text-md);line-height:1.6}
+a{color:var(--color-ink);text-decoration-thickness:1px;text-underline-offset:0.2em}
+a:hover{text-decoration-color:transparent}
+a:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
+::selection{background:var(--color-ink);color:var(--color-accent-ink)}
+.wrap{max-width:var(--container);margin-inline:auto;padding-left:max(var(--gutter),env(safe-area-inset-left,0px));padding-right:max(var(--gutter),env(safe-area-inset-right,0px))}
+.top{padding-block:var(--space-xl) var(--space-2xl);display:flex;flex-direction:column;align-items:flex-start;row-gap:var(--space-md)}
+.back{display:inline-flex;align-items:center;min-height:3rem;font-size:var(--text-sm);font-weight:500}
+.field{margin:var(--space-md) 0 0;font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.kind{margin-left:var(--space-sm);padding:0 0.375rem;border:1px solid var(--color-rule-2);font-size:0.75rem}
+h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;letter-spacing:-0.022em;text-wrap:balance;overflow-wrap:break-word;min-width:0}
+.paper-title{font-size:clamp(1.75rem,3.4vw,2.75rem);line-height:1.15;max-width:30ch}
+.lead{margin:0;max-width:40ch;font-size:var(--text-lead);line-height:1.4;color:var(--color-ink-2);text-wrap:pretty}
+.facts{margin:var(--space-md) 0 0;width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-md) var(--space-xl);border-top:1px solid var(--color-rule-2);padding-top:var(--space-md)}
+.facts dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.facts dd{margin:0;font-size:0.9375rem;color:var(--color-ink-2)}
+.actions{display:flex;flex-wrap:wrap;gap:var(--space-sm)}
+.actions:empty{display:none}
+.btn{display:inline-flex;align-items:center;height:3rem;padding-inline:var(--space-lg);border:1px solid var(--color-ink);font-weight:500;text-decoration:none;white-space:nowrap}
+.btn:first-child{background:var(--color-ink);color:var(--color-accent-ink)}
+.fig{margin:0;display:flex;flex-direction:column;row-gap:var(--space-xs)}
+.fig img{display:block;width:100%;height:auto;border:1px solid var(--color-rule-2);background:var(--color-paper-2)}
+.fig figcaption{font-size:var(--text-sm);color:var(--color-muted)}
+.fig img{max-height:80svh;object-fit:contain}
+.fig.lead{align-items:center}
+.fig.lead img{width:auto;max-width:100%;max-height:78svh}
+.kv{margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-sm) var(--space-xl)}
+.kv dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.kv dd{margin:0;color:var(--color-ink-2);font-size:0.9375rem}
+@media (max-width:48rem){.kv{grid-template-columns:minmax(0,1fr)}}
+.toc{position:sticky;top:0;z-index:2;margin-top:var(--space-2xl);display:flex;flex-wrap:wrap;column-gap:var(--space-xl);background:var(--color-paper);border-block:1px solid var(--color-rule-2);font-size:var(--text-sm);font-weight:500}
+.toc a{display:inline-flex;align-items:center;min-height:3rem;text-decoration:none;color:var(--color-ink-2)}
+.toc a:hover{color:var(--color-ink)}
+.part{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,9fr);column-gap:var(--space-2xl);padding-block:var(--space-3xl);border-bottom:1px solid var(--color-rule-2);scroll-margin-top:3.5rem}
+.part h2{margin:0;font-size:var(--text-section);font-weight:600;line-height:1.15;letter-spacing:-0.015em}
+.part-body{min-width:0;display:flex;flex-direction:column;row-gap:var(--space-lg)}
+.part-body p,.part-body li{max-width:68ch;color:var(--color-ink-2)}
+.part-body p{margin:0}
+.part-body > p:first-child{font-size:1.125rem;line-height:1.5;color:var(--color-ink)}
+.part-body ol,.part-body ul{margin:0;padding-left:1.25em;display:flex;flex-direction:column;row-gap:var(--space-sm)}
+.part-body h3{margin:var(--space-md) 0 0;font-size:1.125rem;font-weight:600}
+.part-body code{font-family:var(--font-mono);font-size:0.8125rem;color:var(--color-muted);overflow-wrap:anywhere}
+.part-body blockquote{margin:0;padding-left:var(--space-md);border-left:1px solid var(--color-rule-2);color:var(--color-ink-2)}
+.tablebox{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:0.9375rem;font-variant-numeric:tabular-nums}
+th,td{padding:var(--space-sm) var(--space-md) var(--space-sm) 0;border-bottom:1px solid var(--color-rule-2);text-align:left;vertical-align:top}
+th{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+td:first-child{font-weight:600;color:var(--color-ink);white-space:nowrap}
+.paper .part-body > p:first-child{font-size:var(--text-md);color:var(--color-ink-2)}
+.intro p{max-width:68ch;color:var(--color-ink-2)}
+.foot{padding-block:var(--space-2xl)}
+@media (max-width:48rem){
+.part{grid-template-columns:minmax(0,1fr);row-gap:var(--space-lg);padding-block:var(--space-2xl)}
+.facts{grid-template-columns:minmax(0,1fr)}
+td:first-child{white-space:normal}
+}
+</style>
+</head>
+<body>
+<header class="wrap top">
+<a class="back" href="../../index.html#work">All work</a>
+<p class="field">Startup<span class="kind">Coursework</span></p>
+<h1>PM decision making</h1>
+<p class="lead">Coursework record: problem framing, PRDs and MVP scoping, weeks 1 to 6.</p>
+<dl class="facts"><div><dt>Shown at</dt><dd>BDAI student society, PM track regular class, 2026</dd></div><div><dt>Built with</dt><dd>Gemini Notebook, Notion, Claude, Zoom</dd></div></dl>
+<div class="actions"></div>
+</header>
+
+<nav class="wrap toc" aria-label="Sections"><a href="#overview">Overview</a><a href="#process">Process</a><a href="#lesson">Lesson</a></nav>
+<main class="wrap">
+<section class="part" id="overview"><h2>Overview</h2><div class="part-body"><p>This is a course the author took, kept as a record of what was covered and learned. It is coursework, not a product, and no product was managed or shipped in it.</p>
+<dl class="kv"><div><dt>Course</dt><dd>AI-driven MVP Design &amp; Product Decision Making (Korean title: AI 기반 MVP 설계와 PM 의사결정 실습).</dd></div><div><dt>Run by</dt><dd>BDAI student society, regular class, PM track.</dd></div><div><dt>Term</dt><dd>weekly on Tuesday, 20:00 to 21:00. Week 3 slides are dated 2026-09-15 in the PDF metadata, which is a Tuesday.</dd></div><div><dt>Length</dt><dd>16 weeks planned in the syllabus. The source holds material for weeks 1 to 6 only (7 recordings, 3 slide decks).</dd></div><div><dt>Format</dt><dd>live online lectures on Zoom with in-class exercises on one fictional case, a delivery app called Baedalgo with made-up internal data; recordings were provided for one week after each class.</dd></div><div><dt>Assessment</dt><dd>the syllabus states attendance rules only (camera on, more than 10 minutes late counts as absent, up to 5 absence forms).</dd></div></dl></div></section>
+<section class="part" id="process"><h2>Process</h2><div class="part-body"><p>Syllabus plan, one line per week (syllabus PDF, pages 2 and 3).</p>
+<ol><li>Week 1. Orientation; the role of a PM and of an MVP.</li><li>Week 2. PM roles in big tech compared with Korean companies.</li><li>Week 3. Problem definition: turning a problem into a question.</li><li>Week 4. Writing a PRD; how business, marketing, engineering and design each read it.</li><li>Week 5. The MVP concept: minimum features compared with the minimum set of decisions.</li><li>Week 6. MVP scope: deciding what is in and what is out.</li><li>Week 7. Planning an MVP with AI tools.</li><li>Week 8. MVP structure: minimum screens, data and flows.</li><li>Week 9. No-code tools: Softr, Tally, Airtable.</li><li>Weeks 10 and 11. Building a no-code MVP, parts 1 and 2.</li><li>Week 12. Reading MVP results and deriving the next decision.</li><li>Week 13. Turning the MVP into a portfolio piece.</li><li>Weeks 14 and 15. Feedback sessions on the final MVP.</li><li>Week 16. Final presentation and review.</li></ol>
+<ol><li>Week 1. What a PM does, three common myths about the role, and how a feature passes from planning to design, development and QA.</li><li>Week 2. A decision frame of problem, evidence, decision; four kinds of evidence (data, user voice, business context, constraints) and what makes evidence strong.</li><li>Week 3. Turning app reviews into a problem statement: a codebook, a nine-column data table, counter-evidence and gaps, done in Gemini Notebook on the Baedalgo case.</li><li>Week 4. What a PRD is and who reads each section; picking one root-cause hypothesis by impact and feasibility, then setting features and scope in and out.</li><li>Week 5. The MVP as the smallest test of a hypothesis; RAT compared with MVP; testing the riskiest assumption without building, for example with a fake door or Wizard of Oz.</li><li>Week 6. Writing PRDs so the team does not keep asking again, meeting notes, and how AI speech recognition works. No assignment that week.</li></ol>
+<ol><li>Week 3 to 4 exercise. Write a PRD for the Baedalgo case in a Notion template: the problem statement was filled in by the course; goals and metrics, target user, scope in and out, user stories and release plan were left for students. Submission: a Notion link and three risks.</li></ol></div></section>
+<section class="part" id="lesson"><h2>Lesson</h2><div class="part-body"><p>What the covered units trained, stated as abilities.</p>
+<ol><li>Can frame a product issue as problem, evidence and decision, and say which of the four kinds of evidence a claim rests on. Week 2.</li><li>Can turn a pile of user reviews into a problem statement with a codebook and a checkable table, keeping observation apart from hypothesis. Week 3.</li><li>Can write a PRD from a template: problem statement with current-state numbers, success metrics, target user, scope in and out with a reason for each line, user stories and a release plan. Week 4.</li><li>Can choose one root-cause hypothesis by impact and feasibility and defer the others, with the reason written down. Week 4.</li><li>Can name the riskiest assumption behind a feature and pick a test that needs no product, such as a fake door or Wizard of Oz. Week 5.</li></ol>
+<p>Week 2 covered evidence instead of PM roles in big tech, and the week 6 recording covered collaboration and speech recognition instead of MVP scope.</p></div></section>
+</main>
+<footer class="wrap foot"><a class="back" href="../../index.html#work">All work</a></footer>
+</body>
+</html>

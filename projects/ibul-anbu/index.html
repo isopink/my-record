@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ibul Anbu</title>
+<meta name="description" content="In-home bedding pickup, wash and remake for older parents, paid by children.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{
+--color-paper:oklch(13% 0.004 250);--color-paper-2:oklch(18% 0.005 250);
+--color-ink:oklch(96% 0.003 250);--color-ink-2:oklch(86% 0.004 250);--color-muted:oklch(72% 0.005 250);
+--color-rule:oklch(96% 0.003 250 / 0.9);--color-rule-2:oklch(96% 0.003 250 / 0.2);
+--color-accent-ink:oklch(13% 0.004 250);--color-focus:oklch(96% 0.003 250);
+--font-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;--font-mono:"IBM Plex Mono",ui-monospace,monospace;
+--text-display:clamp(2.25rem,5vw,4rem);--text-section:clamp(1.5rem,2.4vw,2rem);--text-lead:1.25rem;--text-md:1rem;--text-sm:0.875rem;
+--space-xs:0.5rem;--space-sm:0.75rem;--space-md:1rem;--space-lg:1.5rem;--space-xl:2rem;--space-2xl:3rem;--space-3xl:4.5rem;
+--container:72rem;--gutter:clamp(1rem,4.4vw,4rem);
+color-scheme:dark;
+}
+html,body{overflow-x:clip}
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-paper);color:var(--color-ink);font-family:var(--font-body);font-size:var(--text-md);line-height:1.6}
+a{color:var(--color-ink);text-decoration-thickness:1px;text-underline-offset:0.2em}
+a:hover{text-decoration-color:transparent}
+a:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
+::selection{background:var(--color-ink);color:var(--color-accent-ink)}
+.wrap{max-width:var(--container);margin-inline:auto;padding-left:max(var(--gutter),env(safe-area-inset-left,0px));padding-right:max(var(--gutter),env(safe-area-inset-right,0px))}
+.top{padding-block:var(--space-xl) var(--space-2xl);display:flex;flex-direction:column;align-items:flex-start;row-gap:var(--space-md)}
+.back{display:inline-flex;align-items:center;min-height:3rem;font-size:var(--text-sm);font-weight:500}
+.field{margin:var(--space-md) 0 0;font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.kind{margin-left:var(--space-sm);padding:0 0.375rem;border:1px solid var(--color-rule-2);font-size:0.75rem}
+h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;letter-spacing:-0.022em;text-wrap:balance;overflow-wrap:break-word;min-width:0}
+.paper-title{font-size:clamp(1.75rem,3.4vw,2.75rem);line-height:1.15;max-width:30ch}
+.lead{margin:0;max-width:40ch;font-size:var(--text-lead);line-height:1.4;color:var(--color-ink-2);text-wrap:pretty}
+.facts{margin:var(--space-md) 0 0;width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-md) var(--space-xl);border-top:1px solid var(--color-rule-2);padding-top:var(--space-md)}
+.facts dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.facts dd{margin:0;font-size:0.9375rem;color:var(--color-ink-2)}
+.actions{display:flex;flex-wrap:wrap;gap:var(--space-sm)}
+.actions:empty{display:none}
+.btn{display:inline-flex;align-items:center;height:3rem;padding-inline:var(--space-lg);border:1px solid var(--color-ink);font-weight:500;text-decoration:none;white-space:nowrap}
+.btn:first-child{background:var(--color-ink);color:var(--color-accent-ink)}
+.fig{margin:0;display:flex;flex-direction:column;row-gap:var(--space-xs)}
+.fig img{display:block;width:100%;height:auto;border:1px solid var(--color-rule-2);background:var(--color-paper-2)}
+.fig figcaption{font-size:var(--text-sm);color:var(--color-muted)}
+.fig img{max-height:80svh;object-fit:contain}
+.fig.lead{align-items:center}
+.fig.lead img{width:auto;max-width:100%;max-height:78svh}
+.kv{margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-sm) var(--space-xl)}
+.kv dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.kv dd{margin:0;color:var(--color-ink-2);font-size:0.9375rem}
+@media (max-width:48rem){.kv{grid-template-columns:minmax(0,1fr)}}
+.toc{position:sticky;top:0;z-index:2;margin-top:var(--space-2xl);display:flex;flex-wrap:wrap;column-gap:var(--space-xl);background:var(--color-paper);border-block:1px solid var(--color-rule-2);font-size:var(--text-sm);font-weight:500}
+.toc a{display:inline-flex;align-items:center;min-height:3rem;text-decoration:none;color:var(--color-ink-2)}
+.toc a:hover{color:var(--color-ink)}
+.part{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,9fr);column-gap:var(--space-2xl);padding-block:var(--space-3xl);border-bottom:1px solid var(--color-rule-2);scroll-margin-top:3.5rem}
+.part h2{margin:0;font-size:var(--text-section);font-weight:600;line-height:1.15;letter-spacing:-0.015em}
+.part-body{min-width:0;display:flex;flex-direction:column;row-gap:var(--space-lg)}
+.part-body p,.part-body li{max-width:68ch;color:var(--color-ink-2)}
+.part-body p{margin:0}
+.part-body > p:first-child{font-size:1.125rem;line-height:1.5;color:var(--color-ink)}
+.part-body ol,.part-body ul{margin:0;padding-left:1.25em;display:flex;flex-direction:column;row-gap:var(--space-sm)}
+.part-body h3{margin:var(--space-md) 0 0;font-size:1.125rem;font-weight:600}
+.part-body code{font-family:var(--font-mono);font-size:0.8125rem;color:var(--color-muted);overflow-wrap:anywhere}
+.part-body blockquote{margin:0;padding-left:var(--space-md);border-left:1px solid var(--color-rule-2);color:var(--color-ink-2)}
+.tablebox{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:0.9375rem;font-variant-numeric:tabular-nums}
+th,td{padding:var(--space-sm) var(--space-md) var(--space-sm) 0;border-bottom:1px solid var(--color-rule-2);text-align:left;vertical-align:top}
+th{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+td:first-child{font-weight:600;color:var(--color-ink);white-space:nowrap}
+.paper .part-body > p:first-child{font-size:var(--text-md);color:var(--color-ink-2)}
+.intro p{max-width:68ch;color:var(--color-ink-2)}
+.foot{padding-block:var(--space-2xl)}
+@media (max-width:48rem){
+.part{grid-template-columns:minmax(0,1fr);row-gap:var(--space-lg);padding-block:var(--space-2xl)}
+.facts{grid-template-columns:minmax(0,1fr)}
+td:first-child{white-space:normal}
+}
+</style>
+</head>
+<body>
+<header class="wrap top">
+<a class="back" href="../../index.html#work">All work</a>
+<p class="field">Startup</p>
+<h1>Ibul Anbu</h1>
+<p class="lead">A bedding service where staff strip, wash and remake the bed.</p>
+<dl class="facts"><div><dt>Shown at</dt><dd>ENACTUS UOS 34th cohort, school PIC and joint PIC (2026)</dd></div><div><dt>Period</dt><dd>2026-09 to 2026-10</dd></div><div><dt>Role</dt><dd>Team lead in a team of 4; set tasks, ran feedback rounds, kept the decision log</dd></div><div><dt>Built with</dt><dd>Google Forms survey, PowerPoint, public statistics (NHIS, Statistics Korea)</dd></div></dl>
+<div class="actions"></div>
+</header>
+<div class="wrap"><figure class="fig lead"><img src="img/01-lead.jpg" alt="Dark slide with four step boxes and a 35,000 KRW monthly price box" loading="eager"><figcaption>The service: strip, wash, dry, remake, report to the child</figcaption></figure></div>
+<nav class="wrap toc" aria-label="Sections"><a href="#overview">Overview</a><a href="#problem-define">Problem define</a><a href="#solution">Solution</a><a href="#process">Process</a><a href="#lesson">Lesson</a></nav>
+<main class="wrap">
+<section class="part" id="overview"><h2>Overview</h2><div class="part-body"><p>Ibul Anbu is a 3-week ENACTUS MVP for older parents who cannot wash heavy bedding alone. It produced a survey test, a unit-economics model and an IR deck for the joint PIC.</p>
+<dl class="kv"><div><dt>Shown at</dt><dd>ENACTUS UOS school PIC, then the joint PIC on 2026-10-10</dd></div><div><dt>Customer</dt><dd>adults aged 40 to 59 who pay; parents aged 75 and over who use it</dd></div><div><dt>Price</dt><dd>35,000 KRW a month, one home visit per quarter</dd></div><div><dt>Ran on</dt><dd>an online Google Form, shared one to one during the Chuseok holiday</dd></div></dl></div></section>
+<section class="part" id="problem-define"><h2>Problem define</h2><div class="part-body"><p>Parents &quot;cannot carry heavy bedding to the laundry&quot; and keep using old covers. Their children live far away and leave it until the next visit.</p>
+<ul><li>20 of 26 valid survey respondents live one hour or more, one way, from their parents.</li><li>88.8% of people aged 65 and over have no long-term care grade, so care services do not reach them.</li></ul><figure class="fig"><img src="img/02-problem-alternatives.jpg" alt="Table comparing family visits, laundries, home help, public washing and rental" loading="lazy"><figcaption>Every current option leaves the parent to strip and remake the bed</figcaption></figure></div></section>
+<section class="part" id="solution"><h2>Solution</h2><div class="part-body"><p>A child signs up; staff visit each quarter, strip the bed, wash, dry and sanitize the bedding, then remake it. Parents do nothing; children get a visit report with photos.</p>
+<div class="tablebox"><table><thead><tr><th scope="col">Value with unit</th><th scope="col">What it measures (10 words or fewer)</th></tr></thead><tbody><tr><td>7 of 26</td><td>Valid respondents choosing in-home install at 35,000 KRW</td></tr><tr><td>20,950 KRW</td><td>Planned monthly margin per household after variable cost</td></tr><tr><td>about 115 households</td><td>Planned break-even at 2.4M KRW fixed cost a month</td></tr></tbody></table></div><figure class="fig"><img src="img/05-solution-unit-economics.jpg" alt="Slide with price, variable cost, margin boxes and a cost breakdown" loading="lazy"><figcaption>Rebuilt unit economics after dropping rental bedding</figcaption></figure></div></section>
+<section class="part" id="process"><h2>Process</h2><div class="part-body"><ol><li>Scoping. Reviewed three housing ideas for international students after dropping a buddy service; all 12 universities checked already ran one.</li><li>Survey. Switched to elderly bedding and ran an online survey: 28 responses, 26 valid. The door-swap option was dropped for one in-home plan.</li><li>Costing. Judges at the school PIC doubted the price. A recount with rental bedding and monthly visits gave minus 13,250 KRW a month per customer. <code>비용 재산정</code> (2026-10-08)</li><li>Rebuild. Dropped rental and kept the parents&#x27; own bedding, visits each quarter, 5 homes per complex: 39,000 KRW a visit. <code>비용 재산정 (2)</code>, IR deck p.10</li></ol><figure class="fig"><img src="img/03-process-bm-sketch.jpg" alt="Hand-drawn diagram linking suppliers, the company and two customer groups" loading="lazy"><figcaption>First business model sketch, with bedding makers and volunteers</figcaption></figure><figure class="fig"><img src="img/04-process-cost-fail.jpg" alt="Table of monthly prices against margin and break-even customers" loading="lazy"><figcaption>The first cost model lost money at 35,000 KRW</figcaption></figure></div></section>
+<section class="part" id="lesson"><h2>Lesson</h2><div class="part-body"><p>People said they would pay; nobody has paid yet.</p>
+<p>The survey measured intent, not purchase, and the margin rests on assumed costs (15,000 KRW an hour, 5 homes per complex) that were never timed in a real visit.</p></div></section>
+</main>
+<footer class="wrap foot"><a class="back" href="../../index.html#work">All work</a></footer>
+</body>
+</html>
