@@ -495,8 +495,9 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
         if (p <= 0) { moving = true; continue; }
         if (p < 1) moving = true;
         var e = 1 - Math.pow(1 - p, 3), lit = 1, bob = 0;
-        // Once the letters have gathered, the words keep flowing through them, a light sweeps across and each column sways.
-        if (!still && p >= 1) {
+        // The words flow through the letters, a light sweeps across and each column sways, from the moment the letters
+        // fly in, so the arrival runs straight on into the steady motion with no jump.
+        if (!still) {
           var sec = t / 1000;
           var L = STREAM[(c.n + Math.floor(sec * 6)) % STREAM.length]; c.t = L.t; c.hue = L.hue;
           lit = 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(sec * 2.4 - (c.x + c.y * 0.6) * 0.012));
