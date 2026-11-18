@@ -177,8 +177,8 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 
   function token(n) { return getComputedStyle(root).getPropertyValue(n).trim(); }
   function setup() {
-    var dpr = Math.min(2, window.devicePixelRatio || 1);
     W = gate.clientWidth; H = gate.clientHeight;
+    var dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 4, Math.sqrt(16e6 / (W * H))));
     canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     fs = Math.max(8, Math.min(13, Math.round(H / 70))); cw = fs * 0.6; ch = fs * 1.02;
     cols = Math.ceil(W / cw); rows = Math.ceil(H / ch);
@@ -436,7 +436,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
   }
   function build() {
     layout();
-    var rect = mark.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    var rect = mark.getBoundingClientRect(), dpr;
     W = Math.round(rect.width); H = Math.round(rect.height);
     if (!W || !H) return;
     // The canvas covers the whole first screen, so letters can fly in from its edges.
@@ -444,6 +444,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
     CW = document.documentElement.clientWidth; CH = Math.max(window.innerHeight, offY + H);
     canvas.style.left = -offX + 'px'; canvas.style.top = -offY + 'px';
     canvas.style.width = CW + 'px'; canvas.style.height = CH + 'px';
+    dpr = sharpness();
     canvas.width = CW * dpr; canvas.height = CH * dpr;
     DPR = dpr; ctx.setTransform(dpr, 0, 0, dpr, offX * dpr, offY * dpr);
     fs = Math.max(4, Math.min(7, msize * 0.06)); cw = fs * 0.6; ch = fs * 1.02;
@@ -515,6 +516,19 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
     if (running) raf = requestAnimationFrame(paint);
   }
 
+  // Draw at the screen's full pixel density times the pinch-zoom, so the letters stay sharp when zoomed in,
+  // within a cap on the canvas size that phones accept.
+  function sharpness() {
+    var zoom = window.visualViewport ? Math.max(1, window.visualViewport.scale) : 1;
+    return Math.max(1, Math.min((window.devicePixelRatio || 1) * zoom, 8, Math.sqrt(16e6 / (CW * CH))));
+  }
+  function rescale() {
+    if (!CW || !CH) return;
+    var d = sharpness();
+    if (Math.abs(d - DPR) < 0.25) return;
+    DPR = d; canvas.width = CW * d; canvas.height = CH * d; ctx.setTransform(d, 0, 0, d, offX * d, offY * d);
+    cancelAnimationFrame(raf); running = true; raf = requestAnimationFrame(paint);
+  }
   function run() { cancelAnimationFrame(raf); build(); start = performance.now(); running = true; paint(start); }
   // The sentence keeps moving only while it is on screen.
   var seen = true;
@@ -531,7 +545,14 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
   if (document.documentElement.classList.contains('gated')) window.addEventListener('isopink:enter', go, { once: true }); else go();
 
   var timer = null;
-  window.addEventListener('resize', function () { clearTimeout(timer); timer = setTimeout(run, 150); });
+  // Rebuild only when the layout width changes; a pinch-zoom only sharpens the canvas.
+  var laidOut = document.documentElement.clientWidth, zoomTimer = null;
+  window.addEventListener('resize', function () {
+    if (document.documentElement.clientWidth === laidOut) return;
+    laidOut = document.documentElement.clientWidth;
+    clearTimeout(timer); timer = setTimeout(run, 150);
+  });
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', function () { clearTimeout(zoomTimer); zoomTimer = setTimeout(rescale, 120); });
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', run);
   new MutationObserver(run).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 })();
