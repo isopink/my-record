@@ -37,6 +37,8 @@ h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;lette
 .lead{margin:0;max-width:40ch;font-size:var(--text-lead);line-height:1.4;color:var(--color-ink-2);text-wrap:pretty}
 .facts{margin:var(--space-md) 0 0;width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-md) var(--space-xl);border-top:1px solid var(--color-rule-2);padding-top:var(--space-md)}
 .facts:empty{display:none}
+.tags{margin:var(--space-md) 0 0;padding:var(--space-md) 0 0;width:100%;list-style:none;display:flex;flex-wrap:wrap;gap:var(--space-xs) var(--space-md);border-top:1px solid var(--color-rule-2)}
+.tags li{font-size:var(--text-sm);font-weight:500;color:var(--color-ink-2)}
 .facts dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
 .facts dd{margin:0;font-size:0.9375rem;color:var(--color-ink-2)}
 .titlerow{display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--space-md);row-gap:var(--space-xs)}
@@ -98,7 +100,7 @@ td:first-child{white-space:normal}
 <p class="field">Startup</p>
 <h1>Impact Bridge</h1>
 <p class="lead">A broker between understaffed social enterprises and marketing students.</p>
-<dl class="facts"><div><dt>Built with</dt><dd>Desk research, survey, interviews, Enactus project registration form</dd></div></dl>
+<ul class="tags" aria-label="Built with"><li>#DeskResearch</li><li>#Survey</li><li>#Interviews</li><li>#EnactusRegistrationForm</li></ul>
 <div class="actions"></div>
 </header>
 <div class="wrap"><div class="show" role="region" aria-label="Project photos"><div class="track"><figure class="slide"><img src="img/01-lead-team.jpg" alt="Six people sorting and packing printed cards around a long table" loading="eager"><figcaption>Team members working around the table</figcaption></figure><figure class="slide"><img src="img/02-lead-visit.jpg" alt="A woman in a blue sweater reading a wall calendar at a white table" loading="eager"><figcaption>Meeting with a social enterprise representative</figcaption></figure><figure class="slide"><img src="img/03-lead-warehouse.jpg" alt="Stacked cardboard boxes and a red pallet truck in a workshop" loading="eager"><figcaption>Storage area at the enterprise site</figcaption></figure><figure class="slide"><img src="img/04-lead-aisle.jpg" alt="A narrow warehouse aisle with shelves and orange crates" loading="eager"><figcaption>Shelving aisle at the enterprise site</figcaption></figure><figure class="slide"><img src="img/05-lead-boxes.jpg" alt="Orange product boxes beside a laptop on a white desk" loading="eager"><figcaption>Product boxes and a laptop at the site</figcaption></figure></div><div class="bar"><button class="prev" type="button" aria-label="Previous photo">&larr;</button><span class="count" aria-live="polite">1 / 5</span><button class="next" type="button" aria-label="Next photo">&rarr;</button></div></div></div>

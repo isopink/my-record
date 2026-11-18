@@ -37,6 +37,8 @@ h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;lette
 .lead{margin:0;max-width:40ch;font-size:var(--text-lead);line-height:1.4;color:var(--color-ink-2);text-wrap:pretty}
 .facts{margin:var(--space-md) 0 0;width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-md) var(--space-xl);border-top:1px solid var(--color-rule-2);padding-top:var(--space-md)}
 .facts:empty{display:none}
+.tags{margin:var(--space-md) 0 0;padding:var(--space-md) 0 0;width:100%;list-style:none;display:flex;flex-wrap:wrap;gap:var(--space-xs) var(--space-md);border-top:1px solid var(--color-rule-2)}
+.tags li{font-size:var(--text-sm);font-weight:500;color:var(--color-ink-2)}
 .facts dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
 .facts dd{margin:0;font-size:0.9375rem;color:var(--color-ink-2)}
 .titlerow{display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--space-md);row-gap:var(--space-xs)}
@@ -98,7 +100,7 @@ td:first-child{white-space:normal}
 <p class="field">Data</p>
 <h1>Evacuation Simulation</h1>
 <p class="lead">Smoke reached the escape routes before the last occupant passed.</p>
-<dl class="facts"><div><dt>Built with</dt><dd>Revit 2027, Pathfinder 2026, FDS 6.11.1</dd></div></dl>
+<ul class="tags" aria-label="Built with"><li>#Revit2027</li><li>#Pathfinder2026</li><li>#FDS6.11.1</li></ul>
 <div class="actions"><a class="btn" href="paper.html">Read the full write-up</a></div>
 </header>
 <div class="wrap"><div class="show" role="region" aria-label="Project media"><div class="track"><figure class="slide"><img src="img/01-lead-visibility-slices.jpg" alt="Grid of 20 floor plans shaded by smoke visibility, darker means less visibility" loading="eager"><figcaption>Visibility at 1.75 m for four scenarios from 120 to 720 s</figcaption></figure><figure class="slide"><img src="img/02-problem-define-plan-start-positions.jpg" alt="Floor plan with coloured dots for occupant groups and a red fire square" loading="eager"><figcaption>Fourth floor model with two exits, refuge room and fire</figcaption></figure><figure class="slide"><img src="img/03-solution-route-visibility.jpg" alt="Six line charts of visibility over 400 s with a dashed 5 m line" loading="eager"><figcaption>Route visibility falls below 5 m before the last occupant passes</figcaption></figure><figure class="slide"><img src="img/04-solution-refuge-room.jpg" alt="Three line charts of visibility and pressure over 1,200 s" loading="eager"><figcaption>Refuge room holds 5 m visibility only in scenario B and void open</figcaption></figure><figure class="slide"><img src="img/05-process-revit-void-section.jpg" alt="3D section of a five-storey building showing floors, void, roof plant and external stair" loading="eager"><figcaption>Revit model of the building, cut through the void</figcaption></figure><figure class="slide"><img src="img/06-process-pathfinder-frames.jpg" alt="Eight top views of the floor with occupants moving toward exits and refuge room" loading="eager"><figcaption>Pathfinder frames of the 27-person case from 0 to 250 s</figcaption></figure></div><div class="bar"><button class="prev" type="button" aria-label="Previous">&larr;</button><span class="count" aria-live="polite">1 / 6</span><button class="next" type="button" aria-label="Next">&rarr;</button></div></div></div>

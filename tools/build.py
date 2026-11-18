@@ -38,6 +38,29 @@ GH_ICON = '<a class="gh" href="%s" aria-label="View on GitHub" title="View on Gi
 HIDDEN_FACTS = ('Shown at', 'Role')
 VIDEO_EXT = ('.mp4', '.webm')
 VIDEO_MAX_MB = 8
+# Hashtags under each title (what the case was built with).
+TAGS = {
+    '3ddsg-drone-navigation': ['Crazyflie2.1', 'FlowDeckV2', 'Python3.12', 'MuJoCo', 'IFC', 'Neo4j', 'SceneGraph'],
+    'branding-in-seongsu': ['Rhino', 'AutoCAD', 'Illustrator', 'AfterEffects'],
+    'career-log': ['OpenAI', 'gpt-4o-mini', 'Java17', 'SpringBoot', 'PostgreSQL', 'DockerCompose', 'AWSEC2'],
+    'data-engineering-fundamentals': ['Python3.14', 'venv', 'pip', 'Jupyter', 'VSCode'],
+    'deep-report-pipeline': ['ClaudeSkill', 'Python', 'Nodejs', 'pdfjs', 'EditorialMonoDesignSystem'],
+    'digital-media-ii': ['Rhino7', 'Grasshopper', 'Weaverbird', 'Kangaroo2', 'Chromodoris', 'LunchBox', '@it', 'GhPython', 'QGIS'],
+    'disaster-library-whitepaper': ['Python', 'rdflib', 'pandas', 'scikit-learn', 'DBSCAN'],
+    'first-wrong-step': ['FewShotLearning', 'ClaudeOpus5.5API', 'Python', 'SymPy', 'SQLite'],
+    'gangil-evacuation-simulation': ['Revit2027', 'Pathfinder2026', 'FDS6.11.1'],
+    'ibul-anbu': ['GoogleForms', 'PowerPoint', 'NHIS', 'StatisticsKorea'],
+    'impact-bridge': ['DeskResearch', 'Survey', 'Interviews', 'EnactusRegistrationForm'],
+    'interview-prep-agent': ['UpstageSolarPro4', 'OpenDART', 'Python3.12', 'FastAPI', 'Render'],
+    'object-finder-bot': ['TurtleBot3WafflePi', 'JetsonXavierNX', 'ROS2', 'Nav2', 'OpenCLIP', 'ViT-B/32'],
+    'open-duck-mini-v2': ['RaspberryPi', '14STS3215Servos', 'IsaacLab2.2', 'RSL-RL', 'PPO', 'ONNXRuntime'],
+    'paper-review-deck': ['ClaudeSkill', 'Python', 'Playwright', 'pptxgenjs', 'KaTeX', 'alphaXiv', 'MCP'],
+    'pm-decision-making': ['GeminiNotebook', 'Notion', 'Claude', 'Zoom'],
+    'sigma-engine': ['ClaudeCode', 'SubAgents', 'PreToolUseHook', 'MCPServer', 'KiwoomRESTAPI', 'Python', 'Supabase'],
+    'steps-before-crashes': ['Python', 'geopandas', 'PySAL', 'esda', 'statsmodels'],
+    'thank-you-plaque': ['AdobeIllustrator28.7', 'H2gtrE'],
+}
+
 # Live pages linked from a case page.
 LIVE_LINKS = {'sigma-engine': 'https://isopink.github.io/sigma-engine/'}
 # Section names as the case pages show them.
@@ -290,11 +313,9 @@ def build_case(folder, allowed):
     imgs = images_by_part(folder, allowed)
     ordered = [x for x in imgs if x['part'] == 'Lead'] + [x for x in imgs if x['part'] != 'Lead']
 
-    facts = []
-    for key, label in (('built_with', 'Built with'),):
-        v = clean(front.get(key, ''))
-        if v and v.lower() != 'none':
-            facts.append('<div><dt>%s</dt><dd>%s</dd></div>' % (label, inline(v)))
+    # Tools and methods are shown as hashtags, not a sentence.
+    tags = TAGS.get(slug) or [re.sub(r'[^\w.+/@-]', '', w.title().replace(' ', '')) for w in re.split(r',| and ', clean(front.get('built_with', '')) if clean(front.get('built_with', '')).lower() != 'none' else '') if w.strip()]
+    facts = ['<ul class="tags" aria-label="Built with">%s</ul>' % ''.join('<li>#%s</li>' % esc(t) for t in tags)] if tags else []
     head_text = open(os.path.join(SRC, folder, 'entry.md'), encoding='utf-8').read().split('\n---', 2)[0]
     links = list(dict.fromkeys(re.findall(r'https?://github\.com/isopink/[\w.-]+', head_text)))
     paper = os.path.exists(os.path.join(SRC, folder, 'paper.md')) and front.get('public', '').startswith('yes')
@@ -322,7 +343,7 @@ def build_case(folder, allowed):
 <p class="field">{field}{kind}{status}</p>
 <div class="titlerow"><h1>{title}</h1>{ghlinks}</div>
 <p class="lead">{lead}</p>
-<dl class="facts">{facts}</dl>
+{facts}
 <div class="actions">{actions}</div>
 </header>
 {leadfig}

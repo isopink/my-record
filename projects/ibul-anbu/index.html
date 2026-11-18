@@ -37,6 +37,8 @@ h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;lette
 .lead{margin:0;max-width:40ch;font-size:var(--text-lead);line-height:1.4;color:var(--color-ink-2);text-wrap:pretty}
 .facts{margin:var(--space-md) 0 0;width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-md) var(--space-xl);border-top:1px solid var(--color-rule-2);padding-top:var(--space-md)}
 .facts:empty{display:none}
+.tags{margin:var(--space-md) 0 0;padding:var(--space-md) 0 0;width:100%;list-style:none;display:flex;flex-wrap:wrap;gap:var(--space-xs) var(--space-md);border-top:1px solid var(--color-rule-2)}
+.tags li{font-size:var(--text-sm);font-weight:500;color:var(--color-ink-2)}
 .facts dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
 .facts dd{margin:0;font-size:0.9375rem;color:var(--color-ink-2)}
 .titlerow{display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--space-md);row-gap:var(--space-xs)}
@@ -98,7 +100,7 @@ td:first-child{white-space:normal}
 <p class="field">Startup</p>
 <h1>Ibul Anbu</h1>
 <p class="lead">A bedding service where staff strip, wash and remake the bed.</p>
-<dl class="facts"><div><dt>Built with</dt><dd>Google Forms survey, PowerPoint, public statistics (NHIS, Statistics Korea)</dd></div></dl>
+<ul class="tags" aria-label="Built with"><li>#GoogleForms</li><li>#PowerPoint</li><li>#NHIS</li><li>#StatisticsKorea</li></ul>
 <div class="actions"></div>
 </header>
 <div class="wrap"><div class="show" role="region" aria-label="Project media"><div class="track"><figure class="slide"><img src="img/01-lead.jpg" alt="Dark slide with four step boxes and a 35,000 KRW monthly price box" loading="eager"><figcaption>The service: strip, wash, dry, remake, report to the child</figcaption></figure><figure class="slide"><img src="img/02-problem-alternatives.jpg" alt="Table comparing family visits, laundries, home help, public washing and rental" loading="eager"><figcaption>Every current option leaves the parent to strip and remake the bed</figcaption></figure><figure class="slide"><img src="img/05-solution-unit-economics.jpg" alt="Slide with price, variable cost, margin boxes and a cost breakdown" loading="eager"><figcaption>Rebuilt unit economics after dropping rental bedding</figcaption></figure><figure class="slide"><img src="img/03-process-bm-sketch.jpg" alt="Hand-drawn diagram linking suppliers, the company and two customer groups" loading="eager"><figcaption>First business model sketch, with bedding makers and volunteers</figcaption></figure><figure class="slide"><img src="img/04-process-cost-fail.jpg" alt="Table of monthly prices against margin and break-even customers" loading="eager"><figcaption>The first cost model lost money at 35,000 KRW</figcaption></figure></div><div class="bar"><button class="prev" type="button" aria-label="Previous">&larr;</button><span class="count" aria-live="polite">1 / 5</span><button class="next" type="button" aria-label="Next">&rarr;</button></div></div></div>

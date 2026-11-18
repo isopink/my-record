@@ -37,6 +37,8 @@ h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;lette
 .lead{margin:0;max-width:40ch;font-size:var(--text-lead);line-height:1.4;color:var(--color-ink-2);text-wrap:pretty}
 .facts{margin:var(--space-md) 0 0;width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-md) var(--space-xl);border-top:1px solid var(--color-rule-2);padding-top:var(--space-md)}
 .facts:empty{display:none}
+.tags{margin:var(--space-md) 0 0;padding:var(--space-md) 0 0;width:100%;list-style:none;display:flex;flex-wrap:wrap;gap:var(--space-xs) var(--space-md);border-top:1px solid var(--color-rule-2)}
+.tags li{font-size:var(--text-sm);font-weight:500;color:var(--color-ink-2)}
 .facts dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
 .facts dd{margin:0;font-size:0.9375rem;color:var(--color-ink-2)}
 .titlerow{display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--space-md);row-gap:var(--space-xs)}
@@ -98,7 +100,7 @@ td:first-child{white-space:normal}
 <p class="field">Extra</p>
 <h1>Thank-You Plaque</h1>
 <p class="lead">A thank-you plaque set on one grid for a professor.</p>
-<dl class="facts"><div><dt>Built with</dt><dd>Adobe Illustrator 28.7, font H2gtrE</dd></div></dl>
+<ul class="tags" aria-label="Built with"><li>#AdobeIllustrator28.7</li><li>#H2gtrE</li></ul>
 <div class="actions"></div>
 </header>
 <div class="wrap"><div class="show" role="region" aria-label="Project media"><div class="track"><figure class="slide"><img src="img/04-lead-photo.jpg" alt="A clear acrylic plaque on a wooden light base, engraved with a seal, UOSARCH and a Korean inscription" loading="eager"><figcaption>The finished plaque, recipient name blurred</figcaption></figure><figure class="slide"><img src="img/03-solution-inscription.jpg" alt="Four lines of Korean text, date and sender beside the large letters ARCH" loading="eager"><figcaption>Inscription column beside the vertical wordmark</figcaption></figure><figure class="slide"><img src="img/01-lead-design.jpg" alt="Tall grey panel with a round university seal, a vertical UOSARCH wordmark and a Korean inscription" loading="eager"><figcaption>The plaque drawing, recipient name removed</figcaption></figure><figure class="slide"><img src="img/02-process-grid.jpg" alt="Plaque layout with cyan guide lines marking columns and rows" loading="eager"><figcaption>Layout on the guide grid in Illustrator</figcaption></figure></div><div class="bar"><button class="prev" type="button" aria-label="Previous">&larr;</button><span class="count" aria-live="polite">1 / 4</span><button class="next" type="button" aria-label="Next">&rarr;</button></div></div></div>
