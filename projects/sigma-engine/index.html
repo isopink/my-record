@@ -86,14 +86,14 @@ td:first-child{white-space:normal}
 <p class="field">LLM agents</p>
 <h1>Sigma Engine</h1>
 <p class="lead">Agents propose, rules decide, on one 50 million won account.</p>
-<dl class="facts"><div><dt>Shown at</dt><dd>2026 Navist UOStock AI automated trading mock investment competition</dd></div><div><dt>Period</dt><dd>2026-10 to 2026-11</dd></div><div><dt>Role</dt><dd>Team of 2. 898 of 903 commits are under his S.Lee account, 1 under the teammate (git log to 2026-11-17)</dd></div><div><dt>Built with</dt><dd>Claude Code (sub-agents, PreToolUse Hook, own MCP server), Kiwoom REST API, Python, Supabase</dd></div></dl>
+<dl class="facts"><div><dt>Period</dt><dd>2026-10 to 2026-11</dd></div><div><dt>Role</dt><dd>Team of 2. 898 of 903 commits are under his S.Lee account, 1 under the teammate (git log to 2026-11-17)</dd></div><div><dt>Built with</dt><dd>Claude Code (sub-agents, PreToolUse Hook, own MCP server), Kiwoom REST API, Python, Supabase</dd></div></dl>
 <div class="actions"><a class="btn" href="https://github.com/isopink/sigma-engine">View on GitHub</a></div>
 </header>
 <div class="wrap"><figure class="fig lead"><img src="img/01-lead-dashboard.jpg" alt="Dark dashboard with a return chart, holdings donut and decision list" loading="eager"><figcaption>Dashboard with returns, holdings and one decision run</figcaption></figure></div>
 <nav class="wrap toc" aria-label="Sections"><a href="#overview">Overview</a><a href="#problem-define">Problem define</a><a href="#solution">Solution</a><a href="#process">Process</a><a href="#lesson">Lesson</a></nav>
 <main class="wrap">
 <section class="part" id="overview"><h2>Overview</h2><div class="part-body"><p>An autonomous trading agent for Korean equities where every decision and order comes from the AI. Agents argue and score conviction; code computes the numbers, sizes orders and blocks any order that breaks a risk limit.</p>
-<dl class="kv"><div><dt>Shown at</dt><dd>2026 Navist UOStock AI automated trading mock investment competition, 2026-11-02 to 11-27</dd></div><div><dt>Data</dt><dd>Kiwoom REST API, KRX and Naver news</dd></div><div><dt>Method</dt><dd>lead, regime, position, research, bull, bear and executor agents, risk Hook</dd></div><div><dt>Coverage</dt><dd>24 decision runs a day, 09:30 to 15:15</dd></div></dl></div></section>
+<dl class="kv"><div><dt>Run</dt><dd>2026-11-02 to 2026-11-27</dd></div><div><dt>Data</dt><dd>Kiwoom REST API, KRX and Naver news</dd></div><div><dt>Method</dt><dd>lead, regime, position, research, bull, bear and executor agents, risk Hook</dd></div><div><dt>Coverage</dt><dd>24 decision runs a day, 09:30 to 15:15</dd></div></dl></div></section>
 <section class="part" id="problem-define"><h2>Problem define</h2><div class="part-body"><p>Given the whole trading loop, an LLM misreads a price and trades on it. &quot;Cut losses at -7%&quot; in a prompt &quot;is a wish, not a guarantee.&quot;</p>
 <ul><li>17 of 44 sells after 11-05 were under 500,000 won, piling up fees</li></ul></div></section>
 <section class="part" id="solution"><h2>Solution</h2><div class="part-body"><p>A loop where agents debate candidates every 15 minutes and code sizes each order. A Hook checks every order; an after-close Scorer and Tuner adjust thresholds within fixed ranges.</p>
