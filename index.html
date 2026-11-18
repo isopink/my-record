@@ -324,7 +324,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
     setTimeout(function () { if (!gate.hidden) finish(); }, 950);
   }
 
-  // The tree opens by itself one second after it is drawn; a click or key skips the wait.
+  // The tree stays until it is touched, clicked or a key is pressed.
   ready = true; gate.classList.add('ready');
   gate.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
   gate.addEventListener('wheel', function (e) { e.preventDefault(); }, { passive: false });
@@ -332,7 +332,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
   window.addEventListener('keydown', function (e) { if (!gate.hidden && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(); } });
   window.addEventListener('resize', function () { if (!gate.hidden && !burst) { cancelAnimationFrame(raf); setup(); paint(performance.now()); } });
   var fonts = document.fonts && document.fonts.load ? document.fonts.load('500 11px "IBM Plex Mono"') : Promise.resolve();
-  function begin() { setup(); paint(performance.now()); setTimeout(open, 1000); }
+  function begin() { setup(); paint(performance.now()); }
   Promise.race([fonts, new Promise(function (ok) { setTimeout(ok, 1200); })]).then(begin, begin);
 })();
 </script>
