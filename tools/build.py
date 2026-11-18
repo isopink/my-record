@@ -203,7 +203,7 @@ def figure(img, lead=False):
 # Projects shown under a different field from the one in their entry.md.
 FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Data'}
 # Projects shown under a different name from the one in their entry.md.
-TITLE_OVERRIDE = {'interview-prep-agent': 'Job Interview Prep'}
+TITLE_OVERRIDE = {'interview-prep-agent': 'Job Interview Prep', 'first-wrong-step': 'Pathfinder'}
 
 
 def build_case(folder, allowed):
@@ -292,7 +292,8 @@ def build_case(folder, allowed):
 
 
 built = {c[0]: build_case(*c) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))}
-# Badges shown next to a project's name, as in the GitHub profile README: (label, value, background, text colour).
+# Badges shown next to a project's name, as in the GitHub profile README: (label, value, background, text colour),
+# or a list of them for more than one badge.
 BADGES = {
     'sigma-engine': ('', 'LIVE', '#E5534B', '#fff'),
     'open-duck-mini-v2': ('', 'LIVE', '#E5534B', '#fff'),
@@ -302,7 +303,7 @@ BADGES = {
     'paper-review-deck': ('Under review by', 'Anthropic', '#D97757', '#fff'),
     'deep-report-pipeline': ('Under review by', 'Anthropic', '#D97757', '#fff'),
     'impact-bridge': ('', 'LIVE', '#E5534B', '#fff'),
-    'first-wrong-step': ('', 'ON SALE', '#2DA44E', '#fff'),
+    'first-wrong-step': [('', 'ON SALE', '#2DA44E', '#fff'), ('', 'Top 0.01%', '#8957E5', '#fff')],
 }
 FIELD_NAME = {'LLM agents': 'Agent', 'Architecture': 'Extra'}
 
@@ -326,10 +327,12 @@ for field, href, title, line, course in ROWS:
         current = field
     tag = '<span class="tag">Coursework</span>' if course else ''
     name = '<a class="name" href="%s">%s</a>' % (esc(href), esc(title))
-    badge = BADGES.get(href.split('/')[1])
-    if badge:
-        k, v, bg, fg = badge
-        name = '<span class="title">%s<span class="pill" style="--p:%s;--pi:%s">%s%s</span></span>' % (name, bg, fg, '<span class="pk">%s</span>' % esc(k) if k else '', esc(v))
+    badges = BADGES.get(href.split('/')[1]) or []
+    if isinstance(badges, tuple):
+        badges = [badges]
+    if badges:
+        pills = ''.join('<span class="pill" style="--p:%s;--pi:%s">%s%s</span>' % (bg, fg, '<span class="pk">%s</span>' % esc(k) if k else '', esc(v)) for k, v, bg, fg in badges)
+        name = '<span class="title">%s%s</span>' % (name, pills)
     out.append('<li>%s<span class="line">%s%s</span></li>' % (name, esc(line), tag))
 out += ['</ul></li>', '</ul>']
 
