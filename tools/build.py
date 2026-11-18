@@ -324,9 +324,33 @@ BADGES = {
 }
 
 
+# Short lines for the main list; the full story is on each case page.
+LINE_OVERRIDE = {
+    'open-duck-mini-v2': 'A 3D-printed robot, taught to walk.',
+    'object-finder-bot': 'Ask where it is. It drives there.',
+    '3ddsg-drone-navigation': 'Room to room by scene graph.',
+    'sigma-engine': 'AI agents trade. Code holds the risk.',
+    'interview-prep-agent': 'Filings in, checked interview questions out.',
+    'deep-report-pipeline': 'Any topic to a checked A4 report.',
+    'paper-review-deck': 'Papers to a reproduced review talk.',
+    'career-log': 'Daily notes into career insight.',
+    'steps-before-crashes': "Where Seoul's older pedestrians get hit.",
+    'disaster-library-whitepaper': 'Old disaster news, new library handbooks.',
+    'data-engineering-fundamentals': '16 weeks, Python to Databricks.',
+    'gangil-evacuation-simulation': 'Smoke arrival vs. escape time.',
+    'impact-bridge': 'Student marketers for social enterprises.',
+    'first-wrong-step': 'Finds the first wrong line in CSAT math.',
+    'ibul-anbu': 'Fresh bedding for parents, paid by children.',
+    'pm-decision-making': 'Problem framing and MVP scoping.',
+    'branding-in-seongsu': "A home for Seongsu's vanishing leather craft.",
+    'digital-media-ii': 'Rhino Python to a Seoul game board.',
+    'thank-you-plaque': "Students' thanks, set in a plaque.",
+}
+
+
 def P(folder):
     b = built[folder]
-    return (FIELD_NAME.get(b['field'], b['field']), 'projects/%s/' % b['slug'], b['title'], b['line'], b['kind'] == 'coursework')
+    return (FIELD_NAME.get(b['field'], b['field']), 'projects/%s/' % b['slug'], b['title'], LINE_OVERRIDE.get(b['slug'], b['line']), b['kind'] == 'coursework')
 
 
 ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))]
