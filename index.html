@@ -387,6 +387,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
   var canvas = document.getElementById('mark');
   var ctx = canvas.getContext('2d'), mark = canvas.parentElement, offX = 0, offY = 0, CW = 0, CH = 0;
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var STREAM = WORDS.join('').split('');
   var cells = [], W = 0, H = 0, cw = 0, ch = 0, fs = 0, start = 0, raf = 0, played = false, DPR = 1, running = false, inside = false, px = -9999, py = -9999, REACH = 90;
 
   function token(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
@@ -448,7 +449,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
         var x = Math.floor(c * cw + cw / 2), y = Math.floor(r * ch + ch / 2);
         if (data[(y * W + x) * 4 + 3] < 128) continue;
         var word = WORDS[wi % WORDS.length];
-        cells.push({ x: c * cw, y: r * ch + ch * 0.8, t: word[ci], hue: (data[(y * W + x) * 4] + 5) % 6, ox: 0, oy: 0, vx: 0, vy: 0, wait: (c * 37 + r * 91) % 450, span: 1100, sx: 0, sy: 0, jx: 0, jy: 0, rot: 0, k: 1 });
+        cells.push({ n: cells.length, x: c * cw, y: r * ch + ch * 0.8, t: word[ci], hue: (data[(y * W + x) * 4] + 5) % 6, ox: 0, oy: 0, vx: 0, vy: 0, wait: (c * 37 + r * 91) % 450, span: 1100, sx: 0, sy: 0, jx: 0, jy: 0, rot: 0, k: 1 });
         // Each letter starts out beyond the edge, on the line from the centre through its place.
         var cell = cells[cells.length - 1], turn = Math.atan2(y - H / 2, x - W / 2) + (((c * 17 + r * 29) % 60) - 30) / 100, far = Math.sqrt(CW * CW + CH * CH) * (1 + ((c * 7 + r * 13) % 40) / 100);
         cell.sx = Math.cos(turn) * far; cell.sy = Math.sin(turn) * far;
@@ -470,22 +471,32 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
         var p = still || played ? 1 : Math.max(0, Math.min(1, (t - c.wait) / c.span));
         if (p <= 0) { moving = true; continue; }
         if (p < 1) moving = true;
-        var e = 1 - Math.pow(1 - p, 3);
-        ctx.globalAlpha = e;
+        var e = 1 - Math.pow(1 - p, 3), lit = 1, bob = 0;
+        // Once the letters have gathered, the words keep flowing through them, a light sweeps across and each column sways.
+        if (!still && p >= 1) {
+          var sec = t / 1000;
+          c.t = STREAM[(c.n + Math.floor(sec * 6)) % STREAM.length];
+          lit = 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(sec * 2.4 - (c.x + c.y * 0.6) * 0.012));
+          bob = Math.sin(sec * 2 + c.x * 0.03) * fs * 0.3;
+        }
+        ctx.globalAlpha = e * lit;
         ctx.fillStyle = hues[c.hue];
-        ctx.setTransform(DPR, 0, 0, DPR, (offX + c.x + c.jx + (1 - e) * c.sx) * DPR, (offY + c.y + c.jy + (1 - e) * c.sy) * DPR);
-        
+        ctx.setTransform(DPR, 0, 0, DPR, (offX + c.x + c.jx + (1 - e) * c.sx) * DPR, (offY + c.y + c.jy + bob + (1 - e) * c.sy) * DPR);
+
         ctx.fillText(c.t, 0, 0);
       }
     }
     ctx.setTransform(DPR, 0, 0, DPR, offX * DPR, offY * DPR);
     ctx.globalAlpha = 1;
     if (!moving) played = true;
-    running = moving || stirred || inside;
+    running = moving || stirred || inside || (!still && seen);
     if (running) raf = requestAnimationFrame(paint);
   }
 
   function run() { cancelAnimationFrame(raf); build(); start = performance.now(); running = true; paint(start); }
+  // The sentence keeps moving only while it is on screen.
+  var seen = true;
+  if (window.IntersectionObserver) new IntersectionObserver(function (es) { seen = es[0].isIntersecting; if (seen) wake(); }).observe(mark);
   function wake() { if (!running && !still) { running = true; raf = requestAnimationFrame(paint); } }
 
   var ready = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('700 100px "IBM Plex Sans"'), document.fonts.load('500 11px "IBM Plex Mono"')]) : Promise.resolve();
