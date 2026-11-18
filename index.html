@@ -126,11 +126,12 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 .groups{list-style:none;margin:0;padding:0;border-bottom:var(--rule-hair) solid var(--color-rule-2)}
 .group{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,10fr);column-gap:var(--gap-columns);align-items:center;padding-block:var(--space-md);border-top:var(--rule-hair) solid var(--color-rule-2)}
 .group:first-child{border-top-color:var(--color-rule)}
-.group .field{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.group .field{align-self:start;margin-top:calc(var(--space-xs) - var(--space-md));font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
 .items{list-style:none;margin:0;padding:0}
 .items li{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,7fr);column-gap:var(--gap-columns);row-gap:0.125rem;align-items:baseline;padding-block:var(--space-sm)}
 .items .name{font-weight:600;text-decoration:none}
-.pill{display:inline-flex;align-items:stretch;margin-left:var(--space-xs);font-size:0.6875rem;font-weight:600;line-height:1.5;letter-spacing:0.02em;white-space:nowrap;vertical-align:0.12em;background:var(--p);color:var(--pi);padding-inline:0.375rem;border-radius:2px;overflow:hidden}
+.items .title{display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--space-xs);row-gap:0.25rem}
+.pill{display:inline-flex;align-items:stretch;font-size:0.6875rem;font-weight:600;line-height:1.5;letter-spacing:0.02em;white-space:nowrap;vertical-align:0.12em;background:var(--p);color:var(--pi);padding-inline:0.375rem;border-radius:2px;overflow:hidden}
 .pill .pk{margin-left:-0.375rem;margin-right:0.375rem;padding-inline:0.375rem;background:oklch(36% 0.005 250);color:oklch(96% 0 0);font-weight:500}
 .items .name:hover{text-decoration:underline}
 .items .line{color:var(--color-muted)}
@@ -144,7 +145,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 @media (max-width:40rem){.group{grid-template-columns:minmax(0,1fr);row-gap:var(--space-xs);padding-block:var(--space-md)}.items li{grid-template-columns:minmax(0,1fr)}.skills,.skills ul{gap:0.25rem}.skills .badge{height:1.25rem;padding-inline:0.375rem;font-size:0.6875rem}}
 @media (max-width:40rem){.hero{padding-block:var(--space-md) var(--space-2xl)}.skills{margin-bottom:var(--space-lg);flex-direction:row;flex-wrap:wrap;justify-content:center}.skills ul{display:contents}.skills li{flex:0 0 auto}}
 @media (max-width:60rem){.cols > *{grid-column:1 / -1 !important}}
-@media (max-width:40rem){.group{padding-block:var(--space-lg) var(--space-md)}.group .field{font-size:0.8125rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-ink);text-align:center;padding-bottom:var(--space-xs)}.items li{row-gap:0.25rem;padding-block:var(--space-sm)}.items .name{font-size:1.0625rem;line-height:1.35}.items .line{font-size:0.9375rem;line-height:1.5}}
+@media (max-width:40rem){.group{padding-block:var(--space-xs) var(--space-md)}.group .field{font-size:0.8125rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-ink);text-align:left;margin-top:0;padding-bottom:var(--space-sm)}.items li{row-gap:0.25rem;padding-block:var(--space-sm)}.items .name{font-size:1.0625rem;line-height:1.35}.items .line{font-size:0.9375rem;line-height:1.5}}
 @media (prefers-reduced-motion:reduce){.tree span{animation:none}.enter,.js .fade{transition:none}}
 </style>
 
@@ -339,7 +340,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 <div class="wrap">
 <ul class="groups">
 <li class="group"><span class="field">Agent</span><ul class="items">
-<li><span class="title"><a class="name" href="projects/interview-prep-agent/">Why this company</a><span class="pill" style="--p:#D4A72C;--pi:#1b1b1b"><span class="pk">Awarded by</span>Upstage</span></span><span class="line">Interview questions from a company&#x27;s DART business report, every figure checked.</span></li>
+<li><span class="title"><a class="name" href="projects/interview-prep-agent/">Job Interview Prep</a><span class="pill" style="--p:#D4A72C;--pi:#1b1b1b"><span class="pk">Awarded by</span>Upstage</span></span><span class="line">Interview questions from a company&#x27;s DART business report, every figure checked.</span></li>
 <li><span class="title"><a class="name" href="projects/sigma-engine/">Sigma Engine</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">Claude Code agents debate Korean stocks; code sizes orders and enforces limits.</span></li>
 <li><span class="title"><a class="name" href="projects/deep-report-pipeline/">Deep report pipeline</a><span class="pill" style="--p:#D97757;--pi:#fff"><span class="pk">Under review by</span>Anthropic</span></span><span class="line">A Claude skill that turns a topic into a checked A4 report PDF.</span></li>
 <li><span class="title"><a class="name" href="projects/paper-review-deck/">Paper review deck</a><span class="pill" style="--p:#D97757;--pi:#fff"><span class="pk">Under review by</span>Anthropic</span></span><span class="line">A Claude skill that turns papers into a reproduced, checked review talk.</span></li>
@@ -349,11 +350,12 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 <li><a class="name" href="projects/steps-before-crashes/">Steps Before Crashes</a><span class="line">Elderly pedestrian crash hotspots and inspection candidates for Seoul&#x27;s 467 dongs.</span></li>
 <li><a class="name" href="projects/disaster-library-whitepaper/">Disaster library whitepaper</a><span class="line">Old newspaper disaster reports turned into local library disaster-prep handbooks.</span></li>
 <li><a class="name" href="projects/data-engineering-fundamentals/">Fundamentals of Data Engineering</a><span class="line">A 16-week society course on Python, Docker, databases and Databricks.<span class="tag">Coursework</span></span></li>
+<li><a class="name" href="projects/gangil-evacuation-simulation/">Gangil 4F evacuation simulation</a><span class="line">Smoke arrival against evacuation time on one civic building floor.</span></li>
 </ul></li>
 <li class="group"><span class="field">Startup</span><ul class="items">
-<li><a class="name" href="projects/first-wrong-step/">First wrong step</a><span class="line">Few-shot marking of handwritten CSAT math from the first wrong line.</span></li>
+<li><span class="title"><a class="name" href="projects/first-wrong-step/">Pathfinder</a><span class="pill" style="--p:#2DA44E;--pi:#fff">ON SALE</span><span class="pill" style="--p:#8957E5;--pi:#fff">Top 0.01%</span></span><span class="line">Few-shot marking of handwritten CSAT math from the first wrong line.</span></li>
 <li><a class="name" href="projects/ibul-anbu/">Ibul Anbu</a><span class="line">In-home bedding pickup, wash and remake for older parents, paid by children.</span></li>
-<li><a class="name" href="projects/impact-bridge/">Impact Bridge</a><span class="line">Links social enterprises short on marketing staff with student marketing societies.</span></li>
+<li><span class="title"><a class="name" href="projects/impact-bridge/">Impact Bridge</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">Links social enterprises short on marketing staff with student marketing societies.</span></li>
 <li><a class="name" href="projects/pm-decision-making/">PM decision making</a><span class="line">A course on defining problems and scoping MVPs as a product manager.<span class="tag">Coursework</span></span></li>
 </ul></li>
 <li class="group"><span class="field">Robotics</span><ul class="items">
@@ -363,7 +365,6 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 </ul></li>
 <li class="group"><span class="field">Extra</span><ul class="items">
 <li><a class="name" href="projects/branding-in-seongsu/">Branding in Seongsu</a><span class="line">A shared leather craft hub for Seongsu-dong&#x27;s disappearing craftsmen.</span></li>
-<li><a class="name" href="projects/gangil-evacuation-simulation/">Gangil 4F evacuation simulation</a><span class="line">Smoke arrival against evacuation time on one civic building floor.</span></li>
 <li><a class="name" href="projects/digital-media-ii/">Digital Media II</a><span class="line">Course work from Rhino Python to a data-driven Seoul game board.</span></li>
 <li><a class="name" href="projects/thank-you-plaque/">Thank-you plaque</a><span class="line">A vertical plaque of thanks from students to their professor.</span></li>
 </ul></li>
@@ -387,6 +388,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
   var canvas = document.getElementById('mark');
   var ctx = canvas.getContext('2d'), mark = canvas.parentElement, offX = 0, offY = 0, CW = 0, CH = 0;
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var STREAM = WORDS.join('').split('');
   var cells = [], W = 0, H = 0, cw = 0, ch = 0, fs = 0, start = 0, raf = 0, played = false, DPR = 1, running = false, inside = false, px = -9999, py = -9999, REACH = 90;
 
   function token(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
@@ -448,7 +450,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
         var x = Math.floor(c * cw + cw / 2), y = Math.floor(r * ch + ch / 2);
         if (data[(y * W + x) * 4 + 3] < 128) continue;
         var word = WORDS[wi % WORDS.length];
-        cells.push({ x: c * cw, y: r * ch + ch * 0.8, t: word[ci], hue: (data[(y * W + x) * 4] + 5) % 6, ox: 0, oy: 0, vx: 0, vy: 0, wait: (c * 37 + r * 91) % 450, span: 1100, sx: 0, sy: 0, jx: 0, jy: 0, rot: 0, k: 1 });
+        cells.push({ n: cells.length, x: c * cw, y: r * ch + ch * 0.8, t: word[ci], hue: (data[(y * W + x) * 4] + 5) % 6, ox: 0, oy: 0, vx: 0, vy: 0, wait: (c * 37 + r * 91) % 450, span: 1100, sx: 0, sy: 0, jx: 0, jy: 0, rot: 0, k: 1 });
         // Each letter starts out beyond the edge, on the line from the centre through its place.
         var cell = cells[cells.length - 1], turn = Math.atan2(y - H / 2, x - W / 2) + (((c * 17 + r * 29) % 60) - 30) / 100, far = Math.sqrt(CW * CW + CH * CH) * (1 + ((c * 7 + r * 13) % 40) / 100);
         cell.sx = Math.cos(turn) * far; cell.sy = Math.sin(turn) * far;
@@ -470,22 +472,32 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
         var p = still || played ? 1 : Math.max(0, Math.min(1, (t - c.wait) / c.span));
         if (p <= 0) { moving = true; continue; }
         if (p < 1) moving = true;
-        var e = 1 - Math.pow(1 - p, 3);
-        ctx.globalAlpha = e;
+        var e = 1 - Math.pow(1 - p, 3), lit = 1, bob = 0;
+        // Once the letters have gathered, the words keep flowing through them, a light sweeps across and each column sways.
+        if (!still && p >= 1) {
+          var sec = t / 1000;
+          c.t = STREAM[(c.n + Math.floor(sec * 6)) % STREAM.length];
+          lit = 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(sec * 2.4 - (c.x + c.y * 0.6) * 0.012));
+          bob = Math.sin(sec * 2 + c.x * 0.03) * fs * 0.3;
+        }
+        ctx.globalAlpha = e * lit;
         ctx.fillStyle = hues[c.hue];
-        ctx.setTransform(DPR, 0, 0, DPR, (offX + c.x + c.jx + (1 - e) * c.sx) * DPR, (offY + c.y + c.jy + (1 - e) * c.sy) * DPR);
-        
+        ctx.setTransform(DPR, 0, 0, DPR, (offX + c.x + c.jx + (1 - e) * c.sx) * DPR, (offY + c.y + c.jy + bob + (1 - e) * c.sy) * DPR);
+
         ctx.fillText(c.t, 0, 0);
       }
     }
     ctx.setTransform(DPR, 0, 0, DPR, offX * DPR, offY * DPR);
     ctx.globalAlpha = 1;
     if (!moving) played = true;
-    running = moving || stirred || inside;
+    running = moving || stirred || inside || (!still && seen);
     if (running) raf = requestAnimationFrame(paint);
   }
 
   function run() { cancelAnimationFrame(raf); build(); start = performance.now(); running = true; paint(start); }
+  // The sentence keeps moving only while it is on screen.
+  var seen = true;
+  if (window.IntersectionObserver) new IntersectionObserver(function (es) { seen = es[0].isIntersecting; if (seen) wake(); }).observe(mark);
   function wake() { if (!running && !still) { running = true; raf = requestAnimationFrame(paint); } }
 
   var ready = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('700 100px "IBM Plex Sans"'), document.fonts.load('500 11px "IBM Plex Mono"')]) : Promise.resolve();
