@@ -229,9 +229,9 @@ def figure(img, lead=False):
 
 
 # Field names as the site shows them.
-FIELD_NAME = {'LLM agents': 'Agents', 'Architecture': 'Design'}
+FIELD_NAME = {'LLM agents': 'Agents', 'Architecture': 'Extra', 'Design': 'Extra'}
 # Projects shown under a different field from the one in their entry.md.
-FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Data'}
+FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Data', 'pm-decision-making': 'Extra', 'data-engineering-fundamentals': 'Extra'}
 # Projects shown under a different name from the one in their entry.md.
 TITLE_OVERRIDE = {
     'interview-prep-agent': 'Job Interview Prep',
@@ -347,6 +347,8 @@ BADGES = {
     'deep-report-pipeline': ('Under review by', 'Anthropic', '#D97757', '#fff'),
     'impact-bridge': ('', 'LIVE', '#E5534B', '#fff'),
     'gangil-evacuation-simulation': ('', 'LIVE', '#E5534B', '#fff'),
+    'pm-decision-making': ('', 'LIVE', '#E5534B', '#fff'),
+    'data-engineering-fundamentals': ('', 'LIVE', '#E5534B', '#fff'),
     'ibul-anbu': ('Awarded by', 'UOS', '#D4A72C', '#1b1b1b'),
     'first-wrong-step': [('', 'ON SALE', '#2DA44E', '#fff'), ('', 'Top 0.01%', '#8957E5', '#fff')],
 }
@@ -382,7 +384,7 @@ def P(folder):
 
 
 ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))]
-FIELD_ORDER = ['Robotics', 'Agents', 'Startup', 'Data', 'Design']
+FIELD_ORDER = ['Robotics', 'Agents', 'Startup', 'Data', 'Extra']
 def is_live(href):
     badges = BADGES.get(href.split('/')[1]) or []
     return any(b[1] == 'LIVE' for b in ([badges] if isinstance(badges, tuple) else badges))
