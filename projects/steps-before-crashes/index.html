@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Steps Before Crashes</title>
+<meta name="description" content="Elderly pedestrian crash hotspots and inspection candidates for Seoul&#x27;s 467 dongs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{
+--color-paper:oklch(13% 0.004 250);--color-paper-2:oklch(18% 0.005 250);
+--color-ink:oklch(96% 0.003 250);--color-ink-2:oklch(86% 0.004 250);--color-muted:oklch(72% 0.005 250);
+--color-rule:oklch(96% 0.003 250 / 0.9);--color-rule-2:oklch(96% 0.003 250 / 0.2);
+--color-accent-ink:oklch(13% 0.004 250);--color-focus:oklch(96% 0.003 250);
+--font-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;--font-mono:"IBM Plex Mono",ui-monospace,monospace;
+--text-display:clamp(2.25rem,5vw,4rem);--text-section:clamp(1.5rem,2.4vw,2rem);--text-lead:1.25rem;--text-md:1rem;--text-sm:0.875rem;
+--space-xs:0.5rem;--space-sm:0.75rem;--space-md:1rem;--space-lg:1.5rem;--space-xl:2rem;--space-2xl:3rem;--space-3xl:4.5rem;
+--container:72rem;--gutter:clamp(1rem,4.4vw,4rem);
+color-scheme:dark;
+}
+html,body{overflow-x:clip}
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-paper);color:var(--color-ink);font-family:var(--font-body);font-size:var(--text-md);line-height:1.6}
+a{color:var(--color-ink);text-decoration-thickness:1px;text-underline-offset:0.2em}
+a:hover{text-decoration-color:transparent}
+a:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
+::selection{background:var(--color-ink);color:var(--color-accent-ink)}
+.wrap{max-width:var(--container);margin-inline:auto;padding-left:max(var(--gutter),env(safe-area-inset-left,0px));padding-right:max(var(--gutter),env(safe-area-inset-right,0px))}
+.top{padding-block:var(--space-xl) var(--space-2xl);display:flex;flex-direction:column;align-items:flex-start;row-gap:var(--space-md)}
+.back{display:inline-flex;align-items:center;min-height:3rem;font-size:var(--text-sm);font-weight:500}
+.field{margin:var(--space-md) 0 0;font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.kind{margin-left:var(--space-sm);padding:0 0.375rem;border:1px solid var(--color-rule-2);font-size:0.75rem}
+h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;letter-spacing:-0.022em;text-wrap:balance;overflow-wrap:break-word;min-width:0}
+.paper-title{font-size:clamp(1.75rem,3.4vw,2.75rem);line-height:1.15;max-width:30ch}
+.lead{margin:0;max-width:40ch;font-size:var(--text-lead);line-height:1.4;color:var(--color-ink-2);text-wrap:pretty}
+.facts{margin:var(--space-md) 0 0;width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-md) var(--space-xl);border-top:1px solid var(--color-rule-2);padding-top:var(--space-md)}
+.facts dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.facts dd{margin:0;font-size:0.9375rem;color:var(--color-ink-2)}
+.actions{display:flex;flex-wrap:wrap;gap:var(--space-sm)}
+.actions:empty{display:none}
+.btn{display:inline-flex;align-items:center;height:3rem;padding-inline:var(--space-lg);border:1px solid var(--color-ink);font-weight:500;text-decoration:none;white-space:nowrap}
+.btn:first-child{background:var(--color-ink);color:var(--color-accent-ink)}
+.fig{margin:0;display:flex;flex-direction:column;row-gap:var(--space-xs)}
+.fig img{display:block;width:100%;height:auto;border:1px solid var(--color-rule-2);background:var(--color-paper-2)}
+.fig figcaption{font-size:var(--text-sm);color:var(--color-muted)}
+.fig img{max-height:80svh;object-fit:contain}
+.fig.lead{align-items:center}
+.fig.lead img{width:auto;max-width:100%;max-height:78svh}
+.kv{margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-sm) var(--space-xl)}
+.kv dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.kv dd{margin:0;color:var(--color-ink-2);font-size:0.9375rem}
+@media (max-width:48rem){.kv{grid-template-columns:minmax(0,1fr)}}
+.toc{position:sticky;top:0;z-index:2;margin-top:var(--space-2xl);display:flex;flex-wrap:wrap;column-gap:var(--space-xl);background:var(--color-paper);border-block:1px solid var(--color-rule-2);font-size:var(--text-sm);font-weight:500}
+.toc a{display:inline-flex;align-items:center;min-height:3rem;text-decoration:none;color:var(--color-ink-2)}
+.toc a:hover{color:var(--color-ink)}
+.part{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,9fr);column-gap:var(--space-2xl);padding-block:var(--space-3xl);border-bottom:1px solid var(--color-rule-2);scroll-margin-top:3.5rem}
+.part h2{margin:0;font-size:var(--text-section);font-weight:600;line-height:1.15;letter-spacing:-0.015em}
+.part-body{min-width:0;display:flex;flex-direction:column;row-gap:var(--space-lg)}
+.part-body p,.part-body li{max-width:68ch;color:var(--color-ink-2)}
+.part-body p{margin:0}
+.part-body > p:first-child{font-size:1.125rem;line-height:1.5;color:var(--color-ink)}
+.part-body ol,.part-body ul{margin:0;padding-left:1.25em;display:flex;flex-direction:column;row-gap:var(--space-sm)}
+.part-body h3{margin:var(--space-md) 0 0;font-size:1.125rem;font-weight:600}
+.part-body code{font-family:var(--font-mono);font-size:0.8125rem;color:var(--color-muted);overflow-wrap:anywhere}
+.part-body blockquote{margin:0;padding-left:var(--space-md);border-left:1px solid var(--color-rule-2);color:var(--color-ink-2)}
+.tablebox{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:0.9375rem;font-variant-numeric:tabular-nums}
+th,td{padding:var(--space-sm) var(--space-md) var(--space-sm) 0;border-bottom:1px solid var(--color-rule-2);text-align:left;vertical-align:top}
+th{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+td:first-child{font-weight:600;color:var(--color-ink);white-space:nowrap}
+.paper .part-body > p:first-child{font-size:var(--text-md);color:var(--color-ink-2)}
+.intro p{max-width:68ch;color:var(--color-ink-2)}
+.foot{padding-block:var(--space-2xl)}
+@media (max-width:48rem){
+.part{grid-template-columns:minmax(0,1fr);row-gap:var(--space-lg);padding-block:var(--space-2xl)}
+.facts{grid-template-columns:minmax(0,1fr)}
+td:first-child{white-space:normal}
+}
+</style>
+</head>
+<body>
+<header class="wrap top">
+<a class="back" href="../../index.html#work">All work</a>
+<p class="field">Data</p>
+<h1>Steps Before Crashes</h1>
+<p class="lead">Where older people walk in Seoul, and where they get hit.</p>
+<dl class="facts"><div><dt>Shown at</dt><dd>2026 Data Safe Zone Competition, team NO약자</dd></div><div><dt>Role</dt><dd>Analysis code and models (join, hotspots, forecast, validation), maps, diagnosis cards and the proposal; team of 5</dd></div><div><dt>Built with</dt><dd>Python, geopandas, PySAL esda, statsmodels</dd></div></dl>
+<div class="actions"><a class="btn" href="paper.html">Read the full write-up</a><a class="btn" href="https://github.com/isopink/steps-before-crashes">View on GitHub</a></div>
+</header>
+<div class="wrap"><figure class="fig lead"><img src="img/01-lead-candidate-map.jpg" alt="Seoul map of predicted elderly pedestrian crashes by legal dong with ten numbered candidates" loading="eager"><figcaption>Predicted January 2025 crashes by dong, 10 candidates numbered</figcaption></figure></div>
+<nav class="wrap toc" aria-label="Sections"><a href="#overview">Overview</a><a href="#problem-define">Problem define</a><a href="#solution">Solution</a><a href="#process">Process</a><a href="#lesson">Lesson</a></nav>
+<main class="wrap">
+<section class="part" id="overview"><h2>Overview</h2><div class="part-body"><p>A dong-level analysis joining closed mobile-network walking data with closed crash records for Seoul&#x27;s 467 legal dongs. It outputs walking and crash hotspots and a monthly list of 10 dongs to inspect first.</p>
+<dl class="kv"><div><dt>Shown at</dt><dd>2026 Data Safe Zone Competition</dd></div><div><dt>Data</dt><dd>LG U+ flow population (50 m cell by month) and KoROAD crash records, April to December 2024</dd></div><div><dt>Method</dt><dd>Local Moran&#x27;s I hotspots, Poisson GLM forecast retrained monthly</dd></div><div><dt>Ran on</dt><dd>the Data Safe Zone centre; only dong-level aggregates left it</dd></div></dl></div></section>
+<section class="part" id="problem-define"><h2>Problem define</h2><div class="part-body"><p>Seoul picked places by past crash counts or by facilities, and neither knew where older people actually walk. Residential population is not walking, and public hot-spot lists lack crash type and time.</p>
+<ul><li>50 of Seoul&#x27;s 59 elderly-pedestrian crash hot spots in 2024 were more than 300 m from the nearest senior protection zone.</li><li>346 of 463 counted dongs have no senior protection zone and hold 442 of 1,455 crashes (30.4%).</li></ul><figure class="fig"><img src="img/02-problem-walking-map.jpg" alt="Seoul choropleth of monthly mean elderly walking exposure in five classes" loading="lazy"><figcaption>Where older people walk: monthly exposure by dong, 2024</figcaption></figure></div></section>
+<section class="part" id="solution"><h2>Solution</h2><div class="part-body"><p>Analysis code that joins the two closed datasets, finds hotspots and forecasts next month&#x27;s crashes per dong. A district office gets 10 dongs to inspect first, each with a diagnosis card.</p>
+<div class="tablebox"><table><thead><tr><th scope="col">Value with unit</th><th scope="col">What it measures (10 words or fewer)</th></tr></thead><tbody><tr><td>19.0% (198 of 1,040 crashes)</td><td>Crashes in the model&#x27;s top 10 dongs per month</td></tr><tr><td>18.3% (190 of 1,040 crashes)</td><td>Same capture for the past-crash ranking baseline</td></tr><tr><td>51.6% vs 50.5%</td><td>Spatial hold-out capture, model vs baseline, 5 regions</td></tr></tbody></table></div><figure class="fig"><img src="img/04-solution-capture-curve.jpg" alt="Line chart of cumulative crash capture against number of dongs selected, four nearly overlapping lines" loading="lazy"><figcaption>Top 10 capture: model 19.0%, past crashes 18.3%</figcaption></figure><figure class="fig"><img src="img/05-solution-sanggye-card.jpg" alt="Card with forecast figures and four bar charts of crash makeup for Sanggye-dong" loading="lazy"><figcaption>Diagnosis card for candidate 1, Sanggye-dong</figcaption></figure></div></section>
+<section class="part" id="process"><h2>Process</h2><div class="part-body"><ol><li>Join. Assigned 233,483 walking cells (5.26M rows) to dongs by centre, then by overlap, keeping missing months as missing.</li><li>Hotspots. Local Moran&#x27;s I with 999 permutations gave 0 to 8 dongs by seed. Replaced by requiring significance in all 5 seeds of 9,999.</li><li>Forecast. Poisson, negative binomial and LightGBM predict next month&#x27;s crashes from lagged walking exposure, crashes and observation rate, retrained monthly.</li><li>Validate. Predicted July to December from earlier months only, then held out five district regions in turn, both against past-crash ranking.</li></ol><figure class="fig"><img src="img/03-process-hotspot-map.jpg" alt="Seoul map marking dongs that are walking hotspots, crash hotspots or both" loading="lazy"><figcaption>Walking and crash hotspots, stable across five seeds</figcaption></figure></div></section>
+<section class="part" id="lesson"><h2>Lesson</h2><div class="part-body"><p>The model picks about as well as past crash counts do.</p>
+<p>It caught 198 of 1,040 crashes against 190 for the baseline, and the order flips with tie-breaking. The list says where to look first; nothing measures whether an intervention reduces crashes.</p></div></section>
+</main>
+<footer class="wrap foot"><a class="back" href="../../index.html#work">All work</a></footer>
+</body>
+</html>

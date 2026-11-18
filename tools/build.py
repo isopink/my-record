@@ -12,6 +12,16 @@ SITE = os.path.join(SRC, 'site')
 
 # Projects that get a case page: (folder, slug, picture files allowed on the public page or None for all).
 CASES = [
+    ('LLM agents/interview-prep-agent', None),
+    ('LLM agents/sigma-engine', None),
+    ('LLM agents/deep-report-pipeline', None),
+    ('LLM agents/paper-review-deck', None),
+    ('LLM agents/career-log', None),
+    ('Data/steps-before-crashes', None),
+    ('Data/disaster-library-whitepaper', None),
+    ('Robotics/open-duck-mini-v2', None),
+    ('Robotics/object-finder-bot', None),
+    ('Robotics/3ddsg-drone-navigation', None),
     ('Architecture/branding-in-seongsu', None),
     ('Architecture/gangil-evacuation-simulation', None),
     ('Architecture/digital-media-ii', None),
@@ -56,6 +66,8 @@ def clean(s):
     """Remove working notes that do not belong on a public page."""
     s = re.sub(r'\s*\((?:[^()]|\([^()]*\))*`[^()]*\)', '', s)        # parenthetical file references
     s = re.sub(r'\s*\((?:source|Source)[^)]*\)', '', s)
+    s = re.sub(r'\s*\([^()]*\.(?:md|py|json|csv|txt|pdf|xlsx|fds|out|gh|sql|ipynb)[^()]*\)', '', s)
+    s = re.sub(r'\s*\((?:commit|row|page|p\.|section|slide)[^)]*\)', '', s)
     s = re.sub(r'(?:Source|Sources|Figure|Figures): [^\n]*', '', s)
     sents = re.split(r'(?<=[.!?])\s+', s)
     s = ' '.join(x for x in sents if 'MISSING' not in x and not re.match(r'\s*(?:Source|Figure)s?\b', x)
@@ -150,7 +162,28 @@ def images_by_part(folder, allowed):
     return found
 
 
-PAGE_CSS = open(os.path.join(os.path.dirname(__file__), 'case.css'), encoding='utf-8').read()
+import subprocess
+
+
+def copy_images(folder, dest, allowed):
+    src = os.path.join(SRC, folder, 'images')
+    if not os.path.isdir(src) or allowed == []:
+        return
+    os.makedirs(dest, exist_ok=True)
+    tool = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resize.ps1')
+    for name in sorted(os.listdir(src)):
+        if os.path.splitext(name)[1].lower() not in ('.png', '.jpg', '.jpeg', '.webp', '.gif', '.bmp'):
+            continue
+        target = os.path.join(dest, os.path.splitext(name)[0] + '.jpg')
+        if allowed is not None and os.path.basename(target) not in allowed:
+            continue
+        if os.path.exists(target) and os.path.getmtime(target) >= os.path.getmtime(os.path.join(src, name)):
+            continue
+        subprocess.run(['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', tool, os.path.join(src, name), target],
+                       check=True, capture_output=True)
+
+
+PAGE_CSS = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'case.css'), encoding='utf-8').read()
 
 
 def page(title, desc, body):
@@ -172,6 +205,7 @@ def build_case(folder, allowed):
     slug = os.path.basename(folder)
     out = os.path.join(SITE, 'projects', slug)
     os.makedirs(out, exist_ok=True)
+    copy_images(folder, os.path.join(out, 'img'), allowed)
     imgs = images_by_part(folder, allowed)
     lead = next((x for x in imgs if x['part'] == 'Lead'), None)
 
@@ -180,7 +214,8 @@ def build_case(folder, allowed):
         v = clean(front.get(key, ''))
         if v and v.lower() != 'none':
             facts.append('<div><dt>%s</dt><dd>%s</dd></div>' % (label, inline(v)))
-    links = [l for l in re.findall(r'https?://\S+', front.get('links', ''))]
+    head_text = open(os.path.join(SRC, folder, 'entry.md'), encoding='utf-8').read().split('\n---', 2)[0]
+    links = list(dict.fromkeys(re.findall(r'https?://github\.com/isopink/[\w.-]+', head_text)))
     paper = os.path.exists(os.path.join(SRC, folder, 'paper.md')) and front.get('public', '').startswith('yes')
     actions = ''.join('<a class="btn" href="%s">View on GitHub</a>' % esc(l) for l in links if 'github.com' in l)
     if paper:
@@ -248,7 +283,7 @@ def build_case(folder, allowed):
             'kind': front.get('kind', ''), 'built_with': front.get('built_with', '')}
 
 
-built = {c[0]: build_case(*c) for c in CASES}
+built = {c[0]: build_case(*c) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))}
 FIELD_NAME = {'LLM agents': 'LLM systems'}
 
 
@@ -257,27 +292,9 @@ def P(folder):
     return (FIELD_NAME.get(b['field'], b['field']), 'projects/%s/' % b['slug'], b['title'], b['line'], b['kind'] == 'coursework')
 
 
-ROWS = [
-    ('LLM systems', GH + 'interview-prep-agent', 'Interview Prep Agent', 'Interview prep from a company’s DART filings, every figure checked.', False),
-    ('LLM systems', GH + 'sigma-engine', 'Sigma Engine', 'An autonomous trading agent.', False),
-    ('LLM systems', GH + 'deep-report-pipeline', 'Deep Report Pipeline', 'A topic in, a fact-checked report out, as an A4 PDF.', False),
-    ('LLM systems', GH + 'paper-review-deck', 'Paper Review Deck', 'Turns a research paper into a review slide deck.', False),
-    ('LLM systems', GH + 'career-log', 'Career Log', 'Job-search notes become insights, job picks and a deadline checklist.', False),
-    ('Data', GH + 'steps-before-crashes', 'Steps Before Crashes', 'The ten Seoul dongs to inspect first for elderly pedestrian crashes.', False),
-    ('Data', GH + 'disaster-library-whitepaper', 'Disaster Library Whitepaper', 'Old newspapers turned into disaster-prep handbooks for nearby libraries.', False),
-    P('Data/data-engineering-fundamentals'),
-    P('Startup/first-wrong-step'),
-    P('Startup/ibul-anbu'),
-    P('Startup/impact-bridge'),
-    P('Startup/pm-decision-making'),
-    ('Robotics', GH + 'open-duck-mini-v2', 'Open Duck Mini v2', 'A 3D-printed biped that walks on a Raspberry Pi.', False),
-    ('Robotics', GH + 'object-finder-bot', 'Object Finder Bot', 'A course robot that finds a named object in a room.', False),
-    ('Robotics', GH + '3ddsg-drone-navigation', '3DDSG Drone Navigation', 'Indoor drone flight on a scene graph built from the building’s IFC model.', False),
-    P('Architecture/branding-in-seongsu'),
-    P('Architecture/gangil-evacuation-simulation'),
-    P('Architecture/digital-media-ii'),
-    P('Architecture/thank-you-plaque'),
-]
+ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))]
+FIELD_ORDER = ['LLM systems', 'Data', 'Startup', 'Robotics', 'Architecture']
+ROWS.sort(key=lambda r: FIELD_ORDER.index(r[0]) if r[0] in FIELD_ORDER else 99)
 
 out = ['<ul class="groups">']
 current = None

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Disaster library whitepaper, full write-up</title>
+<meta name="description" content="Old newspaper disaster reports turned into local library disaster-prep handbooks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{
+--color-paper:oklch(13% 0.004 250);--color-paper-2:oklch(18% 0.005 250);
+--color-ink:oklch(96% 0.003 250);--color-ink-2:oklch(86% 0.004 250);--color-muted:oklch(72% 0.005 250);
+--color-rule:oklch(96% 0.003 250 / 0.9);--color-rule-2:oklch(96% 0.003 250 / 0.2);
+--color-accent-ink:oklch(13% 0.004 250);--color-focus:oklch(96% 0.003 250);
+--font-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;--font-mono:"IBM Plex Mono",ui-monospace,monospace;
+--text-display:clamp(2.25rem,5vw,4rem);--text-section:clamp(1.5rem,2.4vw,2rem);--text-lead:1.25rem;--text-md:1rem;--text-sm:0.875rem;
+--space-xs:0.5rem;--space-sm:0.75rem;--space-md:1rem;--space-lg:1.5rem;--space-xl:2rem;--space-2xl:3rem;--space-3xl:4.5rem;
+--container:72rem;--gutter:clamp(1rem,4.4vw,4rem);
+color-scheme:dark;
+}
+html,body{overflow-x:clip}
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-paper);color:var(--color-ink);font-family:var(--font-body);font-size:var(--text-md);line-height:1.6}
+a{color:var(--color-ink);text-decoration-thickness:1px;text-underline-offset:0.2em}
+a:hover{text-decoration-color:transparent}
+a:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
+::selection{background:var(--color-ink);color:var(--color-accent-ink)}
+.wrap{max-width:var(--container);margin-inline:auto;padding-left:max(var(--gutter),env(safe-area-inset-left,0px));padding-right:max(var(--gutter),env(safe-area-inset-right,0px))}
+.top{padding-block:var(--space-xl) var(--space-2xl);display:flex;flex-direction:column;align-items:flex-start;row-gap:var(--space-md)}
+.back{display:inline-flex;align-items:center;min-height:3rem;font-size:var(--text-sm);font-weight:500}
+.field{margin:var(--space-md) 0 0;font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.kind{margin-left:var(--space-sm);padding:0 0.375rem;border:1px solid var(--color-rule-2);font-size:0.75rem}
+h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;letter-spacing:-0.022em;text-wrap:balance;overflow-wrap:break-word;min-width:0}
+.paper-title{font-size:clamp(1.75rem,3.4vw,2.75rem);line-height:1.15;max-width:30ch}
+.lead{margin:0;max-width:40ch;font-size:var(--text-lead);line-height:1.4;color:var(--color-ink-2);text-wrap:pretty}
+.facts{margin:var(--space-md) 0 0;width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-md) var(--space-xl);border-top:1px solid var(--color-rule-2);padding-top:var(--space-md)}
+.facts dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.facts dd{margin:0;font-size:0.9375rem;color:var(--color-ink-2)}
+.actions{display:flex;flex-wrap:wrap;gap:var(--space-sm)}
+.actions:empty{display:none}
+.btn{display:inline-flex;align-items:center;height:3rem;padding-inline:var(--space-lg);border:1px solid var(--color-ink);font-weight:500;text-decoration:none;white-space:nowrap}
+.btn:first-child{background:var(--color-ink);color:var(--color-accent-ink)}
+.fig{margin:0;display:flex;flex-direction:column;row-gap:var(--space-xs)}
+.fig img{display:block;width:100%;height:auto;border:1px solid var(--color-rule-2);background:var(--color-paper-2)}
+.fig figcaption{font-size:var(--text-sm);color:var(--color-muted)}
+.fig img{max-height:80svh;object-fit:contain}
+.fig.lead{align-items:center}
+.fig.lead img{width:auto;max-width:100%;max-height:78svh}
+.kv{margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-sm) var(--space-xl)}
+.kv dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.kv dd{margin:0;color:var(--color-ink-2);font-size:0.9375rem}
+@media (max-width:48rem){.kv{grid-template-columns:minmax(0,1fr)}}
+.toc{position:sticky;top:0;z-index:2;margin-top:var(--space-2xl);display:flex;flex-wrap:wrap;column-gap:var(--space-xl);background:var(--color-paper);border-block:1px solid var(--color-rule-2);font-size:var(--text-sm);font-weight:500}
+.toc a{display:inline-flex;align-items:center;min-height:3rem;text-decoration:none;color:var(--color-ink-2)}
+.toc a:hover{color:var(--color-ink)}
+.part{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,9fr);column-gap:var(--space-2xl);padding-block:var(--space-3xl);border-bottom:1px solid var(--color-rule-2);scroll-margin-top:3.5rem}
+.part h2{margin:0;font-size:var(--text-section);font-weight:600;line-height:1.15;letter-spacing:-0.015em}
+.part-body{min-width:0;display:flex;flex-direction:column;row-gap:var(--space-lg)}
+.part-body p,.part-body li{max-width:68ch;color:var(--color-ink-2)}
+.part-body p{margin:0}
+.part-body > p:first-child{font-size:1.125rem;line-height:1.5;color:var(--color-ink)}
+.part-body ol,.part-body ul{margin:0;padding-left:1.25em;display:flex;flex-direction:column;row-gap:var(--space-sm)}
+.part-body h3{margin:var(--space-md) 0 0;font-size:1.125rem;font-weight:600}
+.part-body code{font-family:var(--font-mono);font-size:0.8125rem;color:var(--color-muted);overflow-wrap:anywhere}
+.part-body blockquote{margin:0;padding-left:var(--space-md);border-left:1px solid var(--color-rule-2);color:var(--color-ink-2)}
+.tablebox{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:0.9375rem;font-variant-numeric:tabular-nums}
+th,td{padding:var(--space-sm) var(--space-md) var(--space-sm) 0;border-bottom:1px solid var(--color-rule-2);text-align:left;vertical-align:top}
+th{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+td:first-child{font-weight:600;color:var(--color-ink);white-space:nowrap}
+.paper .part-body > p:first-child{font-size:var(--text-md);color:var(--color-ink-2)}
+.intro p{max-width:68ch;color:var(--color-ink-2)}
+.foot{padding-block:var(--space-2xl)}
+@media (max-width:48rem){
+.part{grid-template-columns:minmax(0,1fr);row-gap:var(--space-lg);padding-block:var(--space-2xl)}
+.facts{grid-template-columns:minmax(0,1fr)}
+td:first-child{white-space:normal}
+}
+</style>
+</head>
+<body>
+<header class="wrap top">
+<a class="back" href="index.html">Disaster library whitepaper</a>
+<p class="field">Full write-up</p>
+<h1 class="paper-title">Disaster library whitepaper: from old newspaper reports to local disaster-prep handbooks</h1>
+</header>
+<main class="wrap paper">
+<section class="part"><h2>Abstract</h2><div class="part-body"><p>Disasters repeat in the same places, and old newspapers record where. We describe a pipeline that extracts disaster events from mixed Hanja newspaper text by rules, matches each event to libraries within 5 km, groups events into risk zones with DBSCAN, pairs each zone with prevention research in three matching tiers, and drafts one handbook per zone named after its hub library. All results reported here come from a synthetic sample: 13 articles gave 12 events, 2 risk zones, 3 single sites, 15 paper matches and 5 handbook drafts. The pipeline has not been run on real data in the repository, and its LLM extraction path is untested. The handbooks leave evacuation advice to official guidance.</p></div></section>
+<section class="part"><h2>Overview</h2><div class="part-body"><p>The project was entered in the National Library of Korea Library Data Competition 2026. It is a Python pipeline (<code>run_pipeline.py</code>, <code>src/</code>) that turns newspaper articles, a national library list in RDF and a set of research papers into handbook drafts for libraries near places where disasters repeat. The repository holds the code, synthetic sample inputs in <code>data/sample/</code>, and a full sample run in <code>output/</code>. Every article, paper and library in the sample is synthetic, marked <code>[가상]</code> in titles and <code>&quot;synthetic&quot;: true</code> in records (<code>docs/README.ko.md</code>).</p></div></section>
+<section class="part"><h2>Problem define</h2><div class="part-body"><p>The repository states the premise that disasters repeat in the same places and old newspapers remember where. That record is in mixed Hanja text, not in structured data that a nearby library could turn into a local handbook. The repository contains no measurement of the size of this problem on real data.</p></div></section>
+<section class="part"><h2>Solution</h2><div class="part-body"><p>All numbers below are from the synthetic sample run of 2026-09-26. They show that the pipeline runs end to end; they say nothing about real newspapers or places.</p>
+<h3>Pipeline counts</h3>
+<div class="tablebox"><table><thead><tr><th scope="col">Stage</th><th scope="col">Value</th><th scope="col">Source</th></tr></thead><tbody><tr><td>Articles read</td><td>13</td><td><code>output/run_log.json</code></td></tr><tr><td>Events extracted</td><td>12</td><td><code>output/run_log.json</code></td></tr><tr><td>Articles rejected</td><td>1 (place-name geocoding failed)</td><td><code>output/rejected_articles.csv</code></td></tr><tr><td>Libraries kept</td><td>9 of 10 (1 had no coordinates)</td><td><code>output/run_log.json</code></td></tr><tr><td>Risk zones (DBSCAN clusters)</td><td>2</td><td><code>output/run_log.json</code></td></tr><tr><td>Single sites</td><td>3</td><td><code>output/run_log.json</code></td></tr><tr><td>Paper matches</td><td>15</td><td><code>output/run_log.json</code></td></tr><tr><td>Handbook drafts</td><td>5</td><td><code>output/whitepapers/index.csv</code></td></tr></tbody></table></div>
+<h3>Zones on the sample</h3>
+<div class="tablebox"><table><thead><tr><th scope="col">Zone</th><th scope="col">Events</th><th scope="col">Years</th><th scope="col">Mean recurrence (years)</th><th scope="col">Hub library distance (km)</th><th scope="col">Source</th></tr></thead><tbody><tr><td>C00</td><td>7</td><td>1959 to 1998</td><td>6.5</td><td>3.32</td><td><code>output/clusters.csv</code></td></tr><tr><td>C01</td><td>2</td><td>1974 to 1979</td><td>5.0</td><td>2.76</td><td><code>output/clusters.csv</code></td></tr><tr><td>S02</td><td>1</td><td>1987</td><td></td><td>0.29</td><td><code>output/clusters.csv</code></td></tr><tr><td>S03</td><td>1</td><td>1990</td><td></td><td>0.29</td><td><code>output/clusters.csv</code></td></tr><tr><td>S04</td><td>1</td><td>1968</td><td></td><td>0.29</td><td><code>output/clusters.csv</code></td></tr></tbody></table></div>
+<h3>Repeats on the sample</h3>
+<div class="tablebox"><table><thead><tr><th scope="col">Place</th><th scope="col">Disaster type</th><th scope="col">Years</th><th scope="col">Gap (years)</th><th scope="col">Source</th></tr></thead><tbody><tr><td>Gohyeon</td><td>Levee failure</td><td>1963, 1998</td><td>35</td><td><code>output/events.csv</code>, <code>docs/figures/timeline-light.jpg</code></td></tr><tr><td>Seolcheon</td><td>Drought</td><td>1967, 1994</td><td>27</td><td><code>output/events.csv</code>, <code>docs/figures/timeline-light.jpg</code></td></tr></tbody></table></div></div></section>
+<section class="part"><h2>Process</h2><div class="part-body"><p>Data. Synthetic old-newspaper articles in JSONL (<code>data/sample/old_news.jsonl</code>), a library list in RDF (<code>data/sample/libraries.rdf</code>), research papers in e-article JSON form (<code>data/sample/e_articles.json</code>) and a place-name dictionary (<code>data/sample/gazetteer.csv</code>). Place coordinates are approximate town centres.</p>
+<p>Method. Extraction normalizes mixed Hanja text, including Hanja numerals (<code>三千萬</code> to 30,000,000), then pulls date, disaster type, place and damage with rules and gives each event a confidence score (<code>src/news_extract.py</code>). Matching uses haversine distance to every library and keeps all within 5 km, or the nearest one if none (<code>src/spatial.py</code>). DBSCAN with haversine distance, eps 8 km and 2 minimum samples, finds risk zones, and the library closest to each zone is its hub (<code>src/spatial.py</code>). Papers are matched in three tiers: region and type, then type and terrain, then type only; a paper without the core keyword is dropped even if the region matches (<code>src/paper_match.py</code>). One handbook per zone has three parts: past record, risk factors, modern response (<code>src/whitepaper.py</code>).</p>
+<p>Assumptions. Events are geocoded to town centres, so events in the same town fall on one point and a zone means disasters repeated in neighbouring towns. Only reported disasters are counted. The handbook does not write evacuation advice; it leaves a slot for the official guidance.</p>
+<p>Validation. Events with confidence below 0.5 are set aside with a reason, and rejected articles are logged (<code>output/rejected_articles.csv</code>). Every draft ships with a checklist for expert review and carries the label that it must not be distributed before review (<code>output/whitepapers/C00_SAMPLE-0001.md</code>). No validation against real data or ground truth is recorded in the repository.</p></div></section>
+<section class="part"><h2>Lesson</h2><div class="part-body"><p>The pipeline runs end to end, but only on synthetic data, so nothing here shows that it finds real repeat zones. The extraction rules are fitted to the sample&#x27;s writing style; real OCR text with typos and vertical-writing traces would need more rules or the <code>--llm</code> option, and the <code>--llm</code> path and the e-article API source were not run-tested because no API key or specification was available (<code>docs/README.ko.md</code>). Geocoding to town centres limits spatial detail, and disasters the press did not report are absent.</p></div></section>
+<section class="part"><h2>References</h2><div class="part-body"><p>The repository cites no published works. The papers matched in <code>output/paper_matches.csv</code> are synthetic and marked <code>[가상]</code>.</p></div></section>
+</main>
+<footer class="wrap foot"><a class="back" href="index.html">Disaster library whitepaper</a></footer>
+</body>
+</html>
