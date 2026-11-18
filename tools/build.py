@@ -284,7 +284,7 @@ def build_case(folder, allowed):
 
 
 built = {c[0]: build_case(*c) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))}
-FIELD_NAME = {'LLM agents': 'LLM systems'}
+FIELD_NAME = {'LLM agents': 'Agent'}
 
 
 def P(folder):
@@ -293,7 +293,7 @@ def P(folder):
 
 
 ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))]
-FIELD_ORDER = ['LLM systems', 'Data', 'Startup', 'Robotics', 'Architecture']
+FIELD_ORDER = ['Agent', 'Data', 'Startup', 'Robotics', 'Architecture']
 ROWS.sort(key=lambda r: FIELD_ORDER.index(r[0]) if r[0] in FIELD_ORDER else 99)
 
 out = ['<ul class="groups">']
