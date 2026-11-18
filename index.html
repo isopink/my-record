@@ -205,8 +205,8 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
     greet = [];
     for (var r2 = 0; r2 < Math.floor(gh / gch); r2++) for (var c2 = 0; c2 < Math.floor(gw / gcw); c2++) {
       if (data[(Math.floor(r2 * gch + gch / 2) * mask.width + Math.floor(c2 * gcw + gcw / 2)) * 4 + 3] < 128) continue;
-      var letter = stream[count++ % stream.length];
-      greet.push({ x: gx + c2 * gcw, y: gy + r2 * gch, t: letter.t, s: token('--color-ink'), small: true });
+      var letter = stream[count % stream.length];
+      greet.push({ x: gx + c2 * gcw, y: gy + r2 * gch, n: count++, t: letter.t, s: hues[letter.hue], small: true });
     }
     snow = []; for (var s = 0; s < 90; s++) snow.push({ x: Math.random() * W, y: Math.random() * H, v: 12 + Math.random() * 26, c: Math.random() < 0.3 ? '*' : '.', a: 0.25 + Math.random() * 0.55 });
   }
@@ -265,7 +265,15 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
       for (var i = 0; i < list.length; i++) { ctx.globalAlpha = list[i].a; ctx.fillStyle = list[i].s; ctx.fillText(list[i].t, list[i].x, list[i].y); }
       ctx.globalAlpha = 1;
       ctx.font = '500 ' + gfs + 'px ' + token('--font-outlier');
-      for (var g = 0; g < greet.length; g++) { ctx.fillStyle = greet[g].s; ctx.fillText(greet[g].t, greet[g].x, greet[g].y); }
+      // The greeting is coloured like the tree: the words flow through the letters, a light sweeps across them and each column sways a little.
+      var flow = still ? 0 : Math.floor(time * 6), sway = still ? 0 : gfs * 0.35;
+      for (var g = 0; g < greet.length; g++) {
+        var G = greet[g], L2 = stream[(G.n + flow) % stream.length];
+        G.t = L2.t; G.s = hues[L2.hue];
+        ctx.globalAlpha = still ? 1 : 0.5 + 0.5 * (0.5 + 0.5 * Math.sin(time * 2.4 - (G.x + G.y * 0.6) * 0.015));
+        ctx.fillStyle = G.s; ctx.fillText(G.t, G.x, G.y + Math.sin(time * 2 + G.x * 0.03) * sway);
+      }
+      ctx.globalAlpha = 1;
       ctx.fillStyle = token('--word-4'); ctx.font = '700 ' + fs * 2.2 + 'px ' + token('--font-outlier');
       ctx.textAlign = 'center'; ctx.fillText('*', W / 2, H * 0.07 - fs * 1.9); ctx.textAlign = 'start';
       if (!still) raf = requestAnimationFrame(paint);
