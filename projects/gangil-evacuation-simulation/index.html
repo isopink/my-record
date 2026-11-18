@@ -36,6 +36,7 @@ h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;lette
 .paper-title{font-size:clamp(1.75rem,3.4vw,2.75rem);line-height:1.15;max-width:30ch}
 .lead{margin:0;max-width:40ch;font-size:var(--text-lead);line-height:1.4;color:var(--color-ink-2);text-wrap:pretty}
 .facts{margin:var(--space-md) 0 0;width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-md) var(--space-xl);border-top:1px solid var(--color-rule-2);padding-top:var(--space-md)}
+.facts:empty{display:none}
 .facts dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
 .facts dd{margin:0;font-size:0.9375rem;color:var(--color-ink-2)}
 .titlerow{display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--space-md);row-gap:var(--space-xs)}
@@ -88,7 +89,7 @@ td:first-child{white-space:normal}
 <p class="field">Data</p>
 <h1>Evacuation Simulation</h1>
 <p class="lead">Smoke reached the escape routes before the last occupant passed.</p>
-<dl class="facts"><div><dt>Role</dt><dd>Did all of it alone: the Revit model of the building, the Pathfinder and FDS models of the fourth floor, the runs and the results report. This work: 1 person; the results went to one teammate on the course team.</dd></div><div><dt>Built with</dt><dd>Revit 2027, Pathfinder 2026, FDS 6.11.1</dd></div></dl>
+<dl class="facts"><div><dt>Built with</dt><dd>Revit 2027, Pathfinder 2026, FDS 6.11.1</dd></div></dl>
 <div class="actions"><a class="btn" href="paper.html">Read the full write-up</a></div>
 </header>
 <div class="wrap"><figure class="fig lead"><img src="img/01-lead-visibility-slices.jpg" alt="Grid of 20 floor plans shaded by smoke visibility, darker means less visibility" loading="eager"><figcaption>Visibility at 1.75 m for four scenarios from 120 to 720 s</figcaption></figure></div>

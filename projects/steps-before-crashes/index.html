@@ -36,6 +36,7 @@ h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;lette
 .paper-title{font-size:clamp(1.75rem,3.4vw,2.75rem);line-height:1.15;max-width:30ch}
 .lead{margin:0;max-width:40ch;font-size:var(--text-lead);line-height:1.4;color:var(--color-ink-2);text-wrap:pretty}
 .facts{margin:var(--space-md) 0 0;width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-md) var(--space-xl);border-top:1px solid var(--color-rule-2);padding-top:var(--space-md)}
+.facts:empty{display:none}
 .facts dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
 .facts dd{margin:0;font-size:0.9375rem;color:var(--color-ink-2)}
 .titlerow{display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--space-md);row-gap:var(--space-xs)}
@@ -88,7 +89,7 @@ td:first-child{white-space:normal}
 <p class="field">Data</p>
 <div class="titlerow"><h1>Steps Before Crashes</h1><a class="gh" href="https://github.com/isopink/steps-before-crashes" aria-label="View on GitHub" title="View on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></div>
 <p class="lead">Where older people walk in Seoul, and where they get hit.</p>
-<dl class="facts"><div><dt>Shown at</dt><dd>2026 Data Safe Zone Competition, team NO약자</dd></div><div><dt>Role</dt><dd>Analysis code and models (join, hotspots, forecast, validation), maps, diagnosis cards and the proposal; team of 5</dd></div><div><dt>Built with</dt><dd>Python, geopandas, PySAL esda, statsmodels</dd></div></dl>
+<dl class="facts"><div><dt>Built with</dt><dd>Python, geopandas, PySAL esda, statsmodels</dd></div></dl>
 <div class="actions"><a class="btn" href="paper.html">Read the full write-up</a></div>
 </header>
 <div class="wrap"><figure class="fig lead"><img src="img/01-lead-candidate-map.jpg" alt="Seoul map of predicted elderly pedestrian crashes by legal dong with ten numbered candidates" loading="eager"><figcaption>Predicted January 2025 crashes by dong, 10 candidates numbered</figcaption></figure></div>
