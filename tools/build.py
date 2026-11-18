@@ -219,7 +219,7 @@ TITLE_OVERRIDE = {
     'pm-decision-making': 'PM Decision Making',
     'thank-you-plaque': 'Thank-You Plaque',
     'branding-in-seongsu': 'Branding In Seongsu',
-    'open-duck-mini-v2': 'Teaching How To Walk',
+    'open-duck-mini-v2': 'Learn To Walk',
 }
 
 
