@@ -81,6 +81,15 @@ td:first-child{font-weight:600;color:var(--color-ink);white-space:nowrap}
 .facts{grid-template-columns:minmax(0,1fr)}
 td:first-child{white-space:normal}
 }
+.show{position:relative;display:flex;flex-direction:column;align-items:center;row-gap:var(--space-xs)}
+.show .track{display:flex;width:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.show .track::-webkit-scrollbar{display:none}
+.show .slide{flex:0 0 100%;scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;row-gap:var(--space-xs);margin:0}
+.show .slide img{display:block;width:auto;max-width:100%;max-height:78svh;border:1px solid var(--color-rule-2);background:var(--color-paper-2)}
+.show .slide figcaption{font-size:var(--text-sm);color:var(--color-muted)}
+.show .bar{display:flex;align-items:center;gap:var(--space-md);font-size:var(--text-sm);color:var(--color-muted)}
+.show button{border:1px solid var(--color-rule-2);background:none;color:var(--color-ink);font:inherit;width:2.5rem;height:2.5rem;cursor:pointer}
+.show button:focus-visible{outline:2px solid var(--color-focus);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -92,6 +101,7 @@ td:first-child{white-space:normal}
 <dl class="facts"><div><dt>Built with</dt><dd>Desk research, survey, interviews, Enactus project registration form</dd></div></dl>
 <div class="actions"></div>
 </header>
+<div class="wrap"><div class="show" role="region" aria-label="Project photos"><div class="track"><figure class="slide"><img src="img/01-lead-team.jpg" alt="Six people sorting and packing printed cards around a long table" loading="eager"><figcaption>Team members working around the table</figcaption></figure><figure class="slide"><img src="img/02-lead-visit.jpg" alt="A woman in a blue sweater reading a wall calendar at a white table" loading="lazy"><figcaption>Meeting with a social enterprise representative</figcaption></figure><figure class="slide"><img src="img/03-lead-warehouse.jpg" alt="Stacked cardboard boxes and a red pallet truck in a workshop" loading="lazy"><figcaption>Storage area at the enterprise site</figcaption></figure><figure class="slide"><img src="img/04-lead-aisle.jpg" alt="A narrow warehouse aisle with shelves and orange crates" loading="lazy"><figcaption>Shelving aisle at the enterprise site</figcaption></figure><figure class="slide"><img src="img/05-lead-boxes.jpg" alt="Orange product boxes beside a laptop on a white desk" loading="lazy"><figcaption>Product boxes and a laptop at the site</figcaption></figure></div><div class="bar"><button class="prev" type="button" aria-label="Previous photo">&larr;</button><span class="count" aria-live="polite">1 / 5</span><button class="next" type="button" aria-label="Next photo">&rarr;</button></div></div></div>
 
 <main class="wrap">
 <section class="part" id="overview"><h2>Overview</h2><div class="part-body"><p>Impact Bridge is a student project that links social enterprises short on marketing staff with university marketing societies for month-long projects. The firm gets marketing work done; the students get real practice, feedback and a portfolio piece.</p>
@@ -104,5 +114,6 @@ td:first-child{white-space:normal}
 <p>The cost side of the model is blank, and the only revenue line is a brokerage fee with no price set. The survey asked for low cost, but no price was put to them. The next proof is one finished match with a firm&#x27;s own verdict.</p></div></section>
 </main>
 <footer class="wrap foot"><a class="back" href="../../index.html#work">All work</a></footer>
+<script>(function(){var s=document.querySelector('.show');if(!s)return;var t=s.querySelector('.track'),n=t.children.length,c=s.querySelector('.count');function i(){return Math.round(t.scrollLeft/t.clientWidth)}function go(k){t.scrollTo({left:((k+n)%n)*t.clientWidth,behavior:'smooth'})}function u(){c.textContent=(i()+1)+' / '+n}t.addEventListener('scroll',u);s.querySelector('.prev').onclick=function(){go(i()-1)};s.querySelector('.next').onclick=function(){go(i()+1)};u()})()</script>
 </body>
 </html>
