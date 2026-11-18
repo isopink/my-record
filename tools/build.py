@@ -397,8 +397,8 @@ BADGES = {
     'deep-report-pipeline': ('Under review by', 'Anthropic', '#D97757', '#fff'),
     'impact-bridge': ('', 'Live', '#E5534B', '#fff'),
     'gangil-evacuation-simulation': ('', 'Live', '#E5534B', '#fff'),
-    'pm-decision-making': ('', 'Live', '#E5534B', '#fff'),
-    'data-engineering-fundamentals': ('', 'Live', '#E5534B', '#fff'),
+    'pm-decision-making': ('', 'Pending', '#6B6B6B', '#fff'),
+    'data-engineering-fundamentals': ('', 'Pending', '#6B6B6B', '#fff'),
     'ibul-anbu': ('Awarded by', 'UOS', '#D4A72C', '#1b1b1b'),
     'first-wrong-step': [('', 'ON SALE', '#2DA44E', '#fff'), ('', 'Top 0.01%', '#8957E5', '#fff')],
 }
@@ -435,13 +435,17 @@ def P(folder):
 
 ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))]
 FIELD_ORDER = ['Robotics', 'Agents', 'Startup', 'Data', 'Extra']
-def is_live(href):
+def _has(href, word):
     badges = BADGES.get(href.split('/')[1]) or []
-    return any(b[1] == 'Live' for b in ([badges] if isinstance(badges, tuple) else badges))
+    return any(b[1] == word for b in ([badges] if isinstance(badges, tuple) else badges))
+def is_live(href):
+    return _has(href, 'Live')
+def rank(href):
+    return 0 if _has(href, 'Live') else 2 if _has(href, 'Pending') else 1
 
 
-# Fields in their set order; within a field, Live projects come first.
-ROWS.sort(key=lambda r: (FIELD_ORDER.index(r[0]) if r[0] in FIELD_ORDER else 99, not is_live(r[1])))
+# Fields in their set order; within a field, Live projects come first and Pending ones last.
+ROWS.sort(key=lambda r: (FIELD_ORDER.index(r[0]) if r[0] in FIELD_ORDER else 99, rank(r[1])))
 
 out = ['<ul class="groups">']
 current = None
