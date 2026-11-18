@@ -293,6 +293,8 @@ BADGES = {
     'interview-prep-agent': ('Awarded by', 'Upstage', '#D4A72C', '#1b1b1b'),
     'paper-review-deck': ('Under review by', 'Anthropic', '#D97757', '#fff'),
     'deep-report-pipeline': ('Under review by', 'Anthropic', '#D97757', '#fff'),
+    'impact-bridge': ('', 'LIVE', '#E5534B', '#fff'),
+    'first-wrong-step': ('', 'ON SALE', '#2DA44E', '#fff'),
 }
 FIELD_NAME = {'LLM agents': 'Agent', 'Architecture': 'Extra'}
 
