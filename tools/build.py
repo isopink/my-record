@@ -38,7 +38,7 @@ GH_ICON = '<a class="gh" href="%s" aria-label="View on GitHub" title="View on Gi
 HIDDEN_FACTS = ('Shown at', 'Role')
 VIDEO_EXT = ('.mp4', '.webm')
 VIDEO_MAX_MB = 8
-ORDER = ['Overview', 'Problem define', 'Solution', 'Process', 'Lesson', 'Next']
+ORDER = ['Overview', 'Problem define', 'Solution', 'Process', 'Next']
 ALIAS = {'Problem': 'Problem define'}
 GH = 'https://github.com/isopink/'
 
