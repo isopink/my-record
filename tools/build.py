@@ -244,7 +244,7 @@ def build_case(folder, allowed):
     actions = ''.join('<a class="btn" href="%s">View on GitHub</a>' % esc(l) for l in links if 'github.com' in l)
     if paper:
         actions = '<a class="btn" href="paper.html">Read the full write-up</a>' + actions
-    kind = '<span class="kind">Coursework</span>' if front.get('kind') == 'coursework' else ''
+    kind = ''
     status = '<span class="kind">In progress</span>' if front.get('status') == 'ongoing' else ''
 
     parts = []
@@ -371,7 +371,7 @@ for field, href, title, line, course in ROWS:
             out.append('</ul></li>')
         out.append('<li class="group"><span class="field">%s</span><ul class="items">' % esc(field))
         current = field
-    tag = '<span class="tag">Coursework</span>' if course else ''
+    tag = ''
     name = '<a class="name" href="%s">%s</a>' % (esc(href), esc(title))
     badges = BADGES.get(href.split('/')[1]) or []
     if isinstance(badges, tuple):
