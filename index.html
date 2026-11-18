@@ -482,7 +482,8 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
   }
 
   function paint(now) {
-    var hues = [1, 2, 3, 4, 5, 6].map(function (n) { return token('--word-' + n); }), t = now - start, moving = false, stirred = false;
+    // Three neighbouring cool colours (violet, blue, cyan) rather than all six, so the sentence is colourful but not a rainbow.
+    var hues = [1, 2, 6, 1, 2, 6].map(function (n) { return token('--word-' + n); }), t = now - start, moving = false, stirred = false;
     ctx.clearRect(-offX, -offY, CW, CH);
     ctx.textBaseline = 'alphabetic';
     var SCALE = [0.78, 1, 1.4], mono = token('--font-outlier');
