@@ -130,6 +130,8 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 .items{list-style:none;margin:0;padding:0}
 .items li{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,7fr);column-gap:var(--gap-columns);row-gap:0.125rem;align-items:baseline;padding-block:var(--space-sm)}
 .items .name{font-weight:600;text-decoration:none}
+.pill{display:inline-flex;align-items:stretch;margin-left:var(--space-xs);font-size:0.6875rem;font-weight:600;line-height:1.5;letter-spacing:0.02em;white-space:nowrap;vertical-align:0.12em;background:var(--p);color:var(--pi);padding-inline:0.375rem;border-radius:2px;overflow:hidden}
+.pill .pk{margin-left:-0.375rem;margin-right:0.375rem;padding-inline:0.375rem;background:oklch(36% 0.005 250);color:oklch(96% 0 0);font-weight:500}
 .items .name:hover{text-decoration:underline}
 .items .line{color:var(--color-muted)}
 .tag{display:inline-block;margin-left:var(--space-sm);padding:0 0.375rem;border:var(--rule-hair) solid var(--color-rule-2);font-size:0.75rem;color:var(--color-muted);vertical-align:0.1em;white-space:nowrap}
@@ -142,7 +144,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 @media (max-width:40rem){.group{grid-template-columns:minmax(0,1fr);row-gap:var(--space-xs);padding-block:var(--space-md)}.items li{grid-template-columns:minmax(0,1fr)}.skills,.skills ul{gap:0.25rem}.skills .badge{height:1.25rem;padding-inline:0.375rem;font-size:0.6875rem}}
 @media (max-width:40rem){.hero{padding-block:var(--space-md) var(--space-2xl)}.skills{margin-bottom:var(--space-lg);flex-direction:row;flex-wrap:wrap;justify-content:center}.skills ul{display:contents}.skills li{flex:0 0 auto}}
 @media (max-width:60rem){.cols > *{grid-column:1 / -1 !important}}
-@media (max-width:40rem){.group{padding-block:var(--space-lg) var(--space-md)}.group .field{font-size:0.8125rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-ink)}.items li{row-gap:0.25rem;padding-block:var(--space-sm)}.items .name{font-size:1.0625rem;line-height:1.35}.items .line{font-size:0.9375rem;line-height:1.5}}
+@media (max-width:40rem){.group{padding-block:var(--space-lg) var(--space-md)}.group .field{font-size:0.8125rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-ink);text-align:center;padding-bottom:var(--space-xs)}.items li{row-gap:0.25rem;padding-block:var(--space-sm)}.items .name{font-size:1.0625rem;line-height:1.35}.items .line{font-size:0.9375rem;line-height:1.5}}
 @media (prefers-reduced-motion:reduce){.tree span{animation:none}.enter,.js .fade{transition:none}}
 </style>
 
@@ -205,8 +207,8 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
     greet = [];
     for (var r2 = 0; r2 < Math.floor(gh / gch); r2++) for (var c2 = 0; c2 < Math.floor(gw / gcw); c2++) {
       if (data[(Math.floor(r2 * gch + gch / 2) * mask.width + Math.floor(c2 * gcw + gcw / 2)) * 4 + 3] < 128) continue;
-      var letter = stream[count++ % stream.length];
-      greet.push({ x: gx + c2 * gcw, y: gy + r2 * gch, t: letter.t, s: token('--color-ink'), small: true });
+      var letter = stream[count % stream.length];
+      greet.push({ x: gx + c2 * gcw, y: gy + r2 * gch, n: count++, t: letter.t, s: hues[letter.hue], small: true });
     }
     snow = []; for (var s = 0; s < 90; s++) snow.push({ x: Math.random() * W, y: Math.random() * H, v: 12 + Math.random() * 26, c: Math.random() < 0.3 ? '*' : '.', a: 0.25 + Math.random() * 0.55 });
   }
@@ -265,7 +267,15 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
       for (var i = 0; i < list.length; i++) { ctx.globalAlpha = list[i].a; ctx.fillStyle = list[i].s; ctx.fillText(list[i].t, list[i].x, list[i].y); }
       ctx.globalAlpha = 1;
       ctx.font = '500 ' + gfs + 'px ' + token('--font-outlier');
-      for (var g = 0; g < greet.length; g++) { ctx.fillStyle = greet[g].s; ctx.fillText(greet[g].t, greet[g].x, greet[g].y); }
+      // The greeting is coloured like the tree: the words flow through the letters, a light sweeps across them and each column sways a little.
+      var flow = still ? 0 : Math.floor(time * 6), sway = still ? 0 : gfs * 0.35;
+      for (var g = 0; g < greet.length; g++) {
+        var G = greet[g], L2 = stream[(G.n + flow) % stream.length];
+        G.t = L2.t; G.s = hues[L2.hue];
+        ctx.globalAlpha = still ? 1 : 0.5 + 0.5 * (0.5 + 0.5 * Math.sin(time * 2.4 - (G.x + G.y * 0.6) * 0.015));
+        ctx.fillStyle = G.s; ctx.fillText(G.t, G.x, G.y + Math.sin(time * 2 + G.x * 0.03) * sway);
+      }
+      ctx.globalAlpha = 1;
       ctx.fillStyle = token('--word-4'); ctx.font = '700 ' + fs * 2.2 + 'px ' + token('--font-outlier');
       ctx.textAlign = 'center'; ctx.fillText('*', W / 2, H * 0.07 - fs * 1.9); ctx.textAlign = 'start';
       if (!still) raf = requestAnimationFrame(paint);
@@ -329,10 +339,10 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 <div class="wrap">
 <ul class="groups">
 <li class="group"><span class="field">Agent</span><ul class="items">
-<li><a class="name" href="projects/interview-prep-agent/">Why this company</a><span class="line">Interview questions from a company&#x27;s DART business report, every figure checked.</span></li>
-<li><a class="name" href="projects/sigma-engine/">Sigma Engine</a><span class="line">Claude Code agents debate Korean stocks; code sizes orders and enforces limits.</span></li>
-<li><a class="name" href="projects/deep-report-pipeline/">Deep report pipeline</a><span class="line">A Claude skill that turns a topic into a checked A4 report PDF.</span></li>
-<li><a class="name" href="projects/paper-review-deck/">Paper review deck</a><span class="line">A Claude skill that turns papers into a reproduced, checked review talk.</span></li>
+<li><span class="title"><a class="name" href="projects/interview-prep-agent/">Why this company</a><span class="pill" style="--p:#D4A72C;--pi:#1b1b1b"><span class="pk">Awarded by</span>Upstage</span></span><span class="line">Interview questions from a company&#x27;s DART business report, every figure checked.</span></li>
+<li><span class="title"><a class="name" href="projects/sigma-engine/">Sigma Engine</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">Claude Code agents debate Korean stocks; code sizes orders and enforces limits.</span></li>
+<li><span class="title"><a class="name" href="projects/deep-report-pipeline/">Deep report pipeline</a><span class="pill" style="--p:#D97757;--pi:#fff"><span class="pk">Under review by</span>Anthropic</span></span><span class="line">A Claude skill that turns a topic into a checked A4 report PDF.</span></li>
+<li><span class="title"><a class="name" href="projects/paper-review-deck/">Paper review deck</a><span class="pill" style="--p:#D97757;--pi:#fff"><span class="pk">Under review by</span>Anthropic</span></span><span class="line">A Claude skill that turns papers into a reproduced, checked review talk.</span></li>
 <li><a class="name" href="projects/career-log/">career-log</a><span class="line">A journal that turns short daily notes into insights, postings and checklists.</span></li>
 </ul></li>
 <li class="group"><span class="field">Data</span><ul class="items">
@@ -347,9 +357,9 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 <li><a class="name" href="projects/pm-decision-making/">PM decision making</a><span class="line">A course on defining problems and scoping MVPs as a product manager.<span class="tag">Coursework</span></span></li>
 </ul></li>
 <li class="group"><span class="field">Robotics</span><ul class="items">
-<li><a class="name" href="projects/open-duck-mini-v2/">Open Duck Mini v2</a><span class="line">A 3D-printed biped robot that walks on a Raspberry Pi.</span></li>
-<li><a class="name" href="projects/object-finder-bot/">Object-finding robot</a><span class="line">A robot that remembers desk objects and drives to them on request.</span></li>
-<li><a class="name" href="projects/3ddsg-drone-navigation/">3DDSG drone navigation</a><span class="line">An indoor drone that flies room to room on a scene graph.</span></li>
+<li><span class="title"><a class="name" href="projects/open-duck-mini-v2/">Open Duck Mini v2</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">A 3D-printed biped robot that walks on a Raspberry Pi.</span></li>
+<li><span class="title"><a class="name" href="projects/object-finder-bot/">Object-finding robot</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">A robot that remembers desk objects and drives to them on request.</span></li>
+<li><span class="title"><a class="name" href="projects/3ddsg-drone-navigation/">3DDSG drone navigation</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">An indoor drone that flies room to room on a scene graph.</span></li>
 </ul></li>
 <li class="group"><span class="field">Extra</span><ul class="items">
 <li><a class="name" href="projects/branding-in-seongsu/">Branding in Seongsu</a><span class="line">A shared leather craft hub for Seongsu-dong&#x27;s disappearing craftsmen.</span></li>

@@ -284,6 +284,16 @@ def build_case(folder, allowed):
 
 
 built = {c[0]: build_case(*c) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))}
+# Badges shown next to a project's name, as in the GitHub profile README: (label, value, background, text colour).
+BADGES = {
+    'sigma-engine': ('', 'LIVE', '#E5534B', '#fff'),
+    'open-duck-mini-v2': ('', 'LIVE', '#E5534B', '#fff'),
+    'object-finder-bot': ('', 'LIVE', '#E5534B', '#fff'),
+    '3ddsg-drone-navigation': ('', 'LIVE', '#E5534B', '#fff'),
+    'interview-prep-agent': ('Awarded by', 'Upstage', '#D4A72C', '#1b1b1b'),
+    'paper-review-deck': ('Under review by', 'Anthropic', '#D97757', '#fff'),
+    'deep-report-pipeline': ('Under review by', 'Anthropic', '#D97757', '#fff'),
+}
 FIELD_NAME = {'LLM agents': 'Agent', 'Architecture': 'Extra'}
 
 
@@ -305,7 +315,12 @@ for field, href, title, line, course in ROWS:
         out.append('<li class="group"><span class="field">%s</span><ul class="items">' % esc(field))
         current = field
     tag = '<span class="tag">Coursework</span>' if course else ''
-    out.append('<li><a class="name" href="%s">%s</a><span class="line">%s%s</span></li>' % (esc(href), esc(title), esc(line), tag))
+    name = '<a class="name" href="%s">%s</a>' % (esc(href), esc(title))
+    badge = BADGES.get(href.split('/')[1])
+    if badge:
+        k, v, bg, fg = badge
+        name = '<span class="title">%s<span class="pill" style="--p:%s;--pi:%s">%s%s</span></span>' % (name, bg, fg, '<span class="pk">%s</span>' % esc(k) if k else '', esc(v))
+    out.append('<li>%s<span class="line">%s%s</span></li>' % (name, esc(line), tag))
 out += ['</ul></li>', '</ul>']
 
 idx_path = os.path.join(SITE, 'index.html')
