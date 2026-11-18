@@ -38,6 +38,8 @@ GH_ICON = '<a class="gh" href="%s" aria-label="View on GitHub" title="View on Gi
 HIDDEN_FACTS = ('Shown at', 'Role')
 VIDEO_EXT = ('.mp4', '.webm')
 VIDEO_MAX_MB = 8
+# Section names as the case pages show them.
+HEADING = {'Process': 'Key Process'}
 ORDER = ['Overview', 'Problem define', 'Solution', 'Process', 'Next']
 ALIAS = {'Problem': 'Problem define'}
 GH = 'https://github.com/isopink/'
@@ -308,7 +310,7 @@ def build_case(folder, allowed):
         if not html_part.strip():
             continue
         parts.append('<section class="part" id="%s"><h2>%s</h2><div class="part-body">%s%s</div></section>'
-                     % (name.lower().replace(' ', '-'), esc(name), html_part, ''))
+                     % (name.lower().replace(' ', '-'), esc(HEADING.get(name, name)), html_part, ''))
 
     title = front['title']
     body = '''<header class="wrap top">
