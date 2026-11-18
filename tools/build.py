@@ -162,9 +162,6 @@ def images_by_part(folder, allowed):
         stem, ext = os.path.splitext(name)
         part = ALIAS.get(c[4], c[4])
         video = ext.lower() in VIDEO_EXT
-        if video and part != 'Lead':
-            print('skipped %s in %s: video is allowed for the Lead picture only' % (name, folder))
-            continue
         # GIFs and videos keep their own file so they still move; everything else becomes a JPEG.
         base = name.lower() if video else stem + ('.gif' if ext.lower() == '.gif' else '.jpg')
         if allowed is not None and base not in allowed and stem + '.jpg' not in allowed:

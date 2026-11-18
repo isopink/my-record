@@ -16,9 +16,9 @@
 :root{
 --color-paper:#fff;--color-paper-2:oklch(96% 0 0);
 --color-ink:#000;--color-ink-2:oklch(20% 0 0);--color-muted:oklch(32% 0 0);--color-soft:oklch(48% 0 0);
---color-rule:oklch(0% 0 0 / 0.9);--color-rule-2:oklch(0% 0 0 / 0.16);
+--color-rule:oklch(0% 0 0 / 0.9);--color-rule-2:oklch(0% 0 0 / 0.28);
 --color-accent-ink:#fff;--color-focus:#000;
---word-1:#a626a4;--word-2:#4078f2;--word-3:#50a14f;--word-4:#c18401;--word-5:#e45649;--word-6:#0184bc;
+--word-1:#8f1f8d;--word-2:#2a5fd6;--word-3:#2f8230;--word-4:#a06a00;--word-5:#c8372b;--word-6:#00709f;
 --font-display:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;--font-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;--font-outlier:"IBM Plex Mono",ui-monospace,monospace;
 --text-section:clamp(1.875rem,3.2vw,2.75rem);--text-lead:1.3125rem;--text-md:1rem;--text-sm:0.875rem;
 --space-xs:0.5rem;--space-sm:0.75rem;--space-md:1rem;--space-lg:1.5rem;--space-xl:2rem;--space-2xl:3rem;
@@ -31,9 +31,9 @@ color-scheme:light;
 :root,:root[data-theme="light"],:root[data-theme="dark"]{
 --color-paper:#fff;--color-paper-2:oklch(96% 0 0);
 --color-ink:#000;--color-ink-2:oklch(20% 0 0);--color-muted:oklch(32% 0 0);--color-soft:oklch(48% 0 0);
---color-rule:oklch(0% 0 0 / 0.9);--color-rule-2:oklch(0% 0 0 / 0.16);
+--color-rule:oklch(0% 0 0 / 0.9);--color-rule-2:oklch(0% 0 0 / 0.28);
 --color-accent-ink:#fff;--color-focus:#000;
---word-1:#a626a4;--word-2:#4078f2;--word-3:#50a14f;--word-4:#c18401;--word-5:#e45649;--word-6:#0184bc;
+--word-1:#8f1f8d;--word-2:#2a5fd6;--word-3:#2f8230;--word-4:#a06a00;--word-5:#c8372b;--word-6:#00709f;
 color-scheme:light;
 }
 /* No sideways scrolling on the page; vertical scroll and pinch-zoom still work. */
@@ -139,7 +139,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 </style>
 
 <style>
-:root{--color-badge:oklch(30% 0.01 250);--color-badge-ink:oklch(99% 0 0);--tree-hue:146;--tree-chroma:0.17;--trunk:oklch(52% 0.07 60);--snow:oklch(86% 0.01 250)}
+:root{--color-badge:oklch(30% 0.01 250);--color-badge-ink:oklch(99% 0 0);--tree-hue:146;--tree-chroma:0.17;--trunk:oklch(52% 0.07 60);--snow:oklch(72% 0.01 250)}
 .js .gate{justify-content:flex-end;row-gap:var(--space-xs);padding-bottom:max(6svh,var(--space-xl))}
 .gate canvas{position:absolute;left:0;top:0;width:100%;height:100%}
 .gate .greet,.gate .enter{position:relative}
@@ -201,7 +201,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
       var letter = stream[count % stream.length];
       greet.push({ x: gx + c2 * gcw, y: gy + r2 * gch, n: count++, t: letter.t, s: hues[letter.hue], small: true });
     }
-    snow = []; for (var s = 0; s < 90; s++) snow.push({ x: Math.random() * W, y: Math.random() * H, v: 12 + Math.random() * 26, c: Math.random() < 0.3 ? '*' : '.', a: 0.25 + Math.random() * 0.55 });
+    snow = []; for (var s = 0; s < 90; s++) snow.push({ x: Math.random() * W, y: Math.random() * H, v: 12 + Math.random() * 26, c: Math.random() < 0.3 ? '*' : '.', a: 0.4 + Math.random() * 0.5 });
   }
 
   // One point on the tree, turned by `spin`, written into the character grid if it is nearest.
@@ -249,7 +249,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
       if (!k) continue;
       // Foliage is set in the words that also make up the name; the lit side reads brighter.
       var w = stream[i % stream.length];
-      if (k === 1) out.push({ x: c * cw, y: r * ch, t: w.t, s: hues[w.hue], a: 0.3 + 0.7 * ib[i] / 11 });
+      if (k === 1) out.push({ x: c * cw, y: r * ch, t: w.t, s: hues[w.hue], a: 0.6 + 0.4 * ib[i] / 11 });
       else if (k === 2) out.push({ x: c * cw, y: r * ch, t: '|', s: token('--trunk'), a: 1 });
       else if (k === 4) out.push({ x: c * cw, y: r * ch, t: ib[i] ? '~' : '-', s: token('--word-4'), a: 0.95 });
       else { var L3 = lights[ib[i]]; out.push({ x: c * cw, y: r * ch, t: k === 5 ? L3.glyph : 'o', s: hues[L3.hue], a: 1, glow: true }); }
@@ -281,7 +281,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
       for (var g = 0; g < greet.length; g++) {
         var G = greet[g], L2 = stream[(G.n + flow) % stream.length];
         G.t = L2.t; G.s = hues[L2.hue];
-        ctx.globalAlpha = still ? 1 : 0.5 + 0.5 * (0.5 + 0.5 * Math.sin(time * 2.4 - (G.x + G.y * 0.6) * 0.015));
+        ctx.globalAlpha = still ? 1 : 0.78 + 0.22 * (0.5 + 0.5 * Math.sin(time * 2.4 - (G.x + G.y * 0.6) * 0.015));
         ctx.fillStyle = G.s; ctx.fillText(G.t, G.x, G.y + Math.sin(time * 2 + G.x * 0.03) * sway);
       }
       ctx.globalAlpha = 1;
@@ -490,7 +490,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
         if (!still) {
           var sec = t / 1000;
           var L = STREAM[(c.n + Math.floor(sec * 6)) % STREAM.length]; c.t = L.t; c.hue = L.hue;
-          lit = 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(sec * 2.4 - (c.x + c.y * 0.6) * 0.012));
+          lit = 0.82 + 0.18 * (0.5 + 0.5 * Math.sin(sec * 2.4 - (c.x + c.y * 0.6) * 0.012));
           bob = Math.sin(sec * 2 + c.x * 0.03) * fs * 0.3;
         }
         ctx.globalAlpha = e * lit;
