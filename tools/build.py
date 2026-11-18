@@ -65,7 +65,7 @@ TAGS = {
 LIVE_LINKS = {'sigma-engine': 'https://isopink.github.io/sigma-engine/'}
 # Section names as the case pages show them.
 HEADING = {'Process': 'Key Process', 'Problem define': 'Problem'}
-ORDER = ['Overview', 'Motivation', 'Problem define', 'Solution', 'Process', 'Next']
+ORDER = ['Overview', 'Motivation', 'Problem define', 'Solution', 'Next']
 ALIAS = {'Problem': 'Problem define'}
 GH = 'https://github.com/isopink/'
 
