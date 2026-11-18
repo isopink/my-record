@@ -200,6 +200,8 @@ def figure(img, lead=False):
             % ('fig lead' if lead else 'fig', esc(img['src']), esc(img['alt']), 'eager' if lead else 'lazy', inline(img['cap'])))
 
 
+# Field names as the site shows them.
+FIELD_NAME = {'LLM agents': 'Agent', 'Architecture': 'Extra'}
 # Projects shown under a different field from the one in their entry.md.
 FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Data'}
 # Projects shown under a different name from the one in their entry.md.
@@ -258,7 +260,7 @@ def build_case(folder, allowed):
 {parts}
 </main>
 <footer class="wrap foot"><a class="back" href="../../index.html#work">All work</a></footer>'''.format(
-        field=esc(front.get('field', '')), kind=kind, status=status, title=esc(title), lead=inline(sec.get('Lead', '')),
+        field=esc(FIELD_NAME.get(front.get('field', ''), front.get('field', ''))), kind=kind, status=status, title=esc(title), lead=inline(sec.get('Lead', '')),
         facts=''.join(facts), actions=actions, nav=nav, parts='\n'.join(parts),
         leadfig=('<div class="wrap">%s</div>' % figure(lead, True)) if lead else '')
     open(os.path.join(out, 'index.html'), 'w', encoding='utf-8', newline='\n').write(page(title, sec.get('One line', ''), body))
@@ -305,7 +307,6 @@ BADGES = {
     'impact-bridge': ('', 'LIVE', '#E5534B', '#fff'),
     'first-wrong-step': [('', 'ON SALE', '#2DA44E', '#fff'), ('', 'Top 0.01%', '#8957E5', '#fff')],
 }
-FIELD_NAME = {'LLM agents': 'Agent', 'Architecture': 'Extra'}
 
 
 def P(folder):
