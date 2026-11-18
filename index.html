@@ -150,6 +150,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 <p class="hide">Miri Merry Christmas 2026</p>
 <button class="enter" id="enter" type="button">Press anywhere to open</button>
 </div>
+<script>try { history.scrollRestoration = 'manual'; } catch (e) {} window.scrollTo(0, 0);</script>
 <script>
 (function () {
   var root = document.documentElement;
@@ -303,7 +304,12 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
     cancelAnimationFrame(raf);
     gate.hidden = true;
     root.classList.remove('gated');
+    // Land at the top of the page, or at the section a link asked for (such as All work), never on a restored scroll position.
+    var target = location.hash && document.getElementById(location.hash.slice(1));
+    var land = function () { window.scrollTo(0, target ? target.getBoundingClientRect().top + window.scrollY : 0); };
+    land();
     window.dispatchEvent(new Event('isopink:enter'));
+    requestAnimationFrame(land);
   }
   function open() {
     if (!ready || leaving) return;
