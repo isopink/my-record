@@ -154,14 +154,17 @@ def images_by_part(folder, allowed):
         if len(c) < 5:
             continue
         name = os.path.basename(c[0].strip('`'))
-        base = os.path.splitext(name)[0] + '.jpg'
-        if allowed is not None and base not in allowed:
+        stem, ext = os.path.splitext(name)
+        # GIFs keep their own file so they still move; everything else becomes a JPEG.
+        base = stem + ('.gif' if ext.lower() == '.gif' else '.jpg')
+        if allowed is not None and base not in allowed and stem + '.jpg' not in allowed:
             continue
         part = ALIAS.get(c[4], c[4])
         found.append({'src': 'img/' + base, 'cap': c[2], 'alt': c[3], 'part': part})
     return found
 
 
+import shutil
 import subprocess
 
 
@@ -174,10 +177,16 @@ def copy_images(folder, dest, allowed):
     for name in sorted(os.listdir(src)):
         if os.path.splitext(name)[1].lower() not in ('.png', '.jpg', '.jpeg', '.webp', '.gif', '.bmp'):
             continue
-        target = os.path.join(dest, os.path.splitext(name)[0] + '.jpg')
-        if allowed is not None and os.path.basename(target) not in allowed:
+        stem, ext = os.path.splitext(name)
+        gif = ext.lower() == '.gif'
+        target = os.path.join(dest, stem + ('.gif' if gif else '.jpg'))
+        if allowed is not None and os.path.basename(target) not in allowed and stem + '.jpg' not in allowed:
             continue
         if os.path.exists(target) and os.path.getmtime(target) >= os.path.getmtime(os.path.join(src, name)):
+            continue
+        if gif:
+            # Converting a GIF to JPEG keeps only its first frame, so animated GIFs are copied as they are.
+            shutil.copy2(os.path.join(src, name), target)
             continue
         subprocess.run(['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', tool, os.path.join(src, name), target],
                        check=True, capture_output=True)
