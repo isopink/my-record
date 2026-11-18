@@ -148,7 +148,6 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 <canvas id="tree" aria-hidden="true"></canvas>
 <p class="hide">A Christmas tree drawn in characters, turning slowly under falling snow.</p>
 <p class="hide">Miri Merry Christmas 2026</p>
-<button class="enter" id="enter" type="button">Press anywhere to open</button>
 </div>
 <script>try { history.scrollRestoration = 'manual'; } catch (e) {} window.scrollTo(0, 0);</script>
 <script>
@@ -280,7 +279,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
       // The greeting is coloured like the tree: the words flow through the letters, a light sweeps across them and each column sways a little.
       var flow = still ? 0 : Math.floor(time * 6), sway = still ? 0 : gfs * 0.35;
       for (var g = 0; g < greet.length; g++) {
-        var G = greet[g], L2 = stream[(G.n + flow) % stream.length];
+        var G = greet[g], L2 = stream[((G.n + flow) % stream.length + stream.length) % stream.length];
         G.t = L2.t; G.s = hues[L2.hue];
         ctx.globalAlpha = still ? 1 : 0.78 + 0.22 * (0.5 + 0.5 * Math.sin(time * 2.4 - (G.x + G.y * 0.6) * 0.015));
         ctx.fillStyle = G.s; ctx.fillText(G.t, G.x, G.y + Math.sin(time * 2 + G.x * 0.03) * sway);
@@ -325,15 +324,15 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
     setTimeout(function () { if (!gate.hidden) finish(); }, 950);
   }
 
-  // Nothing responds for the first 1.5 s, so the tree is seen before it can be dismissed.
-  setTimeout(function () { ready = true; gate.classList.add('ready'); }, 1500);
+  // The tree opens by itself one second after it is drawn; a click or key skips the wait.
+  ready = true; gate.classList.add('ready');
   gate.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
   gate.addEventListener('wheel', function (e) { e.preventDefault(); }, { passive: false });
   gate.addEventListener('click', open);
   window.addEventListener('keydown', function (e) { if (!gate.hidden && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(); } });
   window.addEventListener('resize', function () { if (!gate.hidden && !burst) { cancelAnimationFrame(raf); setup(); paint(performance.now()); } });
   var fonts = document.fonts && document.fonts.load ? document.fonts.load('500 11px "IBM Plex Mono"') : Promise.resolve();
-  function begin() { setup(); paint(performance.now()); }
+  function begin() { setup(); paint(performance.now()); setTimeout(open, 1000); }
   Promise.race([fonts, new Promise(function (ok) { setTimeout(ok, 1200); })]).then(begin, begin);
 })();
 </script>
