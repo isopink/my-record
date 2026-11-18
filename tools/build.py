@@ -210,7 +210,7 @@ def build_case(folder, allowed):
     lead = next((x for x in imgs if x['part'] == 'Lead'), None)
 
     facts = []
-    for key, label in (('shown_at', 'Shown at'), ('period', 'Period'), ('role', 'Role'), ('built_with', 'Built with')):
+    for key, label in (('shown_at', 'Shown at'), ('role', 'Role'), ('built_with', 'Built with')):
         v = clean(front.get(key, ''))
         if v and v.lower() != 'none':
             facts.append('<div><dt>%s</dt><dd>%s</dd></div>' % (label, inline(v)))
@@ -284,7 +284,7 @@ def build_case(folder, allowed):
 
 
 built = {c[0]: build_case(*c) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))}
-FIELD_NAME = {'LLM agents': 'LLM systems'}
+FIELD_NAME = {'LLM agents': 'Agent', 'Architecture': 'Extra'}
 
 
 def P(folder):
@@ -293,7 +293,7 @@ def P(folder):
 
 
 ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))]
-FIELD_ORDER = ['LLM systems', 'Data', 'Startup', 'Robotics', 'Architecture']
+FIELD_ORDER = ['Agent', 'Data', 'Startup', 'Robotics', 'Extra']
 ROWS.sort(key=lambda r: FIELD_ORDER.index(r[0]) if r[0] in FIELD_ORDER else 99)
 
 out = ['<ul class="groups">']
