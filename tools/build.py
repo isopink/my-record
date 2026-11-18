@@ -218,6 +218,7 @@ TITLE_OVERRIDE = {
     'data-engineering-fundamentals': 'Data Engineering Fundamentals',
     'pm-decision-making': 'PM Decision Making',
     'thank-you-plaque': 'Thank-You Plaque',
+    'branding-in-seongsu': 'Branding In Seongsu',
 }
 
 
