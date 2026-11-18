@@ -313,16 +313,20 @@ ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.
 FIELD_ORDER = ['Agent', 'Data', 'Startup', 'Robotics', 'Extra']
 ROWS.sort(key=lambda r: FIELD_ORDER.index(r[0]) if r[0] in FIELD_ORDER else 99)
 
+# Field names and project names take the tree's six colours in turn.
 out = ['<ul class="groups">']
 current = None
+ng = nn = 0
 for field, href, title, line, course in ROWS:
     if field != current:
         if current:
             out.append('</ul></li>')
-        out.append('<li class="group"><span class="field">%s</span><ul class="items">' % esc(field))
+        ng += 1
+        out.append('<li class="group"><span class="field" style="--c:var(--word-%d)">%s</span><ul class="items">' % ((ng - 1) % 6 + 1, esc(field)))
         current = field
     tag = '<span class="tag">Coursework</span>' if course else ''
-    name = '<a class="name" href="%s">%s</a>' % (esc(href), esc(title))
+    nn += 1
+    name = '<a class="name" style="--c:var(--word-%d)" href="%s">%s</a>' % ((nn + 2) % 6 + 1, esc(href), esc(title))
     badge = BADGES.get(href.split('/')[1])
     if badge:
         k, v, bg, fg = badge
