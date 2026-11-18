@@ -304,9 +304,9 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
     cancelAnimationFrame(raf);
     gate.hidden = true;
     root.classList.remove('gated');
-    // Land at the top of the page, or at the section a link asked for (such as All work), never on a restored scroll position.
-    var target = location.hash && document.getElementById(location.hash.slice(1));
-    var land = function () { window.scrollTo(0, target ? target.getBoundingClientRect().top + window.scrollY : 0); };
+    // Always land at the top of the page, whatever the scroll position or #hash the visit came with.
+    try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+    var land = function () { window.scrollTo(0, 0); };
     land();
     window.dispatchEvent(new Event('isopink:enter'));
     requestAnimationFrame(land);
