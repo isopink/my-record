@@ -38,6 +38,8 @@ GH_ICON = '<a class="gh" href="%s" aria-label="View on GitHub" title="View on Gi
 HIDDEN_FACTS = ('Shown at', 'Role')
 VIDEO_EXT = ('.mp4', '.webm')
 VIDEO_MAX_MB = 8
+# Live pages linked from a case page.
+LIVE_LINKS = {'sigma-engine': 'https://isopink.github.io/sigma-engine/'}
 # Section names as the case pages show them.
 HEADING = {'Process': 'Key Process'}
 ORDER = ['Overview', 'Problem define', 'Solution', 'Process', 'Next']
@@ -299,6 +301,8 @@ def build_case(folder, allowed):
     # The GitHub link is the logo next to the title, not a button.
     ghlinks = ''.join(GH_ICON % esc(l) for l in links if 'github.com' in l)
     actions = '<a class="btn" href="paper.html">Read the full write-up</a>' if paper else ''
+    if slug in LIVE_LINKS:
+        actions += '<a class="btn" href="%s" target="_blank" rel="noopener">Live Dashboard</a>' % LIVE_LINKS[slug]
     kind = ''
     status = '<span class="kind">In progress</span>' if front.get('status') == 'ongoing' else ''
 
