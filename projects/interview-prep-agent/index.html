@@ -57,11 +57,6 @@ h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;lette
 .kv dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
 .kv dd{margin:0;color:var(--color-ink-2);font-size:0.9375rem}
 @media (max-width:48rem){.kv{grid-template-columns:minmax(0,1fr)}}
-.toc{position:sticky;top:0;z-index:2;margin-top:var(--space-2xl);display:flex;flex-wrap:nowrap;column-gap:var(--space-xl);overflow-x:auto;scrollbar-width:none;background:var(--color-paper);border-block:1px solid var(--color-rule-2);font-size:var(--text-sm);font-weight:500}
-.toc a{display:inline-flex;align-items:center;min-height:3rem;text-decoration:none;color:var(--color-ink-2);white-space:nowrap}
-.toc::-webkit-scrollbar{display:none}
-@media (max-width:40rem){.toc{justify-content:space-between;column-gap:var(--space-sm);font-size:0.8125rem}}
-.toc a:hover{color:var(--color-ink)}
 .part{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,9fr);column-gap:var(--space-2xl);padding-block:var(--space-3xl);border-bottom:1px solid var(--color-rule-2);scroll-margin-top:3.5rem}
 .part h2{margin:0;font-size:var(--text-section);font-weight:600;line-height:1.15;letter-spacing:-0.015em}
 .part-body{min-width:0;display:flex;flex-direction:column;row-gap:var(--space-lg)}
@@ -97,7 +92,6 @@ td:first-child{white-space:normal}
 <div class="actions"></div>
 </header>
 <div class="wrap"><figure class="fig lead"><img src="img/01-lead-start-page.jpg" alt="why this company start page, yellow, title asks &quot;Why this company?&quot;" loading="eager"><figcaption>Start page of the live service</figcaption></figure></div>
-<nav class="wrap toc" aria-label="Sections"><a href="#overview">Overview</a><a href="#problem-define">Problem define</a><a href="#solution">Solution</a><a href="#process">Process</a><a href="#lesson">Lesson</a></nav>
 <main class="wrap">
 <section class="part" id="overview"><h2>Overview</h2><div class="part-body"><p>A web service that reads a listed company&#x27;s DART business report for a chosen role. It shows notable findings with numbers and sources, then asks 3 to 7 interview questions ending on &quot;why this company?&quot;</p>
 <dl class="kv"><div><dt>Shown at</dt><dd>Upstage MABC 2026 hackathon, final round</dd></div><div><dt>Data</dt><dd>OpenDART filings and optional IR PDFs (one file, 20 MB or less)</dd></div><div><dt>Method</dt><dd>rule judge, 6 finding types by 6 role families, Solar Pro 4 writer, figure verifier</dd></div><div><dt>Ran on</dt><dd>Render free tier</dd></div></dl></div></section>

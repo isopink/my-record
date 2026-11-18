@@ -288,7 +288,6 @@ def build_case(folder, allowed):
         parts.append('<section class="part" id="%s"><h2>%s</h2><div class="part-body">%s%s</div></section>'
                      % (name.lower().replace(' ', '-'), esc(name), html_part, figs))
 
-    nav = ''.join('<a href="#%s">%s</a>' % (n.lower().replace(' ', '-'), esc(n)) for n in ORDER if n in sec and render(sec[n]).strip())
     title = front['title']
     body = '''<header class="wrap top">
 <a class="back" href="../../index.html#work">All work</a>
@@ -299,13 +298,12 @@ def build_case(folder, allowed):
 <div class="actions">{actions}</div>
 </header>
 {leadfig}
-<nav class="wrap toc" aria-label="Sections">{nav}</nav>
 <main class="wrap">
 {parts}
 </main>
 <footer class="wrap foot"><a class="back" href="../../index.html#work">All work</a></footer>'''.format(
         field=esc(FIELD_NAME.get(front.get('field', ''), front.get('field', ''))), kind=kind, status=status, title=esc(title), lead=inline(sec.get('Lead', '')),
-        facts=''.join(facts), actions=actions, ghlinks=ghlinks, nav=nav, parts='\n'.join(parts),
+        facts=''.join(facts), actions=actions, ghlinks=ghlinks, parts='\n'.join(parts),
         leadfig=('<div class="wrap">%s</div>' % figure(lead, True)) if lead else '')
     open(os.path.join(out, 'index.html'), 'w', encoding='utf-8', newline='\n').write(page(title, sec.get('One line', ''), body))
 

@@ -57,11 +57,6 @@ h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;lette
 .kv dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
 .kv dd{margin:0;color:var(--color-ink-2);font-size:0.9375rem}
 @media (max-width:48rem){.kv{grid-template-columns:minmax(0,1fr)}}
-.toc{position:sticky;top:0;z-index:2;margin-top:var(--space-2xl);display:flex;flex-wrap:nowrap;column-gap:var(--space-xl);overflow-x:auto;scrollbar-width:none;background:var(--color-paper);border-block:1px solid var(--color-rule-2);font-size:var(--text-sm);font-weight:500}
-.toc a{display:inline-flex;align-items:center;min-height:3rem;text-decoration:none;color:var(--color-ink-2);white-space:nowrap}
-.toc::-webkit-scrollbar{display:none}
-@media (max-width:40rem){.toc{justify-content:space-between;column-gap:var(--space-sm);font-size:0.8125rem}}
-.toc a:hover{color:var(--color-ink)}
 .part{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,9fr);column-gap:var(--space-2xl);padding-block:var(--space-3xl);border-bottom:1px solid var(--color-rule-2);scroll-margin-top:3.5rem}
 .part h2{margin:0;font-size:var(--text-section);font-weight:600;line-height:1.15;letter-spacing:-0.015em}
 .part-body{min-width:0;display:flex;flex-direction:column;row-gap:var(--space-lg)}
@@ -96,8 +91,8 @@ td:first-child{white-space:normal}
 <dl class="facts"><div><dt>Shown at</dt><dd>Intelligent Robotics course, University of Seoul, fall 2026; demo scheduled 2026-11-26</dd></div><div><dt>Role</dt><dd>Robot and navigation side, per the role split commit of 2026-10-29; team of 2 (the author and 1 teammate)</dd></div><div><dt>Built with</dt><dd>TurtleBot3 Waffle Pi, Jetson Xavier NX, ROS 2 with Nav2, OpenCLIP ViT-B/32</dd></div></dl>
 <div class="actions"></div>
 </header>
+<div class="wrap"><figure class="fig lead"><video src="img/01-lead.mp4" poster="img/01-lead.jpg" aria-label="A black modular robot seen from above, with an edge computer, a LiDAR and a lit green LED" autoplay muted loop playsinline controls preload="metadata"></video><figcaption>The robot from above, with its edge computer and LiDAR</figcaption></figure></div>
 
-<nav class="wrap toc" aria-label="Sections"><a href="#overview">Overview</a><a href="#problem-define">Problem define</a><a href="#solution">Solution</a><a href="#process">Process</a><a href="#lesson">Lesson</a></nav>
 <main class="wrap">
 <section class="part" id="overview"><h2>Overview</h2><div class="part-body"><p>A TurtleBot3 Waffle Pi patrols a room and stores each desk object as a CLIP embedding, map position, timestamp and existence confidence. Given an English description, it drives to the best memory with Nav2 and re-checks the live view.</p>
 <dl class="kv"><div><dt>Shown at</dt><dd>Intelligent Robotics, University of Seoul, fall 2026; demo 2026-11-26</dd></div><div><dt>Method</dt><dd>Kalman or EKF position fusion, Bayes existence update, CLIP similarity times confidence</dd></div><div><dt>Hardware</dt><dd>Jetson Xavier NX on the robot, RealSense or C920 camera</dd></div><div><dt>Ran on</dt><dd>Windows PC and CI only; nothing has run on the real robot yet</dd></div></dl></div></section>
@@ -105,7 +100,7 @@ td:first-child{white-space:normal}
 <ul><li>43.0% top-1 for label-match search, depth mode, toy world</li><li>50.0% top-1 on moved objects with a memory that only appends</li></ul></div></section>
 <section class="part" id="solution"><h2>Solution</h2><div class="part-body"><p>An object memory package, ROS 2 nodes and robot scripts that turn an English query into Nav2 goals with a live CLIP re-check. Results so far come from a toy world, not the robot.</p>
 <div class="tablebox"><table><thead><tr><th scope="col">Value with unit</th><th scope="col">What it measures (10 words or fewer)</th></tr></thead><tbody><tr><td>95.0% top-1</td><td>CLIP search success, depth mode, toy world</td></tr><tr><td>100.0% top-1</td><td>Moved objects found, probabilistic memory, toy world</td></tr><tr><td>373 tests passed</td><td>pytest in CI on Python 3.8 and 3.10</td></tr></tbody></table></div></div></section>
-<section class="part" id="process"><h2>Process</h2><div class="part-body"><ol><li>Propose. Chose desk objects, a raised camera mast, English CLIP queries and two camera modes, depth and no depth.</li><li>Prototype. A teammate built a Jetson CLIP test and a camera-only finder; detectNet ran at about 30 FPS in the labs.</li><li>Build. Eight work branches built memory, geometry, search, vision worker, ROS 2 nodes and robot scripts, merged on 2026-11-16. <code>src/objmem/</code>,</li><li>Fix. An hfov of 1.2 rad gave objects outside the image negative Bayes updates; replaced by 0.96 rad.</li></ol></div></section>
+<section class="part" id="process"><h2>Process</h2><div class="part-body"><ol><li>Propose. Chose desk objects, a raised camera mast, English CLIP queries and two camera modes, depth and no depth.</li><li>Prototype. A teammate built a Jetson CLIP test and a camera-only finder; detectNet ran at about 30 FPS in the labs.</li><li>Build. Eight work branches built memory, geometry, search, vision worker, ROS 2 nodes and robot scripts, merged on 2026-11-16. <code>src/objmem/</code>,</li><li>Fix. An hfov of 1.2 rad gave objects outside the image negative Bayes updates; replaced by 0.96 rad.</li></ol><figure class="fig"><img src="img/02-process-hardware.jpg" alt="A black modular wheeled robot on a tiled floor with an ASUS edge computer, a LiDAR, a battery and cables" loading="lazy"><figcaption>The robot with its edge computer, LiDAR and battery</figcaption></figure></div></section>
 <section class="part" id="lesson"><h2>Lesson</h2><div class="part-body"><p>Everything passes on a PC; nothing has run on the real robot yet.</p>
 <p>The toy world has perfect localization, no occlusion and synthetic embeddings, so its absolute numbers mean little. Memory thresholds such as cos_thresh 0.8 are guesses. Every robot script, Nav2 goal and real camera call is still unverified.</p></div></section>
 </main>
