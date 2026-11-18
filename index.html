@@ -186,7 +186,8 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
     var hue = token('--tree-hue'), chroma = token('--tree-chroma');
     shades = RAMP.split('').map(function (c, i) { return 'oklch(' + (34 + i * 4.6) + '% ' + chroma + ' ' + hue + ')'; });
     hues = [1, 2, 3, 4, 5, 6].map(function (n) { return token('--word-' + n); });
-    if (!lights.length) for (var i = 0; i < 34; i++) lights.push({ tier: 1 + (i % 3), at: 0.25 + ((i * 37) % 70) / 100, turn: (i * 2.399) % TAU, hue: i % 6 });
+    // Bulbs that twinkle and baubles that stay lit, spread over every tier.
+    if (!lights.length) for (var i = 0; i < 72; i++) lights.push({ tier: i % 4, at: (i % 4 ? 0.15 : 0.45) + ((i * 37) % 80) / 100 * (i % 4 ? 1 : 0.5), turn: (i * 2.399) % TAU, hue: i % 6, ball: i % 3 === 0, glyph: i % 6 === 0 ? '@' : 'O' });
     stream = [];
     WORDS.forEach(function (word, n) { word.split('').forEach(function (t) { stream.push({ t: t, hue: n % 6 }); }); });
     // The greeting is drawn once off screen, then every cell it covers takes a letter.
@@ -239,9 +240,17 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
       }
     }
     for (var k = 0; k < 40; k++) { var th2 = k / 40 * TAU; for (var q = 0; q < 8; q++) plot(0.055 * Math.cos(th2), 1 + q * 0.016, 0.055 * Math.sin(th2), 0, 2); }
+    // A gold garland winds round each tier, under the lights.
+    for (var g2 = 0; g2 < TIERS.length; g2++) {
+      var G2 = TIERS[g2];
+      for (var s2 = 0; s2 < 160; s2++) {
+        var f2 = 0.12 + 0.8 * s2 / 159, y2 = G2[0] + (G2[1] - G2[0]) * f2, r2 = (G2[2] + (G2[3] - G2[2]) * f2) * 1.1, a2 = f2 * TAU * 1.25 + g2 * 1.9 + spin;
+        plot(r2 * Math.cos(a2), y2 + 0.02 * Math.sin(f2 * TAU * 3), r2 * Math.sin(a2) + 0.005, s2 % 2, 4);
+      }
+    }
     lights.forEach(function (L, n) {
-      var T = TIERS[L.tier], y = T[0] + (T[1] - T[0]) * L.at, r = (T[2] + (T[3] - T[2]) * L.at) * 1.14, turned = L.turn + spin;
-      if (Math.sin(time * 2 + n) > -0.6) plot(r * Math.cos(turned), y, r * Math.sin(turned) + 0.01, L.hue, 3);
+      var T = TIERS[L.tier], y = T[0] + (T[1] - T[0]) * L.at, r = (T[2] + (T[3] - T[2]) * L.at) * 1.16, turned = L.turn + spin;
+      if (L.ball || Math.sin(time * 3 + n * 1.7) > -0.3) plot(r * Math.cos(turned), y, r * Math.sin(turned) + 0.02, n, L.ball ? 5 : 3);
     });
   }
   function cells() {
@@ -251,7 +260,10 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
       if (!k) continue;
       // Foliage is set in the words that also make up the name; the lit side reads brighter.
       var w = stream[i % stream.length];
-      out.push({ x: c * cw, y: r * ch, t: k === 1 ? w.t : k === 2 ? '|' : 'o', s: k === 1 ? hues[w.hue] : k === 2 ? token('--trunk') : hues[ib[i]], a: k === 1 ? 0.3 + 0.7 * ib[i] / 11 : 1 });
+      if (k === 1) out.push({ x: c * cw, y: r * ch, t: w.t, s: hues[w.hue], a: 0.3 + 0.7 * ib[i] / 11 });
+      else if (k === 2) out.push({ x: c * cw, y: r * ch, t: '|', s: token('--trunk'), a: 1 });
+      else if (k === 4) out.push({ x: c * cw, y: r * ch, t: ib[i] ? '~' : '-', s: token('--word-4'), a: 0.95 });
+      else { var L3 = lights[ib[i]]; out.push({ x: c * cw, y: r * ch, t: k === 5 ? L3.glyph : 'o', s: hues[L3.hue], a: 1, glow: true }); }
     }
     return out;
   }
@@ -265,7 +277,14 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
       ctx.globalAlpha = 1;
       frame(still ? 0.6 : time * 0.45, time);
       list = cells();
-      for (var i = 0; i < list.length; i++) { ctx.globalAlpha = list[i].a; ctx.fillStyle = list[i].s; ctx.fillText(list[i].t, list[i].x, list[i].y); }
+      for (var i = 0; i < list.length; i++) {
+        var it = list[i];
+        ctx.globalAlpha = it.a; ctx.fillStyle = it.s;
+        // Bulbs and baubles glow in their own colour.
+        if (it.glow) { ctx.shadowColor = it.s; ctx.shadowBlur = fs * 0.9; ctx.font = '700 ' + fs * 1.15 + 'px ' + token('--font-outlier'); }
+        ctx.fillText(it.t, it.x, it.y);
+        if (it.glow) { ctx.shadowBlur = 0; ctx.font = '500 ' + fs + 'px ' + token('--font-outlier'); }
+      }
       ctx.globalAlpha = 1;
       ctx.font = '500 ' + gfs + 'px ' + token('--font-outlier');
       // The greeting is coloured like the tree: the words flow through the letters, a light sweeps across them and each column sways a little.
