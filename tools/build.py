@@ -316,7 +316,13 @@ def P(folder):
 
 ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))]
 FIELD_ORDER = ['Agent', 'Data', 'Startup', 'Robotics', 'Extra']
-ROWS.sort(key=lambda r: FIELD_ORDER.index(r[0]) if r[0] in FIELD_ORDER else 99)
+def is_live(href):
+    badges = BADGES.get(href.split('/')[1]) or []
+    return any(b[1] == 'LIVE' for b in ([badges] if isinstance(badges, tuple) else badges))
+
+
+# Fields in their set order; within a field, LIVE projects come first.
+ROWS.sort(key=lambda r: (FIELD_ORDER.index(r[0]) if r[0] in FIELD_ORDER else 99, not is_live(r[1])))
 
 out = ['<ul class="groups">']
 current = None
