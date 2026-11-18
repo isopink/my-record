@@ -388,17 +388,17 @@ built = {c[0]: build_case(*c) for c in CASES if os.path.exists(os.path.join(SRC,
 # Badges shown next to a project's name, as in the GitHub profile README: (label, value, background, text colour),
 # or a list of them for more than one badge.
 BADGES = {
-    'sigma-engine': ('', 'On-going', '#E5534B', '#fff'),
-    'open-duck-mini-v2': ('', 'On-going', '#E5534B', '#fff'),
-    'object-finder-bot': ('', 'On-going', '#E5534B', '#fff'),
-    '3ddsg-drone-navigation': ('', 'On-going', '#E5534B', '#fff'),
+    'sigma-engine': ('', 'Live', '#E5534B', '#fff'),
+    'open-duck-mini-v2': ('', 'Live', '#E5534B', '#fff'),
+    'object-finder-bot': ('', 'Live', '#E5534B', '#fff'),
+    '3ddsg-drone-navigation': ('', 'Live', '#E5534B', '#fff'),
     'interview-prep-agent': ('Awarded by', 'Upstage', '#D4A72C', '#1b1b1b'),
     'paper-review-deck': ('Under review by', 'Anthropic', '#D97757', '#fff'),
     'deep-report-pipeline': ('Under review by', 'Anthropic', '#D97757', '#fff'),
-    'impact-bridge': ('', 'On-going', '#E5534B', '#fff'),
-    'gangil-evacuation-simulation': ('', 'On-going', '#E5534B', '#fff'),
-    'pm-decision-making': ('', 'On-going', '#E5534B', '#fff'),
-    'data-engineering-fundamentals': ('', 'On-going', '#E5534B', '#fff'),
+    'impact-bridge': ('', 'Live', '#E5534B', '#fff'),
+    'gangil-evacuation-simulation': ('', 'Live', '#E5534B', '#fff'),
+    'pm-decision-making': ('', 'Live', '#E5534B', '#fff'),
+    'data-engineering-fundamentals': ('', 'Live', '#E5534B', '#fff'),
     'ibul-anbu': ('Awarded by', 'UOS', '#D4A72C', '#1b1b1b'),
     'first-wrong-step': [('', 'ON SALE', '#2DA44E', '#fff'), ('', 'Top 0.01%', '#8957E5', '#fff')],
 }
@@ -437,10 +437,10 @@ ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.
 FIELD_ORDER = ['Robotics', 'Agents', 'Startup', 'Data', 'Extra']
 def is_live(href):
     badges = BADGES.get(href.split('/')[1]) or []
-    return any(b[1] == 'On-going' for b in ([badges] if isinstance(badges, tuple) else badges))
+    return any(b[1] == 'Live' for b in ([badges] if isinstance(badges, tuple) else badges))
 
 
-# Fields in their set order; within a field, On-going projects come first.
+# Fields in their set order; within a field, Live projects come first.
 ROWS.sort(key=lambda r: (FIELD_ORDER.index(r[0]) if r[0] in FIELD_ORDER else 99, not is_live(r[1])))
 
 out = ['<ul class="groups">']
