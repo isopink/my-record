@@ -339,7 +339,7 @@ LINE_OVERRIDE = {
     'data-engineering-fundamentals': '16 weeks, Python to Databricks.',
     'gangil-evacuation-simulation': 'Smoke arrival vs. escape time.',
     'impact-bridge': 'Student marketers for social enterprises.',
-    'first-wrong-step': 'Finds the first wrong line in CSAT math.',
+    'first-wrong-step': 'Homework checks and problem picks, automated for teachers.',
     'ibul-anbu': 'Fresh bedding for parents, paid by children.',
     'pm-decision-making': 'Problem framing and MVP scoping.',
     'branding-in-seongsu': "A home for Seongsu's vanishing leather craft.",
