@@ -227,6 +227,30 @@ def figure(img, lead=False):
     return ('<figure class="%s"><img src="%s" alt="%s" loading="%s"><figcaption>%s</figcaption></figure>'
             % ('fig lead' if lead else 'fig', esc(img['src']), esc(img['alt']), 'eager' if lead else 'lazy', inline(img['cap'])))
 
+SHOW_JS = """<script>(function(){var s=document.querySelector('.show');if(!s)return;var t=s.querySelector('.track'),n=t.children.length,c=s.querySelector('.count');function i(){return Math.round(t.scrollLeft/t.clientWidth)}function go(k){t.scrollTo({left:((k+n)%n)*t.clientWidth,behavior:'smooth'})}function u(){c.textContent=(i()+1)+' / '+n}t.addEventListener('scroll',u);s.querySelector('.prev').onclick=function(){go(i()-1)};s.querySelector('.next').onclick=function(){go(i()+1)};u();if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target.querySelector('video');if(!v)return;if(e.isIntersecting){var p=v.play();if(p&&p.catch)p.catch(function(){})}else v.pause()})},{root:t,threshold:0.6});[].forEach.call(t.children,function(x){io.observe(x)})}})()</script>
+"""
+
+
+def slide(img, first):
+    if img['src'].lower().endswith(VIDEO_EXT):
+        poster = ' poster="%s"' % esc(img['poster']) if img.get('poster') else ''
+        return ('<figure class="slide"><video src="%s"%s aria-label="%s" muted loop playsinline controls preload="%s"></video><figcaption>%s</figcaption></figure>'
+                % (esc(img['src']), poster, esc(img['alt']), 'auto' if first else 'metadata', inline(img['cap'])))
+    return ('<figure class="slide"><img src="%s" alt="%s" loading="eager"><figcaption>%s</figcaption></figure>'
+            % (esc(img['src']), esc(img['alt']), inline(img['cap'])))
+
+
+def media(imgs):
+    """All pictures, GIFs and videos of a case sit in one slideshow under the title: Lead first, then table order."""
+    if not imgs:
+        return ''
+    if len(imgs) == 1:
+        return '<div class="wrap">%s</div>' % figure(imgs[0], True)
+    bar = ('<div class="bar"><button class="prev" type="button" aria-label="Previous">&larr;</button><span class="count" aria-live="polite">1 / %d</span>'
+           '<button class="next" type="button" aria-label="Next">&rarr;</button></div>' % len(imgs))
+    return ('<div class="wrap"><div class="show" role="region" aria-label="Project media"><div class="track">%s</div>%s</div></div>'
+            % (''.join(slide(x, k == 0) for k, x in enumerate(imgs)), bar))
+
 
 # Field names as the site shows them.
 FIELD_NAME = {'LLM agents': 'Agents', 'Architecture': 'Extra', 'Design': 'Extra'}
@@ -260,7 +284,7 @@ def build_case(folder, allowed):
     os.makedirs(out, exist_ok=True)
     copy_images(folder, os.path.join(out, 'img'), allowed)
     imgs = images_by_part(folder, allowed)
-    lead = next((x for x in imgs if x['part'] == 'Lead'), None)
+    ordered = [x for x in imgs if x['part'] == 'Lead'] + [x for x in imgs if x['part'] != 'Lead']
 
     facts = []
     for key, label in (('built_with', 'Built with'),):
@@ -283,9 +307,8 @@ def build_case(folder, allowed):
         html_part = render(sec[name])
         if not html_part.strip():
             continue
-        figs = ''.join(figure(x) for x in imgs if x['part'] == name)
         parts.append('<section class="part" id="%s"><h2>%s</h2><div class="part-body">%s%s</div></section>'
-                     % (name.lower().replace(' ', '-'), esc(name), html_part, figs))
+                     % (name.lower().replace(' ', '-'), esc(name), html_part, ''))
 
     title = front['title']
     body = '''<header class="wrap top">
@@ -303,8 +326,8 @@ def build_case(folder, allowed):
 <footer class="wrap foot"><a class="back" href="../../index.html#work">All work</a></footer>'''.format(
         field=esc(FIELD_NAME.get(front.get('field', ''), front.get('field', ''))), kind=kind, status=status, title=esc(title), lead=inline(sec.get('Lead', '')),
         facts=''.join(facts), actions=actions, ghlinks=ghlinks, parts='\n'.join(parts),
-        leadfig=('<div class="wrap">%s</div>' % figure(lead, True)) if lead else '')
-    open(os.path.join(out, 'index.html'), 'w', encoding='utf-8', newline='\n').write(page(title, sec.get('One line', ''), body))
+        leadfig=media(ordered))
+    open(os.path.join(out, 'index.html'), 'w', encoding='utf-8', newline='\n').write(page(title, sec.get('One line', ''), body + (SHOW_JS if len(ordered) > 1 else '')))
 
     if paper:
         md = open(os.path.join(SRC, folder, 'paper.md'), encoding='utf-8').read()
