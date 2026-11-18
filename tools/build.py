@@ -243,7 +243,7 @@ TITLE_OVERRIDE = {
     'paper-review-deck': 'Paper Review Deck',
     'career-log': 'Career Log',
     'disaster-library-whitepaper': 'Disaster Library Whitepaper',
-    'data-engineering-fundamentals': 'Data Engineering Fundamentals',
+    'data-engineering-fundamentals': 'LLM Fine-tuning',
     'pm-decision-making': 'PM Decision Making',
     'thank-you-plaque': 'Thank-You Plaque',
     'branding-in-seongsu': 'Branding In Seongsu',
