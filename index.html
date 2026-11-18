@@ -14,10 +14,10 @@
 /* Hallmark · v2.0.0 · theme: custom (by request: minimal, black and white, no pictures, no graph; colour only in the words of the name) · genre: modern-minimal · deal: manual · job: hire · shape: index-first · hero: banner · nav: edge-aligned · footer: colophon · signature: the name set out of the names of the projects and skills */
 /* Hallmark · pre-emit critique: P4 H5 E4 S5 R5 V5 · weakest: P, the page argues nothing beyond the list; kept that way on purpose, as a record */
 :root{
---color-paper:oklch(98.6% 0.002 250);
---color-ink:oklch(16% 0.004 250);--color-ink-2:oklch(30% 0.005 250);--color-muted:oklch(44% 0.006 250);--color-soft:oklch(62% 0.005 250);
---color-rule:oklch(16% 0.004 250 / 0.9);--color-rule-2:oklch(16% 0.004 250 / 0.16);
---color-accent-ink:oklch(98.6% 0.002 250);--color-focus:oklch(16% 0.004 250);
+--color-paper:#fff;--color-paper-2:oklch(96% 0 0);
+--color-ink:#000;--color-ink-2:oklch(20% 0 0);--color-muted:oklch(32% 0 0);--color-soft:oklch(48% 0 0);
+--color-rule:oklch(0% 0 0 / 0.9);--color-rule-2:oklch(0% 0 0 / 0.16);
+--color-accent-ink:#fff;--color-focus:#000;
 --word-1:#a626a4;--word-2:#4078f2;--word-3:#50a14f;--word-4:#c18401;--word-5:#e45649;--word-6:#0184bc;
 --font-display:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;--font-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;--font-outlier:"IBM Plex Mono",ui-monospace,monospace;
 --text-section:clamp(1.875rem,3.2vw,2.75rem);--text-lead:1.3125rem;--text-md:1rem;--text-sm:0.875rem;
@@ -27,30 +27,14 @@
 --rule-hair:1px;--tracking-display:-0.022em;
 color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
---color-paper:oklch(17% 0.004 250);
---color-ink:oklch(96% 0.003 250);--color-ink-2:oklch(86% 0.004 250);--color-muted:oklch(72% 0.005 250);--color-soft:oklch(56% 0.005 250);
---color-rule:oklch(96% 0.003 250 / 0.9);--color-rule-2:oklch(96% 0.003 250 / 0.2);
---color-accent-ink:oklch(17% 0.004 250);--color-focus:oklch(96% 0.003 250);
---word-1:#c678dd;--word-2:#61afef;--word-3:#98c379;--word-4:#e5c07b;--word-5:#e06c75;--word-6:#56b6c2;
-color-scheme:dark;
-}}
-:root[data-theme="dark"]{
---color-paper:oklch(17% 0.004 250);
---color-ink:oklch(96% 0.003 250);--color-ink-2:oklch(86% 0.004 250);--color-muted:oklch(72% 0.005 250);--color-soft:oklch(56% 0.005 250);
---color-rule:oklch(96% 0.003 250 / 0.9);--color-rule-2:oklch(96% 0.003 250 / 0.2);
---color-accent-ink:oklch(17% 0.004 250);--color-focus:oklch(96% 0.003 250);
---word-1:#c678dd;--word-2:#61afef;--word-3:#98c379;--word-4:#e5c07b;--word-5:#e06c75;--word-6:#56b6c2;
-color-scheme:dark;
-}
-/* One committed look: the page is always dark, whatever the viewer's theme. */
-:root,:root[data-theme="light"]{
---color-paper:oklch(13% 0.004 250);
---color-ink:oklch(96% 0.003 250);--color-ink-2:oklch(86% 0.004 250);--color-muted:oklch(72% 0.005 250);--color-soft:oklch(56% 0.005 250);
---color-rule:oklch(96% 0.003 250 / 0.9);--color-rule-2:oklch(96% 0.003 250 / 0.2);
---color-accent-ink:oklch(13% 0.004 250);--color-focus:oklch(96% 0.003 250);
---word-1:#c678dd;--word-2:#61afef;--word-3:#98c379;--word-4:#e5c07b;--word-5:#e06c75;--word-6:#56b6c2;
-color-scheme:dark;
+/* One committed look: the page is always white with black text, whatever the viewer's theme. */
+:root,:root[data-theme="light"],:root[data-theme="dark"]{
+--color-paper:#fff;--color-paper-2:oklch(96% 0 0);
+--color-ink:#000;--color-ink-2:oklch(20% 0 0);--color-muted:oklch(32% 0 0);--color-soft:oklch(48% 0 0);
+--color-rule:oklch(0% 0 0 / 0.9);--color-rule-2:oklch(0% 0 0 / 0.16);
+--color-accent-ink:#fff;--color-focus:#000;
+--word-1:#a626a4;--word-2:#4078f2;--word-3:#50a14f;--word-4:#c18401;--word-5:#e45649;--word-6:#0184bc;
+color-scheme:light;
 }
 /* No sideways scrolling on the page; vertical scroll and pinch-zoom still work. */
 html,body{overflow-x:hidden;overflow-x:clip;overscroll-behavior-x:none;max-width:100%}

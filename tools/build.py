@@ -33,6 +33,9 @@ CASES = [
     ('Startup/pm-decision-making', None),
     ('Data/data-engineering-fundamentals', None),
 ]
+GH_ICON = '<a class="gh" href="%s" aria-label="View on GitHub" title="View on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>'
+VIDEO_EXT = ('.mp4', '.webm')
+VIDEO_MAX_MB = 8
 ORDER = ['Overview', 'Problem define', 'Solution', 'Process', 'Lesson', 'Next']
 ALIAS = {'Problem': 'Problem define'}
 GH = 'https://github.com/isopink/'
@@ -155,12 +158,20 @@ def images_by_part(folder, allowed):
             continue
         name = os.path.basename(c[0].strip('`'))
         stem, ext = os.path.splitext(name)
-        # GIFs keep their own file so they still move; everything else becomes a JPEG.
-        base = stem + ('.gif' if ext.lower() == '.gif' else '.jpg')
+        part = ALIAS.get(c[4], c[4])
+        video = ext.lower() in VIDEO_EXT
+        if video and part != 'Lead':
+            print('skipped %s in %s: video is allowed for the Lead picture only' % (name, folder))
+            continue
+        # GIFs and videos keep their own file so they still move; everything else becomes a JPEG.
+        base = name.lower() if video else stem + ('.gif' if ext.lower() == '.gif' else '.jpg')
         if allowed is not None and base not in allowed and stem + '.jpg' not in allowed:
             continue
-        part = ALIAS.get(c[4], c[4])
-        found.append({'src': 'img/' + base, 'cap': c[2], 'alt': c[3], 'part': part})
+        item = {'src': 'img/' + base, 'cap': c[2], 'alt': c[3], 'part': part}
+        if video:
+            # A picture with the same file name stem is used as the poster, shown before the video plays.
+            item['poster'] = 'img/' + stem + '.jpg'
+        found.append(item)
     return found
 
 
@@ -175,18 +186,21 @@ def copy_images(folder, dest, allowed):
     os.makedirs(dest, exist_ok=True)
     tool = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resize.ps1')
     for name in sorted(os.listdir(src)):
-        if os.path.splitext(name)[1].lower() not in ('.png', '.jpg', '.jpeg', '.webp', '.gif', '.bmp'):
+        if os.path.splitext(name)[1].lower() not in ('.png', '.jpg', '.jpeg', '.webp', '.gif', '.bmp') + VIDEO_EXT:
             continue
         stem, ext = os.path.splitext(name)
         gif = ext.lower() == '.gif'
-        target = os.path.join(dest, stem + ('.gif' if gif else '.jpg'))
+        video = ext.lower() in VIDEO_EXT
+        target = os.path.join(dest, name.lower() if video else stem + ('.gif' if gif else '.jpg'))
         if allowed is not None and os.path.basename(target) not in allowed and stem + '.jpg' not in allowed:
             continue
         if os.path.exists(target) and os.path.getmtime(target) >= os.path.getmtime(os.path.join(src, name)):
             continue
-        if gif:
-            # Converting a GIF to JPEG keeps only its first frame, so animated GIFs are copied as they are.
+        if gif or video:
+            # Converting a GIF to JPEG keeps only its first frame, so animated GIFs and videos are copied as they are.
             shutil.copy2(os.path.join(src, name), target)
+            if video and os.path.getsize(target) > VIDEO_MAX_MB * 1024 * 1024:
+                print('warning: %s is over %d MB; compress it before publishing' % (name, VIDEO_MAX_MB))
             continue
         subprocess.run(['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', tool, os.path.join(src, name), target],
                        check=True, capture_output=True)
@@ -205,6 +219,12 @@ def page(title, desc, body):
 
 
 def figure(img, lead=False):
+    if img['src'].lower().endswith(VIDEO_EXT):
+        # Muted so browsers allow autoplay; controls stay so a visitor can pause it.
+        poster = ' poster="%s"' % esc(img['poster']) if img.get('poster') else ''
+        return ('<figure class="%s"><video src="%s"%s aria-label="%s" autoplay muted loop playsinline controls preload="metadata"></video>'
+                '<figcaption>%s</figcaption></figure>'
+                % ('fig lead' if lead else 'fig', esc(img['src']), poster, esc(img['alt']), inline(img['cap'])))
     return ('<figure class="%s"><img src="%s" alt="%s" loading="%s"><figcaption>%s</figcaption></figure>'
             % ('fig lead' if lead else 'fig', esc(img['src']), esc(img['alt']), 'eager' if lead else 'lazy', inline(img['cap'])))
 
@@ -251,9 +271,9 @@ def build_case(folder, allowed):
     head_text = open(os.path.join(SRC, folder, 'entry.md'), encoding='utf-8').read().split('\n---', 2)[0]
     links = list(dict.fromkeys(re.findall(r'https?://github\.com/isopink/[\w.-]+', head_text)))
     paper = os.path.exists(os.path.join(SRC, folder, 'paper.md')) and front.get('public', '').startswith('yes')
-    actions = ''.join('<a class="btn" href="%s">View on GitHub</a>' % esc(l) for l in links if 'github.com' in l)
-    if paper:
-        actions = '<a class="btn" href="paper.html">Read the full write-up</a>' + actions
+    # The GitHub link is the logo next to the title, not a button.
+    ghlinks = ''.join(GH_ICON % esc(l) for l in links if 'github.com' in l)
+    actions = '<a class="btn" href="paper.html">Read the full write-up</a>' if paper else ''
     kind = ''
     status = '<span class="kind">In progress</span>' if front.get('status') == 'ongoing' else ''
 
@@ -273,7 +293,7 @@ def build_case(folder, allowed):
     body = '''<header class="wrap top">
 <a class="back" href="../../index.html#work">All work</a>
 <p class="field">{field}{kind}{status}</p>
-<h1>{title}</h1>
+<div class="titlerow"><h1>{title}</h1>{ghlinks}</div>
 <p class="lead">{lead}</p>
 <dl class="facts">{facts}</dl>
 <div class="actions">{actions}</div>
@@ -285,7 +305,7 @@ def build_case(folder, allowed):
 </main>
 <footer class="wrap foot"><a class="back" href="../../index.html#work">All work</a></footer>'''.format(
         field=esc(FIELD_NAME.get(front.get('field', ''), front.get('field', ''))), kind=kind, status=status, title=esc(title), lead=inline(sec.get('Lead', '')),
-        facts=''.join(facts), actions=actions, nav=nav, parts='\n'.join(parts),
+        facts=''.join(facts), actions=actions, ghlinks=ghlinks, nav=nav, parts='\n'.join(parts),
         leadfig=('<div class="wrap">%s</div>' % figure(lead, True)) if lead else '')
     open(os.path.join(out, 'index.html'), 'w', encoding='utf-8', newline='\n').write(page(title, sec.get('One line', ''), body))
 
