@@ -126,10 +126,10 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 .groups{list-style:none;margin:0;padding:0;border-bottom:var(--rule-hair) solid var(--color-rule-2)}
 .group{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,10fr);column-gap:var(--gap-columns);align-items:center;padding-block:var(--space-md);border-top:var(--rule-hair) solid var(--color-rule-2)}
 .group:first-child{border-top-color:var(--color-rule)}
-.group .field{align-self:start;margin-top:calc(var(--space-xs) - var(--space-md));font-size:var(--text-sm);font-weight:500;color:var(--c,var(--color-muted))}
+.group .field{align-self:start;margin-top:calc(var(--space-xs) - var(--space-md));font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
 .items{list-style:none;margin:0;padding:0}
 .items li{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,7fr);column-gap:var(--gap-columns);row-gap:0.125rem;align-items:baseline;padding-block:var(--space-sm)}
-.items .name{font-weight:600;text-decoration:none;color:var(--c,var(--color-ink))}
+.items .name{font-weight:600;text-decoration:none}
 .items .title{display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--space-xs);row-gap:0.25rem}
 .pill{display:inline-flex;align-items:stretch;font-size:0.6875rem;font-weight:600;line-height:1.5;letter-spacing:0.02em;white-space:nowrap;vertical-align:0.12em;background:var(--p);color:var(--pi);padding-inline:0.375rem;border-radius:2px;overflow:hidden}
 .pill .pk{margin-left:-0.375rem;margin-right:0.375rem;padding-inline:0.375rem;background:oklch(36% 0.005 250);color:oklch(96% 0 0);font-weight:500}
@@ -145,7 +145,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 @media (max-width:40rem){.group{grid-template-columns:minmax(0,1fr);row-gap:var(--space-xs);padding-block:var(--space-md)}.items li{grid-template-columns:minmax(0,1fr)}.skills,.skills ul{gap:0.25rem}.skills .badge{height:1.25rem;padding-inline:0.375rem;font-size:0.6875rem}}
 @media (max-width:40rem){.hero{padding-block:var(--space-md) var(--space-2xl)}.skills{margin-bottom:var(--space-lg);flex-direction:row;flex-wrap:wrap;justify-content:center}.skills ul{display:contents}.skills li{flex:0 0 auto}}
 @media (max-width:60rem){.cols > *{grid-column:1 / -1 !important}}
-@media (max-width:40rem){.group{padding-block:var(--space-xs) var(--space-md)}.group .field{font-size:0.8125rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--c,var(--color-ink));text-align:left;margin-top:0;padding-bottom:var(--space-sm)}.items li{row-gap:0.25rem;padding-block:var(--space-sm)}.items .name{font-size:1.0625rem;line-height:1.35}.items .line{font-size:0.9375rem;line-height:1.5}}
+@media (max-width:40rem){.group{padding-block:var(--space-xs) var(--space-md)}.group .field{font-size:0.8125rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-ink);text-align:left;margin-top:0;padding-bottom:var(--space-sm)}.items li{row-gap:0.25rem;padding-block:var(--space-sm)}.items .name{font-size:1.0625rem;line-height:1.35}.items .line{font-size:0.9375rem;line-height:1.5}}
 @media (prefers-reduced-motion:reduce){.tree span{animation:none}.enter,.js .fade{transition:none}}
 </style>
 
@@ -339,34 +339,34 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
 <section class="sec fade" id="work" aria-label="Projects">
 <div class="wrap">
 <ul class="groups">
-<li class="group"><span class="field" style="--c:var(--word-1)">Agent</span><ul class="items">
-<li><span class="title"><a class="name" style="--c:var(--word-4)" href="projects/interview-prep-agent/">Why this company</a><span class="pill" style="--p:#D4A72C;--pi:#1b1b1b"><span class="pk">Awarded by</span>Upstage</span></span><span class="line">Interview questions from a company&#x27;s DART business report, every figure checked.</span></li>
-<li><span class="title"><a class="name" style="--c:var(--word-5)" href="projects/sigma-engine/">Sigma Engine</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">Claude Code agents debate Korean stocks; code sizes orders and enforces limits.</span></li>
-<li><span class="title"><a class="name" style="--c:var(--word-6)" href="projects/deep-report-pipeline/">Deep report pipeline</a><span class="pill" style="--p:#D97757;--pi:#fff"><span class="pk">Under review by</span>Anthropic</span></span><span class="line">A Claude skill that turns a topic into a checked A4 report PDF.</span></li>
-<li><span class="title"><a class="name" style="--c:var(--word-1)" href="projects/paper-review-deck/">Paper review deck</a><span class="pill" style="--p:#D97757;--pi:#fff"><span class="pk">Under review by</span>Anthropic</span></span><span class="line">A Claude skill that turns papers into a reproduced, checked review talk.</span></li>
-<li><a class="name" style="--c:var(--word-2)" href="projects/career-log/">career-log</a><span class="line">A journal that turns short daily notes into insights, postings and checklists.</span></li>
+<li class="group"><span class="field">Agent</span><ul class="items">
+<li><span class="title"><a class="name" href="projects/interview-prep-agent/">Job Interview Prep</a><span class="pill" style="--p:#D4A72C;--pi:#1b1b1b"><span class="pk">Awarded by</span>Upstage</span></span><span class="line">Interview questions from a company&#x27;s DART business report, every figure checked.</span></li>
+<li><span class="title"><a class="name" href="projects/sigma-engine/">Sigma Engine</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">Claude Code agents debate Korean stocks; code sizes orders and enforces limits.</span></li>
+<li><span class="title"><a class="name" href="projects/deep-report-pipeline/">Deep report pipeline</a><span class="pill" style="--p:#D97757;--pi:#fff"><span class="pk">Under review by</span>Anthropic</span></span><span class="line">A Claude skill that turns a topic into a checked A4 report PDF.</span></li>
+<li><span class="title"><a class="name" href="projects/paper-review-deck/">Paper review deck</a><span class="pill" style="--p:#D97757;--pi:#fff"><span class="pk">Under review by</span>Anthropic</span></span><span class="line">A Claude skill that turns papers into a reproduced, checked review talk.</span></li>
+<li><a class="name" href="projects/career-log/">career-log</a><span class="line">A journal that turns short daily notes into insights, postings and checklists.</span></li>
 </ul></li>
-<li class="group"><span class="field" style="--c:var(--word-2)">Data</span><ul class="items">
-<li><a class="name" style="--c:var(--word-3)" href="projects/steps-before-crashes/">Steps Before Crashes</a><span class="line">Elderly pedestrian crash hotspots and inspection candidates for Seoul&#x27;s 467 dongs.</span></li>
-<li><a class="name" style="--c:var(--word-4)" href="projects/disaster-library-whitepaper/">Disaster library whitepaper</a><span class="line">Old newspaper disaster reports turned into local library disaster-prep handbooks.</span></li>
-<li><a class="name" style="--c:var(--word-5)" href="projects/data-engineering-fundamentals/">Fundamentals of Data Engineering</a><span class="line">A 16-week society course on Python, Docker, databases and Databricks.<span class="tag">Coursework</span></span></li>
-<li><a class="name" style="--c:var(--word-6)" href="projects/gangil-evacuation-simulation/">Gangil 4F evacuation simulation</a><span class="line">Smoke arrival against evacuation time on one civic building floor.</span></li>
+<li class="group"><span class="field">Data</span><ul class="items">
+<li><a class="name" href="projects/steps-before-crashes/">Steps Before Crashes</a><span class="line">Elderly pedestrian crash hotspots and inspection candidates for Seoul&#x27;s 467 dongs.</span></li>
+<li><a class="name" href="projects/disaster-library-whitepaper/">Disaster library whitepaper</a><span class="line">Old newspaper disaster reports turned into local library disaster-prep handbooks.</span></li>
+<li><a class="name" href="projects/data-engineering-fundamentals/">Fundamentals of Data Engineering</a><span class="line">A 16-week society course on Python, Docker, databases and Databricks.<span class="tag">Coursework</span></span></li>
+<li><a class="name" href="projects/gangil-evacuation-simulation/">Gangil 4F evacuation simulation</a><span class="line">Smoke arrival against evacuation time on one civic building floor.</span></li>
 </ul></li>
-<li class="group"><span class="field" style="--c:var(--word-3)">Startup</span><ul class="items">
-<li><span class="title"><a class="name" style="--c:var(--word-1)" href="projects/first-wrong-step/">First wrong step</a><span class="pill" style="--p:#2DA44E;--pi:#fff">ON SALE</span></span><span class="line">Few-shot marking of handwritten CSAT math from the first wrong line.</span></li>
-<li><a class="name" style="--c:var(--word-2)" href="projects/ibul-anbu/">Ibul Anbu</a><span class="line">In-home bedding pickup, wash and remake for older parents, paid by children.</span></li>
-<li><span class="title"><a class="name" style="--c:var(--word-3)" href="projects/impact-bridge/">Impact Bridge</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">Links social enterprises short on marketing staff with student marketing societies.</span></li>
-<li><a class="name" style="--c:var(--word-4)" href="projects/pm-decision-making/">PM decision making</a><span class="line">A course on defining problems and scoping MVPs as a product manager.<span class="tag">Coursework</span></span></li>
+<li class="group"><span class="field">Startup</span><ul class="items">
+<li><span class="title"><a class="name" href="projects/first-wrong-step/">First wrong step</a><span class="pill" style="--p:#2DA44E;--pi:#fff">ON SALE</span></span><span class="line">Few-shot marking of handwritten CSAT math from the first wrong line.</span></li>
+<li><a class="name" href="projects/ibul-anbu/">Ibul Anbu</a><span class="line">In-home bedding pickup, wash and remake for older parents, paid by children.</span></li>
+<li><span class="title"><a class="name" href="projects/impact-bridge/">Impact Bridge</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">Links social enterprises short on marketing staff with student marketing societies.</span></li>
+<li><a class="name" href="projects/pm-decision-making/">PM decision making</a><span class="line">A course on defining problems and scoping MVPs as a product manager.<span class="tag">Coursework</span></span></li>
 </ul></li>
-<li class="group"><span class="field" style="--c:var(--word-4)">Robotics</span><ul class="items">
-<li><span class="title"><a class="name" style="--c:var(--word-5)" href="projects/open-duck-mini-v2/">Open Duck Mini v2</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">A 3D-printed biped robot that walks on a Raspberry Pi.</span></li>
-<li><span class="title"><a class="name" style="--c:var(--word-6)" href="projects/object-finder-bot/">Object-finding robot</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">A robot that remembers desk objects and drives to them on request.</span></li>
-<li><span class="title"><a class="name" style="--c:var(--word-1)" href="projects/3ddsg-drone-navigation/">3DDSG drone navigation</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">An indoor drone that flies room to room on a scene graph.</span></li>
+<li class="group"><span class="field">Robotics</span><ul class="items">
+<li><span class="title"><a class="name" href="projects/open-duck-mini-v2/">Open Duck Mini v2</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">A 3D-printed biped robot that walks on a Raspberry Pi.</span></li>
+<li><span class="title"><a class="name" href="projects/object-finder-bot/">Object-finding robot</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">A robot that remembers desk objects and drives to them on request.</span></li>
+<li><span class="title"><a class="name" href="projects/3ddsg-drone-navigation/">3DDSG drone navigation</a><span class="pill" style="--p:#E5534B;--pi:#fff">LIVE</span></span><span class="line">An indoor drone that flies room to room on a scene graph.</span></li>
 </ul></li>
-<li class="group"><span class="field" style="--c:var(--word-5)">Extra</span><ul class="items">
-<li><a class="name" style="--c:var(--word-2)" href="projects/branding-in-seongsu/">Branding in Seongsu</a><span class="line">A shared leather craft hub for Seongsu-dong&#x27;s disappearing craftsmen.</span></li>
-<li><a class="name" style="--c:var(--word-3)" href="projects/digital-media-ii/">Digital Media II</a><span class="line">Course work from Rhino Python to a data-driven Seoul game board.</span></li>
-<li><a class="name" style="--c:var(--word-4)" href="projects/thank-you-plaque/">Thank-you plaque</a><span class="line">A vertical plaque of thanks from students to their professor.</span></li>
+<li class="group"><span class="field">Extra</span><ul class="items">
+<li><a class="name" href="projects/branding-in-seongsu/">Branding in Seongsu</a><span class="line">A shared leather craft hub for Seongsu-dong&#x27;s disappearing craftsmen.</span></li>
+<li><a class="name" href="projects/digital-media-ii/">Digital Media II</a><span class="line">Course work from Rhino Python to a data-driven Seoul game board.</span></li>
+<li><a class="name" href="projects/thank-you-plaque/">Thank-you plaque</a><span class="line">A vertical plaque of thanks from students to their professor.</span></li>
 </ul></li>
 </ul>
 </div>

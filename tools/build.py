@@ -202,12 +202,15 @@ def figure(img, lead=False):
 
 # Projects shown under a different field from the one in their entry.md.
 FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Data'}
+# Projects shown under a different name from the one in their entry.md.
+TITLE_OVERRIDE = {'interview-prep-agent': 'Job Interview Prep'}
 
 
 def build_case(folder, allowed):
     front, sec = parse(os.path.join(SRC, folder, 'entry.md'))
     slug = os.path.basename(folder)
     front['field'] = FIELD_OVERRIDE.get(slug, front.get('field'))
+    front['title'] = TITLE_OVERRIDE.get(slug, front.get('title'))
     out = os.path.join(SITE, 'projects', slug)
     os.makedirs(out, exist_ok=True)
     copy_images(folder, os.path.join(out, 'img'), allowed)
@@ -313,20 +316,16 @@ ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.
 FIELD_ORDER = ['Agent', 'Data', 'Startup', 'Robotics', 'Extra']
 ROWS.sort(key=lambda r: FIELD_ORDER.index(r[0]) if r[0] in FIELD_ORDER else 99)
 
-# Field names and project names take the tree's six colours in turn.
 out = ['<ul class="groups">']
 current = None
-ng = nn = 0
 for field, href, title, line, course in ROWS:
     if field != current:
         if current:
             out.append('</ul></li>')
-        ng += 1
-        out.append('<li class="group"><span class="field" style="--c:var(--word-%d)">%s</span><ul class="items">' % ((ng - 1) % 6 + 1, esc(field)))
+        out.append('<li class="group"><span class="field">%s</span><ul class="items">' % esc(field))
         current = field
     tag = '<span class="tag">Coursework</span>' if course else ''
-    nn += 1
-    name = '<a class="name" style="--c:var(--word-%d)" href="%s">%s</a>' % ((nn + 2) % 6 + 1, esc(href), esc(title))
+    name = '<a class="name" href="%s">%s</a>' % (esc(href), esc(title))
     badge = BADGES.get(href.split('/')[1])
     if badge:
         k, v, bg, fg = badge
