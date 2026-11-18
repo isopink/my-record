@@ -229,7 +229,7 @@ def figure(img, lead=False):
 
 
 # Field names as the site shows them.
-FIELD_NAME = {'LLM agents': 'Agents', 'Architecture': 'Design', 'Startup': 'Business'}
+FIELD_NAME = {'LLM agents': 'Agents', 'Architecture': 'Design'}
 # Projects shown under a different field from the one in their entry.md.
 FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Data'}
 # Projects shown under a different name from the one in their entry.md.
@@ -381,7 +381,7 @@ def P(folder):
 
 
 ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))]
-FIELD_ORDER = ['Robotics', 'Agents', 'Business', 'Data', 'Design']
+FIELD_ORDER = ['Robotics', 'Agents', 'Startup', 'Data', 'Design']
 def is_live(href):
     badges = BADGES.get(href.split('/')[1]) or []
     return any(b[1] == 'LIVE' for b in ([badges] if isinstance(badges, tuple) else badges))
