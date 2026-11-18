@@ -388,7 +388,9 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
   var canvas = document.getElementById('mark');
   var ctx = canvas.getContext('2d'), mark = canvas.parentElement, offX = 0, offY = 0, CW = 0, CH = 0;
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var STREAM = WORDS.join('').split('');
+  // Letters of the project names in order, each in its word's colour, as in the greeting under the tree.
+  var STREAM = [];
+  WORDS.forEach(function (w, i) { w.split('').forEach(function (t) { STREAM.push({ t: t, hue: i % 6 }); }); });
   var cells = [], W = 0, H = 0, cw = 0, ch = 0, fs = 0, start = 0, raf = 0, played = false, DPR = 1, running = false, inside = false, px = -9999, py = -9999, REACH = 90;
 
   function token(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
@@ -425,14 +427,14 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
     canvas.style.width = CW + 'px'; canvas.style.height = CH + 'px';
     canvas.width = CW * dpr; canvas.height = CH * dpr;
     DPR = dpr; ctx.setTransform(dpr, 0, 0, dpr, offX * dpr, offY * dpr);
-    fs = Math.max(4.5, Math.min(9, msize * 0.065)); cw = fs * 0.62; ch = fs * 1.18;
+    fs = Math.max(4, Math.min(7, msize * 0.06)); cw = fs * 0.6; ch = fs * 1.02;
 
     // Draw the sentence once, off screen. Each word is painted in its own shade of red,
     // so a cell can tell which word it belongs to and take that word's colour.
     var mask = document.createElement('canvas'); mask.width = W; mask.height = H;
     var m = mask.getContext('2d'), nth = 0;
     m.font = '700 ' + msize + 'px ' + token('--font-display');
-    m.textBaseline = 'top'; m.lineWidth = msize * 0.03; m.lineJoin = 'round';
+    m.textBaseline = 'top'; m.lineWidth = msize * 0.04; m.lineJoin = 'round';
     mlines.forEach(function (line, row) {
       var x = 0;
       line.forEach(function (word) {
@@ -450,7 +452,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
         var x = Math.floor(c * cw + cw / 2), y = Math.floor(r * ch + ch / 2);
         if (data[(y * W + x) * 4 + 3] < 128) continue;
         var word = WORDS[wi % WORDS.length];
-        cells.push({ n: cells.length, x: c * cw, y: r * ch + ch * 0.8, t: word[ci], hue: (data[(y * W + x) * 4] + 5) % 6, ox: 0, oy: 0, vx: 0, vy: 0, wait: (c * 37 + r * 91) % 450, span: 1100, sx: 0, sy: 0, jx: 0, jy: 0, rot: 0, k: 1 });
+        cells.push({ n: cells.length, x: c * cw, y: r * ch + ch * 0.8, t: STREAM[cells.length % STREAM.length].t, hue: STREAM[cells.length % STREAM.length].hue, ox: 0, oy: 0, vx: 0, vy: 0, wait: (c * 37 + r * 91) % 450, span: 1100, sx: 0, sy: 0, jx: 0, jy: 0, rot: 0, k: 1 });
         // Each letter starts out beyond the edge, on the line from the centre through its place.
         var cell = cells[cells.length - 1], turn = Math.atan2(y - H / 2, x - W / 2) + (((c * 17 + r * 29) % 60) - 30) / 100, far = Math.sqrt(CW * CW + CH * CH) * (1 + ((c * 7 + r * 13) % 40) / 100);
         cell.sx = Math.cos(turn) * far; cell.sy = Math.sin(turn) * far;
@@ -476,7 +478,7 @@ footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-mute
         // Once the letters have gathered, the words keep flowing through them, a light sweeps across and each column sways.
         if (!still && p >= 1) {
           var sec = t / 1000;
-          c.t = STREAM[(c.n + Math.floor(sec * 6)) % STREAM.length];
+          var L = STREAM[(c.n + Math.floor(sec * 6)) % STREAM.length]; c.t = L.t; c.hue = L.hue;
           lit = 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(sec * 2.4 - (c.x + c.y * 0.6) * 0.012));
           bob = Math.sin(sec * 2 + c.x * 0.03) * fs * 0.3;
         }
