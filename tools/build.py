@@ -210,7 +210,7 @@ def build_case(folder, allowed):
     lead = next((x for x in imgs if x['part'] == 'Lead'), None)
 
     facts = []
-    for key, label in (('shown_at', 'Shown at'), ('period', 'Period'), ('role', 'Role'), ('built_with', 'Built with')):
+    for key, label in (('shown_at', 'Shown at'), ('role', 'Role'), ('built_with', 'Built with')):
         v = clean(front.get(key, ''))
         if v and v.lower() != 'none':
             facts.append('<div><dt>%s</dt><dd>%s</dd></div>' % (label, inline(v)))
