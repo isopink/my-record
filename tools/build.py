@@ -200,9 +200,14 @@ def figure(img, lead=False):
             % ('fig lead' if lead else 'fig', esc(img['src']), esc(img['alt']), 'eager' if lead else 'lazy', inline(img['cap'])))
 
 
+# Projects shown under a different field from the one in their entry.md.
+FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Data'}
+
+
 def build_case(folder, allowed):
     front, sec = parse(os.path.join(SRC, folder, 'entry.md'))
     slug = os.path.basename(folder)
+    front['field'] = FIELD_OVERRIDE.get(slug, front.get('field'))
     out = os.path.join(SITE, 'projects', slug)
     os.makedirs(out, exist_ok=True)
     copy_images(folder, os.path.join(out, 'img'), allowed)
