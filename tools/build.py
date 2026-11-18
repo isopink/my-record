@@ -205,7 +205,7 @@ FIELD_NAME = {'LLM agents': 'Agents', 'Architecture': 'Design', 'Startup': 'Busi
 # Projects shown under a different field from the one in their entry.md.
 FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Data'}
 # Projects shown under a different name from the one in their entry.md.
-TITLE_OVERRIDE = {'interview-prep-agent': 'Job Interview Prep', 'first-wrong-step': 'Pathfinder'}
+TITLE_OVERRIDE = {'interview-prep-agent': 'Job Interview Prep', 'first-wrong-step': 'Pathfinder', 'gangil-evacuation-simulation': 'Evacuation simulation'}
 
 
 def build_case(folder, allowed):
