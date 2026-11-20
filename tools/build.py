@@ -274,7 +274,7 @@ FIELD_NAME = {'LLM agents': 'Data', 'Startup': 'Extra'}
 # Projects shown under a different field from the one in their entry.md.
 FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Extra', 'deep-report-pipeline': 'Extra', 'paper-review-deck': 'Extra'}
 # Projects that keep a case page but are left off the main page list.
-HIDE_FROM_LIST = {'career-log'}
+HIDE_FROM_LIST = {'career-log', 'deep-report-pipeline', 'paper-review-deck'}
 # Projects listed last within their field.
 LIST_LAST = {'deep-report-pipeline', 'paper-review-deck'}
 # Projects shown under a different name from the one in their entry.md.
