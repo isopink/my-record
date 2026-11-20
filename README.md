@@ -2,7 +2,7 @@
 
 A record of things I have built. The site is one static page, `index.html`, served with GitHub Pages.
 
-- Opening screen: a robot hand set in the names of the projects and tools, flexing its fingers.
+- Opening screen: a figure standing in rain with arms held out, lit in gold from the upper right, all set in the letters of the project and tool names.
 - Main page: skills, one sentence, and the list of projects by field.
 
 No build step. Open `index.html` in a browser to preview.
