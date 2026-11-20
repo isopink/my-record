@@ -386,7 +386,6 @@ BADGES = {
     'paper-review-deck': ('Under review by', 'Anthropic', '#D97757', '#fff'),
     'deep-report-pipeline': ('Under review by', 'Anthropic', '#D97757', '#fff'),
     'impact-bridge': ('', 'Live', '#E5534B', '#fff'),
-    'gangil-evacuation-simulation': ('', 'Live', '#E5534B', '#fff'),
     'ibul-anbu': ('Awarded by', 'UOS', '#D4A72C', '#1b1b1b'),
     'first-wrong-step': [('', 'ON SALE', '#2DA44E', '#fff'), ('', 'Top 0.01%', '#8957E5', '#fff')],
 }
