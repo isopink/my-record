@@ -270,7 +270,7 @@ def media(imgs):
 
 
 # Field names as the site shows them.
-FIELD_NAME = {'LLM agents': 'Agents', 'Startup': 'Extra'}
+FIELD_NAME = {'LLM agents': 'Data', 'Startup': 'Extra'}
 # Projects shown under a different field from the one in their entry.md.
 FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Extra', 'deep-report-pipeline': 'Extra', 'paper-review-deck': 'Extra'}
 # Projects that keep a case page but are left off the main page list.
@@ -417,7 +417,7 @@ def P(folder):
 
 
 ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md')) and c[0].split('/')[1] not in HIDE_FROM_LIST]
-FIELD_ORDER = ['Robotics', 'Data', 'Agents', 'Extra']
+FIELD_ORDER = ['Robotics', 'Data', 'Extra']
 def _has(href, word):
     badges = BADGES.get(href.split('/')[1]) or []
     return any(b[1] == word for b in ([badges] if isinstance(badges, tuple) else badges))
