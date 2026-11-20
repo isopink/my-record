@@ -13,14 +13,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
 /* One look with the Sigma Engine dashboard: near-black ground, flat cards with hairline borders, Noto Serif KR.
-   Greys only, plus its red and blue in the letters and one green dot for a project that is live.
-   The opening screen alone is lit in gold: letters of rain, and a figure standing in it. */
+   Greys only, plus its red and blue in the letters and one green dot for a project that is live. */
 :root{
 --canvas:#101010;--card:#161616;--line:#2a2a2a;--line-2:#3d3a39;--row:rgba(255,255,255,.07);
 --ink:#f2f2f2;--body:#bdbdbd;--muted:#8b949e;--grey:#5a5a5a;
 --red:#ff5a65;--blue:#4e94ff;--green:#34c759;
 --word-1:#f2f2f2;--word-2:#d6d6d6;--word-3:#ff5a65;--word-4:#f2f2f2;--word-5:#bdbdbd;--word-6:#4e94ff;
---glow-0:#1c1206;--glow-1:#8f5413;--glow-2:#eba23c;--glow-3:#fff0c8;
+
 --font-display:"Noto Serif KR","AppleMyungjo","Batang",serif;--font-body:"Noto Serif KR","AppleMyungjo","Batang",serif;--font-outlier:"IBM Plex Mono",ui-monospace,monospace;
 --container:1360px;--gutter:max(16px,3vw);--gap:16px;
 color-scheme:dark;
@@ -115,11 +114,11 @@ footer{padding-block:24px 48px}
   // Rain falls down and to the left, away from the light in the upper right.
   var FALL = [-0.34, 0.94];
   var W = 0, H = 0, fs = 0, cw = 0, ch = 0, cols = 0, rows = 0, S = 0, ox = 0, oy = 0, lx = 0, ly = 0, reach = 1, mono = '';
-  var fig = null, body = [], edge = [], rain = [], sparks = [], stream = [], LUT = [], glow = '';
-  var raf = 0, ready = false, leaving = false, burst = null, last = 0;
+  var mask = document.createElement('canvas'), m = mask.getContext('2d', { willReadFrequently: true });
+  var fig = null, body = [], edge = [], rain = [], sparks = [], stream = [], hues = [], bloom = '';
+  var raf = 0, ready = false, leaving = false, burst = null, last = 0, t0 = performance.now();
 
   function token(n) { return getComputedStyle(root).getPropertyValue(n).trim(); }
-  function rgb(hex) { return [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)]; }
   function ease(v) { v = Math.max(0, Math.min(1, v)); return v * v * (3 - 2 * v); }
   // How much of the light reaches a point: strongest in the upper right, gone by the lower left and the bottom edge.
   function light(x, y) {
@@ -131,30 +130,83 @@ footer{padding-block:24px 48px}
     return c >= 0 && r >= 0 && c < cols && r < rows && fig[r * cols + c] === 1;
   }
 
-  // The figure, drawn once as a flat shape: seen from behind, head back, arms held out in the rain.
-  // Units are its own height, x from its middle, y from the top of its head.
-  function figure(m) {
-    function X(x) { return ox + x * S; }
-    function Y(y) { return oy + y * S; }
-    function poly(p) { m.beginPath(); for (var i = 0; i < p.length; i += 2) m[i ? 'lineTo' : 'moveTo'](X(p[i]), Y(p[i + 1])); m.closePath(); m.fill(); }
-    function limb(x0, y0, x1, y1, w) { m.lineWidth = w * S; m.beginPath(); m.moveTo(X(x0), Y(y0)); m.lineTo(X(x1), Y(y1)); m.stroke(); }
-    m.fillStyle = m.strokeStyle = '#fff'; m.lineCap = 'round'; m.lineJoin = 'round';
-    // Head, tipped back towards the light.
-    m.beginPath(); m.ellipse(X(0.012), Y(0.078), 0.063 * S, 0.076 * S, 0.42, 0, TAU); m.fill();
-    poly([-0.036, 0.125, 0.03, 0.12, 0.05, 0.2, -0.058, 0.21]);
-    // Back and shoulders.
-    poly([-0.168, 0.218, -0.06, 0.176, 0.06, 0.17, 0.168, 0.2, 0.152, 0.36, 0.116, 0.5, 0.122, 0.565, -0.106, 0.575, -0.116, 0.48, -0.152, 0.36]);
-    // Arms: upper arm, forearm, hand, then the open fingers.
-    limb(-0.14, 0.236, -0.3, 0.33, 0.086); limb(-0.3, 0.33, -0.455, 0.386, 0.066); limb(-0.455, 0.386, -0.53, 0.377, 0.042);
-    limb(0.14, 0.226, 0.3, 0.306, 0.086); limb(0.3, 0.306, 0.45, 0.356, 0.066); limb(0.45, 0.356, 0.522, 0.346, 0.042);
-    [[-0.59, 0.342], [-0.606, 0.37], [-0.596, 0.398], [-0.566, 0.416], [-0.5, 0.326]].forEach(function (f) { limb(-0.522, 0.378, f[0], f[1], 0.015); });
-    [[0.588, 0.298], [0.61, 0.328], [0.606, 0.36], [0.58, 0.388], [0.498, 0.296]].forEach(function (f) { limb(0.512, 0.348, f[0], f[1], 0.015); });
-    // Wet sleeves hanging under the arms, and the open shirt at one side.
-    poly([-0.16, 0.3, -0.3, 0.37, -0.335, 0.445, -0.22, 0.4, -0.14, 0.4]);
-    poly([0.15, 0.29, 0.31, 0.35, 0.335, 0.415, 0.22, 0.386, 0.14, 0.39]);
-    poly([-0.11, 0.44, -0.236, 0.5, -0.252, 0.6, -0.2, 0.668, -0.1, 0.62]);
-    // Legs, which sink into the dark.
-    poly([-0.106, 0.56, 0.122, 0.55, 0.158, 0.72, 0.152, 1.04, 0.022, 1.04, 0.014, 0.8, -0.006, 1.04, -0.112, 1.04, -0.086, 0.75]);
+  // The figure as a flat shape, drawn again every frame straight onto the letter grid (one pixel per cell):
+  // seen from behind, back arched, head thrown back, arms flung out and up towards the light, legs braced apart.
+  // Units are its own height, x from its middle, y from the top of its head. It heaves, sways and reaches as time passes.
+  function figure(time) {
+    var breath = Math.sin(time * 2.7) + 0.4 * Math.sin(time * 5.4 + 1), lean = 0.03 * Math.sin(time * 0.62), reachL = Math.sin(time * 0.9), reachR = Math.sin(time * 0.75 + 1.3);
+    var grip = 0.8 + 0.2 * Math.sin(time * 1.6), flap = Math.sin(time * 3.1), flap2 = Math.sin(time * 3.7 + 1), roll = -0.95 + 0.13 * Math.sin(time * 0.8) - 0.03 * breath;
+    var sag = 0.012 * (0.5 + 0.5 * Math.sin(time * 0.45));
+    // Everything above the knees leans with the sway, lifts with each breath and sags as the legs give.
+    function X(x, y) { return (ox + (x + lean * Math.max(0, 0.78 - y) / 0.78) * S) / cw; }
+    function Y(y) { return (oy + (y - 0.009 * breath * Math.max(0, 0.45 - y) / 0.45 + sag * Math.max(0, 0.8 - y) / 0.8) * S) / ch; }
+    // A closed shape with rounded corners, through the given points.
+    function blob(p) {
+      var n = p.length / 2, i, ax, ay, bx, by;
+      m.beginPath();
+      for (i = 0; i <= n; i++) {
+        ax = X(p[(i % n) * 2], p[(i % n) * 2 + 1]); ay = Y(p[(i % n) * 2 + 1]);
+        bx = X(p[((i + 1) % n) * 2], p[((i + 1) % n) * 2 + 1]); by = Y(p[((i + 1) % n) * 2 + 1]);
+        if (!i) m.moveTo((ax + bx) / 2, (ay + by) / 2); else m.quadraticCurveTo(ax, ay, (ax + bx) / 2, (ay + by) / 2);
+      }
+      m.fill();
+    }
+    function poly(p) { m.beginPath(); for (var i = 0; i < p.length; i += 2) m[i ? 'lineTo' : 'moveTo'](X(p[i], p[i + 1]), Y(p[i + 1])); m.closePath(); m.fill(); }
+    // A limb is a row of discs, so it keeps its width whichever way it runs on the stretched grid.
+    function limb(x0, y0, x1, y1, w0, w1) {
+      for (var i = 0; i <= 16; i++) {
+        var f = i / 16, x = x0 + (x1 - x0) * f, y = y0 + (y1 - y0) * f, w = (w0 + ((w1 === undefined ? w0 : w1) - w0) * f) * S / 2;
+        m.beginPath(); m.ellipse(X(x, y), Y(y), w / cw, w / ch, 0, 0, TAU); m.fill();
+      }
+    }
+    m.setTransform(1, 0, 0, 1, 0, 0); m.clearRect(0, 0, cols, rows); m.fillStyle = '#fff';
+    // Head in profile, thrown right back, mouth open to the sky. Drawn facing right, then turned.
+    var hx = 0.03, hy = 0.098, hr = 0.066, cr = Math.cos(roll), sr = Math.sin(roll);
+    var face = [-0.2, -1, 0.55, -0.92, 0.98, -0.5, 1.02, -0.2, 1.3, 0.02, 1.02, 0.2, 0.98, 0.34, 0.5, 0.5, 0.95, 0.72, 0.84, 1.08, 0.3, 1.2, -0.3, 1.0, -1, 0.5, -1.05, -0.3, -0.7, -0.85], turned = [];
+    for (var k = 0; k < face.length; k += 2) turned.push(hx + (face[k] * cr - face[k + 1] * sr) * hr, hy + (face[k] * sr + face[k + 1] * cr) * hr);
+    poly(turned);
+    // Throat stretched tight between the jaw and the collar.
+    blob([-0.06, 0.15, -0.01, 0.09, 0.085, 0.125, 0.075, 0.215, -0.075, 0.225]);
+    // Back, arched and thin: shoulders dragged up and wide, ribs showing, waist drawn in.
+    var sw = 0.007 * breath;
+    blob([-0.17 - sw, 0.235, -0.1, 0.195, 0, 0.185, 0.1, 0.185, 0.172 + sw, 0.222, 0.165 + sw, 0.3, 0.128, 0.4, 0.092, 0.5, 0.112, 0.6, 0, 0.625, -0.108, 0.605, -0.086, 0.5, -0.125, 0.4, -0.162 - sw, 0.3]);
+    // Arms flung wide: the one nearer the light strains up towards it, the other trails lower. Both rise and sink back.
+    var la = [-0.145, 0.25, -0.31, 0.285 - 0.02 * reachL, -0.455, 0.262 - 0.045 * reachL, -0.512, 0.246 - 0.055 * reachL];
+    var ra = [0.148, 0.236, 0.3, 0.19 - 0.02 * reachR, 0.425, 0.092 - 0.045 * reachR, 0.468, 0.048 - 0.055 * reachR];
+    limb(la[0], la[1], la[2], la[3], 0.086, 0.062); limb(la[2], la[3], la[4], la[5], 0.058, 0.042); limb(la[4], la[5], la[6], la[7], 0.044, 0.04);
+    limb(ra[0], ra[1], ra[2], ra[3], 0.086, 0.062); limb(ra[2], ra[3], ra[4], ra[5], 0.058, 0.042); limb(ra[4], ra[5], ra[6], ra[7], 0.044, 0.04);
+    // Hands wide open, fingers clawing at the air.
+    [[-0.1, 0.03], [-0.102, -0.02], [-0.082, -0.062], [-0.046, -0.086], [0.012, -0.066]].forEach(function (f) { limb(la[6], la[7], la[6] + f[0] * grip, la[7] + f[1] * grip, 0.019, 0.012); });
+    [[0.1, -0.012], [0.09, -0.06], [0.058, -0.092], [0.016, -0.1], [-0.045, -0.052]].forEach(function (f) { limb(ra[6], ra[7], ra[6] + f[0] * grip, ra[7] + f[1] * grip, 0.019, 0.012); });
+    // What is left of the shirt: soaked strips hanging from the arms and off the back, whipped by the wind.
+    function strip(x, y, w, len, drift) { poly([x - w / 2, y, x + w / 2, y, x + drift + w * 0.3, y + len * 0.6, x + drift * 1.8, y + len]); }
+    var d1 = 0.02 * flap - 0.012, d2 = 0.018 * flap2 - 0.012;
+    strip(la[2] + 0.07, la[3] + 0.025, 0.05, 0.12, d1); strip(la[2] - 0.02, la[3] + 0.02, 0.04, 0.085, d2); strip(la[4] + 0.05, la[5] + 0.018, 0.034, 0.1, d1); strip(la[4] - 0.01, la[5] + 0.014, 0.026, 0.06, d2);
+    strip(ra[2] - 0.06, ra[3] + 0.04, 0.05, 0.115, d2); strip(ra[2] + 0.02, ra[3] + 0.02, 0.04, 0.09, d1); strip(ra[4] - 0.04, ra[5] + 0.03, 0.032, 0.1, d2);
+    poly([-0.07, 0.4, -0.135, 0.38, -0.185 + d1, 0.5, -0.2 + d1 * 1.8, 0.69, -0.15 + d2, 0.6, -0.125 + d2 * 1.5, 0.74, -0.07, 0.6]);
+    poly([0.07, 0.42, 0.13, 0.4, 0.165 + d2, 0.53, 0.16 + d2 * 1.8, 0.7, 0.125 + d1, 0.6, 0.07, 0.6]);
+    // Legs giving way: knees buckling in, feet wide, sinking into the dark.
+    var buckle = 0.016 * Math.sin(time * 0.45);
+    limb(-0.055, 0.6, -0.07 + buckle, 0.81, 0.13, 0.092); limb(-0.07 + buckle, 0.81, -0.2, 1.06, 0.088, 0.06);
+    limb(0.058, 0.598, 0.085 - buckle, 0.8, 0.13, 0.092); limb(0.085 - buckle, 0.8, 0.185, 1.06, 0.088, 0.06);
+  }
+
+  // Read the shape off the grid and give every cell of the figure a letter. The words run down the body like the
+  // water does. The figure is nearly dark, except along the edges that face the light.
+  function clothe(time) {
+    figure(time);
+    var data = m.getImageData(0, 0, cols, rows).data, r, c, i, flow = Math.floor(time * 9), n = stream.length;
+    for (i = 0; i < cols * rows; i++) fig[i] = data[i * 4 + 3] > 105 ? 1 : 0;
+    body.length = 0; edge.length = 0;
+    for (r = 0; r < rows; r++) for (c = 0; c < cols; c++) {
+      if (!fig[r * cols + c]) continue;
+      var x = c * cw, y = r * ch, dx = lx - x, dy = ly - y, dl = Math.sqrt(dx * dx + dy * dy), depth = 0;
+      for (var s = 1; s <= 6; s++) if (!inside(x + cw / 2 + dx / dl * ch * s, y + ch / 2 + dy / dl * ch * s)) { depth = s; break; }
+      var rimv = depth ? Math.pow(1 - (depth - 1) / 6, 2.2) : 0, L = light(x, y), sink = 1 - 0.95 * ease(((y - oy) / S - 0.6) / 0.4);
+      var w = stream[(r * cols + c + flow) % n], shimmer = 0.85 + 0.15 * Math.sin(time * 5 + c * 0.9 - r * 1.3);
+      body.push({ x: x, y: y, t: w.t, s: hues[w.hue], v: Math.min(1, (0.2 + 0.1 * L + rimv * (0.3 + 1.6 * L)) * sink * shimmer) });
+      if ((r === 0 || !fig[(r - 1) * cols + c]) && sink > 0.3) edge.push(x, y);
+    }
   }
 
   function setup() {
@@ -163,44 +215,22 @@ footer{padding-block:24px 48px}
     canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     fs = Math.max(8, Math.min(13, Math.round(H / 70))); cw = fs * 0.6; ch = fs * 1.02;
     cols = Math.ceil(W / cw); rows = Math.ceil(H / ch); mono = '500 ' + fs + 'px ' + token('--font-outlier');
+    mask.width = cols; mask.height = rows; fig = new Uint8Array(cols * rows);
+    // The page's own colours: greys, with one word in six red and one blue.
+    hues = [1, 2, 3, 4, 5, 6].map(function (n) { return token('--word-' + n); });
     stream = [];
-    WORDS.forEach(function (word) { word.split('').forEach(function (t) { stream.push(t); }); });
-    // Colours of the light, from the dark it leaves to its white-gold centre.
-    var stops = [0, 1, 2, 3].map(function (n) { return rgb(token('--glow-' + n)); }), at = [0, 0.36, 0.72, 1];
-    LUT = [];
-    for (var i = 0; i < 32; i++) {
-      var v = i / 31, k = v < at[1] ? 0 : v < at[2] ? 1 : 2, f = (v - at[k]) / (at[k + 1] - at[k]), a = stops[k], b = stops[k + 1];
-      LUT.push('rgb(' + Math.round(a[0] + (b[0] - a[0]) * f) + ',' + Math.round(a[1] + (b[1] - a[1]) * f) + ',' + Math.round(a[2] + (b[2] - a[2]) * f) + ')');
-    }
-    glow = 'rgba(' + stops[2].join(',') + ',';
+    WORDS.forEach(function (word, n) { word.split('').forEach(function (t) { stream.push({ t: t, hue: n % 6 }); }); });
+    var ink = token('--ink');
+    bloom = 'rgba(' + parseInt(ink.slice(1, 3), 16) + ',' + parseInt(ink.slice(3, 5), 16) + ',' + parseInt(ink.slice(5, 7), 16) + ',';
     lx = W * 0.94; ly = -H * 0.06; reach = Math.sqrt(W * W + H * H) * 1.08;
-    S = Math.min(H * 0.88, W / 1.26); ox = W * 0.5; oy = Math.max(H * 0.1, (H - S) * 0.4);
-
-    // The shape decides which cells of the letter grid belong to the figure.
-    var mask = document.createElement('canvas'); mask.width = W; mask.height = H;
-    var m = mask.getContext('2d', { willReadFrequently: true });
-    figure(m);
-    var data = m.getImageData(0, 0, W, H).data, r, c;
-    fig = new Uint8Array(cols * rows);
-    for (r = 0; r < rows; r++) for (c = 0; c < cols; c++) {
-      var px = Math.min(W - 1, Math.floor(c * cw + cw / 2)), py = Math.min(H - 1, Math.floor(r * ch + ch / 2));
-      if (data[(py * W + px) * 4 + 3] > 127) fig[r * cols + c] = 1;
-    }
-    // Each cell of the figure takes a letter. It is nearly dark, except along the edges that face the light.
-    body = []; edge = [];
-    for (r = 0; r < rows; r++) for (c = 0; c < cols; c++) {
-      if (!fig[r * cols + c]) continue;
-      var x = c * cw, y = r * ch, dx = lx - x, dy = ly - y, dl = Math.sqrt(dx * dx + dy * dy), depth = 0;
-      for (var s = 1; s <= 6; s++) if (!inside(x + cw / 2 + dx / dl * ch * s, y + ch / 2 + dy / dl * ch * s)) { depth = s; break; }
-      var rimv = depth ? Math.pow(1 - (depth - 1) / 6, 2.2) : 0, L = light(x, y), yn = (y - oy) / S;
-      var sink = 1 - 0.94 * ease((yn - 0.6) / 0.4);
-      body.push({ x: x, y: y, t: stream[(r * cols + c) % stream.length], v: Math.min(1, (0.09 + 0.08 * L + rimv * (0.25 + 1.5 * L)) * sink) });
-      if ((r === 0 || !fig[(r - 1) * cols + c]) && sink > 0.3) edge.push({ x: x, y: y });
-    }
-    // Streaks of rain, each a short run of letters.
+    S = Math.min(H * 0.84, W / 1.3); ox = W * 0.5; oy = Math.max(H * 0.13, (H - S) * 0.42);
+    // Each streak of rain is one of the words, in that word's colour.
     rain = [];
-    var count = Math.min(1500, Math.round(W * H / 800));
-    for (var n = 0; n < count; n++) rain.push({ x: Math.random() * (W + H * 0.37 + 40) - 20, y: Math.random() * (H + 40) - 20, len: 4 + Math.floor(Math.random() * 8), v: 520 + Math.random() * 560, k: Math.floor(Math.random() * stream.length), a: 0.35 + Math.random() * 0.65, front: Math.random() < 0.08 });
+    var count = Math.min(1100, Math.round(W * H / 1050));
+    for (var n = 0; n < count; n++) {
+      var k = Math.floor(Math.random() * WORDS.length);
+      rain.push({ x: Math.random() * (W + H * 0.37 + 40) - 20, y: Math.random() * (H + 40) - 20, word: WORDS[k].slice(0, 12), s: hues[k % 6], v: 520 + Math.random() * 560, a: 0.35 + Math.random() * 0.65, front: Math.random() < 0.08 });
+    }
     sparks = [];
   }
 
@@ -208,59 +238,66 @@ footer{padding-block:24px 48px}
   function drops(front) {
     var out = [], step = fs * 0.82;
     for (var i = 0; i < rain.length; i++) {
-      var d = rain[i];
+      var d = rain[i], len = d.word.length;
       if (d.front !== front) continue;
-      for (var j = 0; j < d.len; j++) {
+      for (var j = 0; j < len; j++) {
         var x = d.x - FALL[0] * j * step, y = d.y - FALL[1] * j * step;
         if (x < -cw || y < -ch || x > W || y > H) continue;
         if (!front && inside(x + cw / 2, y + ch / 2)) continue;
-        var v = light(x, y) * d.a * (1 - 0.8 * j / d.len) * 1.7;
-        if (v < 0.03) continue;
-        out.push({ x: x, y: y, t: stream[(d.k + j) % stream.length], v: Math.min(1, v) });
+        var v = light(x, y) * d.a * (1 - 0.8 * j / len) * 1.7;
+        if (v < 0.04) continue;
+        // The word reads down the streak, its last letter leading.
+        out.push({ x: x, y: y, t: d.word.charAt(len - 1 - j), s: d.s, v: Math.min(1, v) });
       }
     }
     return out;
   }
   function draw(list) {
-    for (var i = 0; i < list.length; i++) { var it = list[i]; ctx.fillStyle = LUT[Math.min(31, Math.floor(it.v * 32))]; ctx.fillText(it.t, it.x, it.y); }
+    for (var i = 0; i < list.length; i++) { var it = list[i]; ctx.globalAlpha = it.v; ctx.fillStyle = it.s; ctx.fillText(it.t, it.x, it.y); }
+    ctx.globalAlpha = 1;
   }
   function paint(now) {
-    var dt = Math.min(0.05, (now - last) / 1000), i; last = now;
+    var dt = Math.min(0.05, (now - last) / 1000), time = still ? 1.2 : (now - t0) / 1000, i; last = now;
     ctx.clearRect(0, 0, W, H);
     ctx.font = mono; ctx.textBaseline = 'top';
     if (!burst) {
-      // The light itself: a soft bloom in the upper right.
-      var g = ctx.createRadialGradient(lx, ly, 0, lx, ly, reach * 0.62);
-      g.addColorStop(0, glow + '0.34)'); g.addColorStop(0.45, glow + '0.09)'); g.addColorStop(1, glow + '0)');
+      // The light itself: a faint bloom in the upper right.
+      var g = ctx.createRadialGradient(lx, ly, 0, lx, ly, reach * 0.6);
+      g.addColorStop(0, bloom + '0.16)'); g.addColorStop(0.45, bloom + '0.04)'); g.addColorStop(1, bloom + '0)');
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      clothe(time);
       if (!still) {
         var span = W + H * 0.37 + 40;
         for (i = 0; i < rain.length; i++) {
-          var d = rain[i];
+          var d = rain[i], tail = d.word.length * fs;
           d.x += FALL[0] * d.v * dt; d.y += FALL[1] * d.v * dt;
-          if (d.y - d.len * fs > H + 20) { d.y -= H + 40 + d.len * fs; d.x += (H + 40 + d.len * fs) * 0.362; }
+          if (d.y - tail > H + 20) { d.y -= H + 40 + tail; d.x += (H + 40 + tail) * 0.362; }
+          // Keep the rain even across the whole screen: a streak that leaves one side comes back on the other.
           if (d.x < -20) d.x += span; else if (d.x > span - 20) d.x -= span;
         }
         // Rain breaks on the head, shoulders and arms.
-        for (i = edge.length * dt * 2.5; i > 0; i--) if (Math.random() < i) {
-          var e = edge[Math.floor(Math.random() * edge.length)];
-          sparks.push({ x: e.x + (Math.random() - 0.5) * cw, y: e.y, at: now, life: 140 + Math.random() * 200, t: ".'`:,"[Math.floor(Math.random() * 5)], lean: (Math.random() - 0.5) * 14 });
+        for (i = edge.length / 2 * dt * 2.5; i > 0; i--) if (Math.random() < i) {
+          var e = Math.floor(Math.random() * edge.length / 2) * 2;
+          sparks.push({ x: edge[e] + (Math.random() - 0.5) * cw, y: edge[e + 1], at: now, life: 140 + Math.random() * 200, t: ".'`:,"[Math.floor(Math.random() * 5)], lean: (Math.random() - 0.5) * 14 });
         }
       }
       draw(drops(false));
       draw(body);
+      ctx.fillStyle = hues[0];
       for (i = sparks.length - 1; i >= 0; i--) {
         var s = sparks[i], p = (now - s.at) / s.life;
         if (p >= 1) { sparks.splice(i, 1); continue; }
-        ctx.fillStyle = LUT[Math.min(31, Math.floor(Math.min(1, light(s.x, s.y) * 2.4 + 0.25) * (1 - p * 0.6) * 32))];
+        ctx.globalAlpha = Math.min(1, light(s.x, s.y) * 2.4 + 0.25) * (1 - p * 0.6);
         ctx.fillText(s.t, s.x + s.lean * p, s.y - ch * (0.5 + 1.1 * Math.sin(p * Math.PI * 0.75)));
       }
+      ctx.globalAlpha = 1;
       draw(drops(true));
       if (!still) raf = requestAnimationFrame(paint);
     } else {
       // Every letter leaves along the line from the middle of the figure through itself.
       var q = Math.min(1, (now - burst.at) / 800), e2 = q * q;
-      for (i = 0; i < burst.list.length; i++) { var b = burst.list[i]; ctx.fillStyle = b.s; ctx.fillText(b.t, b.x + b.dx * e2, b.y + b.dy * e2); }
+      for (i = 0; i < burst.list.length; i++) { var b = burst.list[i]; ctx.globalAlpha = b.v; ctx.fillStyle = b.s; ctx.fillText(b.t, b.x + b.dx * e2, b.y + b.dy * e2); }
+      ctx.globalAlpha = 1;
       if (q < 1) raf = requestAnimationFrame(paint); else finish();
     }
   }
@@ -279,10 +316,10 @@ footer{padding-block:24px 48px}
     if (!ready || leaving) return;
     leaving = true;
     if (still) { finish(); return; }
-    var list = drops(false).concat(body, drops(true)), cx = ox, cy = oy + S * 0.4, far0 = Math.sqrt(W * W + H * H);
-    list = list.map(function (c) {
+    var cx = ox, cy = oy + S * 0.4, far0 = Math.sqrt(W * W + H * H);
+    var list = drops(false).concat(body, drops(true)).map(function (c) {
       var turn = Math.atan2(c.y - cy, c.x - cx) + (Math.random() - 0.5) * 0.7, far = far0 * (0.75 + Math.random() * 0.6);
-      return { x: c.x, y: c.y, t: c.t, s: LUT[Math.min(31, Math.floor(c.v * 32))], dx: Math.cos(turn) * far, dy: Math.sin(turn) * far };
+      return { x: c.x, y: c.y, t: c.t, s: c.s, v: c.v, dx: Math.cos(turn) * far, dy: Math.sin(turn) * far };
     });
     burst = { at: performance.now(), list: list };
     setTimeout(function () { if (!gate.hidden) finish(); }, 950);
