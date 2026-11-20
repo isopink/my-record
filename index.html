@@ -100,7 +100,7 @@ footer{padding-block:24px 48px}
 </style>
 <div class="gate" id="gate">
 <canvas id="tree" aria-hidden="true"></canvas>
-<p class="hide">A Christmas tree drawn in characters, turning slowly under falling snow.</p>
+<p class="hide">A robot hand drawn in characters, flexing its fingers one after another under falling snow.</p>
 <p class="hide">Miri Merry Christmas 2026</p>
 </div>
 <script>try { history.scrollRestoration = 'manual'; } catch (e) {} window.scrollTo(0, 0);</script>
@@ -111,9 +111,12 @@ footer{padding-block:24px 48px}
   var gate = document.getElementById('gate'), canvas = document.getElementById('tree'), ctx = canvas.getContext('2d');
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var RAMP = '.,-~:;=!*#$@', TAU = Math.PI * 2;
-  // Four stacked cones: [top y, bottom y, top radius, bottom radius], y from 0 at the tip to 1 at the base.
-  var TIERS = [[0, 0.3, 0, 0.2], [0.2, 0.52, 0.07, 0.3], [0.42, 0.76, 0.13, 0.38], [0.64, 1, 0.19, 0.46]];
-  var W = 0, H = 0, fs = 0, cw = 0, ch = 0, cols = 0, rows = 0, zb, ib, kb, shades = [], hues = [], lights = [], snow = [];
+  // A robot hand, wrist down, palm to the viewer, measured in the same units as the old tree (about 1.1 tall).
+  // Each finger: [x of its knuckle, lengths of its three links, radius, sideways lean].
+  var FINGERS = [[-0.255, [0.17, 0.105, 0.085], 0.054, -0.1], [-0.085, [0.19, 0.115, 0.09], 0.056, -0.03], [0.085, [0.175, 0.105, 0.085], 0.054, 0.04], [0.25, [0.135, 0.085, 0.07], 0.048, 0.12]];
+  var THUMB = { at: [-0.3, 0.1, 0.035], open: [-0.78, 0.56, 0.28], shut: [0.3, 0.5, 0.8], links: [0.17, 0.13, 0.1], bend: [0.25, 0.6, 1], r: 0.062 };
+  var PALM = 0.4, PALM_HALF = 0.07, HAND_TOP = 0.82, HAND_SHIFT = 0.15, HAND_SCALE = 1.12;
+  var W = 0, H = 0, fs = 0, cw = 0, ch = 0, cols = 0, rows = 0, zb, ib, kb, hues = [], joints = [], tone = {}, snow = [];
   var raf = 0, ready = false, leaving = false, burst = null, t0 = performance.now(), stream = [], greet = [], gfs = 7, treeSize = 0;
   var GREETING = 'Miri Merry Christmas 2026';
   var WORDS = ['InterviewPrepAgent', 'Python', 'StepsBeforeCrashes', 'FastAPI', 'OpenDuckMini', 'SolarPro', 'IndoorAutonomousFlight', 'IsaacLab', 'PPO', 'SigmaEngine', 'Claude', 'RaspberryPi', 'ROS2', 'Jetson', 'ObjectFinderBot', 'CLIP', 'LightGBM', 'PoissonGLM', 'IFC', 'BIM', 'ONNX', 'Codex', 'Java', 'SceneGraph', 'SpatialStatistics', 'PublicData', 'Revit', 'Pathfinder', 'FDS', 'EvacuationSimulation', 'FirstWrongStep', 'FewShot', 'SymPy', 'SQLite', 'IbulAnbu', 'ImpactBridge', 'Enactus', 'Docker', 'PostgreSQL'];
@@ -126,11 +129,8 @@ footer{padding-block:24px 48px}
     fs = Math.max(8, Math.min(13, Math.round(H / 70))); cw = fs * 0.6; ch = fs * 1.02;
     cols = Math.ceil(W / cw); rows = Math.ceil(H / ch);
     zb = new Float32Array(cols * rows); ib = new Int8Array(cols * rows); kb = new Int8Array(cols * rows);
-    var hue = token('--tree-hue'), chroma = token('--tree-chroma');
-    shades = RAMP.split('').map(function (c, i) { return 'oklch(' + (34 + i * 4.6) + '% ' + chroma + ' ' + hue + ')'; });
     hues = [1, 2, 3, 4, 5, 6].map(function (n) { return token('--word-' + n); });
-    // Bulbs that twinkle and baubles that stay lit, spread over every tier.
-    if (!lights.length) for (var i = 0; i < 72; i++) lights.push({ tier: i % 4, at: (i % 4 ? 0.15 : 0.45) + ((i * 37) % 80) / 100 * (i % 4 ? 1 : 0.5), turn: (i * 2.399) % TAU, hue: i % 6, ball: i % 3 === 0, glyph: i % 6 === 0 ? '@' : 'O' });
+    tone = { open: token('--blue'), mid: token('--ink'), shut: token('--red'), metal: token('--garland') };
     stream = [];
     WORDS.forEach(function (word, n) { word.split('').forEach(function (t) { stream.push({ t: t, hue: n % 6 }); }); });
     // The greeting is drawn once off screen, then every cell it covers takes a letter.
@@ -145,7 +145,7 @@ footer{padding-block:24px 48px}
     // The letters are thickened in the mask, so each stroke is several cells wide.
     m.lineWidth = size * 0.04; m.lineJoin = 'round';
     lines.forEach(function (l, n) { m.strokeText(l, gw / 2, size * 0.1 + n * step); m.fillText(l, gw / 2, size * 0.1 + n * step); });
-    treeSize = Math.min(H * 0.54, W * 0.95, (H * 0.84 - gh - H * 0.07) / 1.18);
+    treeSize = Math.min(H * 0.54, W * 0.76, (H * 0.84 - gh - H * 0.07) / 1.18);
     var data = m.getImageData(0, 0, mask.width, gh).data, gx = (W - gw) / 2, gy = H * 0.07 + treeSize * 1.18 + fs;
     // Small letters, about three across each stroke, so the strokes read as solid.
     gfs = Math.max(4, Math.min(7, size * 0.06)); var gcw = gfs * 0.6, gch = gfs * 1.02, count = 0;
@@ -161,52 +161,124 @@ footer{padding-block:24px 48px}
   // One point on the tree, turned by `spin`, written into the character grid if it is nearest.
   function plot(x, y, z, shade, kind) {
     var size = treeSize, cx = W / 2, top = H * 0.07;
-    var px = cx + x * size, py = top + (y + z * 0.13) * size;
+    var px = cx + x * size, py = top + (y + z * 0.3) * size;
     var c = Math.round(px / cw), r = Math.round(py / ch);
     if (c < 0 || r < 0 || c >= cols || r >= rows) return;
     var i = r * cols + c;
     if (z < zb[i]) return;
     zb[i] = z; ib[i] = shade; kb[i] = kind;
   }
+  // One point of the hand with its surface normal, turned by the swing and lit from the upper left.
+  var cs = 1, sn = 0;
+  function put(X, Y, Z, nx, ny, nz, kind, n) {
+    var mx = nx * cs + nz * sn, mz = -nx * sn + nz * cs;
+    var lit = Math.max(0, Math.min(1, 0.14 + 0.86 * (-0.42 * mx + 0.38 * ny + 0.74 * mz) / 0.93));
+    plot(HAND_SCALE * (X * cs + Z * sn) + HAND_SHIFT, HAND_SCALE * (HAND_TOP - Y), HAND_SCALE * (-X * sn + Z * cs), kind === 1 ? Math.min(11, Math.floor(lit * 12)) : n, kind);
+  }
+  function unit(v) { var l = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]) || 1; return [v[0] / l, v[1] / l, v[2] / l]; }
+  function cross(a, b) { return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]; }
+  // One link of a finger: a tapered tube from A towards B, drawn between the fractions t0 and t1 of its length.
+  function link(A, B, r0, r1, t0, t1) {
+    var D = [B[0] - A[0], B[1] - A[1], B[2] - A[2]], len = Math.sqrt(D[0] * D[0] + D[1] * D[1] + D[2] * D[2]), d = unit(D);
+    var u = unit(cross(d, Math.abs(d[2]) > 0.9 ? [1, 0, 0] : [0, 0, 1])), v = cross(d, u), steps = Math.ceil(len * 100) + 2;
+    for (var i = 0; i <= steps; i++) {
+      var f = t0 + (t1 - t0) * i / steps, r = r0 + (r1 - r0) * f;
+      for (var j = 0; j < 44; j++) {
+        var a = j / 44 * TAU, nx = Math.cos(a) * u[0] + Math.sin(a) * v[0], ny = Math.cos(a) * u[1] + Math.sin(a) * v[1], nz = Math.cos(a) * u[2] + Math.sin(a) * v[2];
+        put(A[0] + D[0] * f + r * nx, A[1] + D[1] * f + r * ny, A[2] + D[2] * f + r * nz, nx, ny, nz, 1, 0);
+      }
+    }
+  }
+  // A ball: a fingertip (kind 1, set in letters) or the bare metal of a joint (kind 4).
+  function ball(C, r, kind) {
+    for (var i = 0; i <= 12; i++) {
+      var lat = (i / 12 - 0.5) * Math.PI, ring = Math.cos(lat), ny = Math.sin(lat);
+      for (var j = 0; j < 26; j++) {
+        var a = j / 26 * TAU, nx = ring * Math.cos(a), nz = ring * Math.sin(a);
+        put(C[0] + r * nx, C[1] + r * ny, C[2] + r * nz, nx, ny, nz, kind, (i + j) % 2);
+      }
+    }
+  }
+  // A joint: a metal ball with one lit actuator on the palm side and one on the back. The light goes
+  // from blue through white to red as the finger closes.
+  function joint(C, r, side, curl) {
+    ball(C, r * 0.82, 4);
+    joints.push({ s: curl < 0.3 ? tone.open : curl < 0.62 ? tone.mid : tone.shut });
+    var n = joints.length - 1, o = r * 1.04;
+    put(C[0] + side[0] * o, C[1] + side[1] * o, C[2] + side[2] * o, 0, 0, 0, 5, n);
+    put(C[0] - side[0] * o, C[1] - side[1] * o, C[2] - side[2] * o, 0, 0, 0, 5, n);
+  }
+  // How far a finger is closed, 0 to 1. The fingers close one after another, then rest open.
+  function curlOf(k, time) {
+    if (still) return 0.12;
+    var w = Math.max(0, Math.sin(time * 1.5 - k * 0.6));
+    return 0.06 + 0.72 * w * w * (3 - 2 * w);
+  }
   function frame(spin, time) {
     zb.fill(-9); kb.fill(0);
-    for (var t = 0; t < TIERS.length; t++) {
-      var T = TIERS[t];
-      for (var a = 0; a < 64; a++) {
-        var f = a / 63, y = T[0] + (T[1] - T[0]) * f, base = T[2] + (T[3] - T[2]) * f;
-        for (var b = 0; b < 150; b++) {
-          var th = b / 150 * TAU, r = base * (1 + 0.09 * Math.sin(th * 7 + t * 1.7)), turned = th + spin;
-          var nx = Math.cos(turned), nz = Math.sin(turned);
-          var lit = Math.max(0, (nx * -0.5 + 0.42 * 0.55 + nz * 0.68) / 1.09);
-          plot(r * nx, y, r * nz, Math.min(11, Math.floor(lit * 12)), 1);
-        }
+    cs = Math.cos(spin); sn = Math.sin(spin); joints = [];
+    var i, j, f, x, z, k;
+    // Forearm: an oval tube with two metal cuffs.
+    for (i = 0; i <= 26; i++) {
+      var Yf = -0.16 + 0.13 * i / 26, cuff = i >= 3 && i <= 6 || i >= 19 && i <= 22;
+      for (j = 0; j < 130; j++) {
+        var af = j / 130 * TAU, ex = Math.cos(af) / 0.2, ez = Math.sin(af) / 0.085, el = Math.sqrt(ex * ex + ez * ez), grow = cuff ? 0.008 : 0;
+        put((0.2 + grow) * Math.cos(af), Yf, (0.085 + grow) * Math.sin(af), ex / el, 0, ez / el, cuff ? 4 : 1, j % 2);
       }
     }
-    for (var k = 0; k < 40; k++) { var th2 = k / 40 * TAU; for (var q = 0; q < 8; q++) plot(0.055 * Math.cos(th2), 1 + q * 0.016, 0.055 * Math.sin(th2), 0, 2); }
-    // A gold garland winds round each tier, under the lights.
-    for (var g2 = 0; g2 < TIERS.length; g2++) {
-      var G2 = TIERS[g2];
-      for (var s2 = 0; s2 < 160; s2++) {
-        var f2 = 0.12 + 0.8 * s2 / 159, y2 = G2[0] + (G2[1] - G2[0]) * f2, r2 = (G2[2] + (G2[3] - G2[2]) * f2) * 1.1, a2 = f2 * TAU * 1.25 + g2 * 1.9 + spin;
-        plot(r2 * Math.cos(a2), y2 + 0.02 * Math.sin(f2 * TAU * 3), r2 * Math.sin(a2) + 0.005, s2 % 2, 4);
+    // Palm: a slab with rounded edges, a little wider at the knuckles.
+    for (i = 0; i <= 44; i++) {
+      var Yp = PALM * i / 44, half = 0.29 + 0.04 * i / 44;
+      for (j = 0; j <= 128; j++) {
+        x = half * (j / 64 - 1); f = Math.pow(Math.abs(x / half), 3);
+        z = PALM_HALF * Math.pow(Math.max(0, 1 - f * Math.abs(x / half)), 0.25);
+        var px = f * (x < 0 ? -1 : 1) / half, pz = Math.pow(z / PALM_HALF, 3) / PALM_HALF, pl = Math.sqrt(px * px + pz * pz) || 1;
+        put(x, Yp, z, px / pl, 0, pz / pl, 1, 0); put(x, Yp, -z, px / pl, 0, -pz / pl, 1, 0);
+      }
+      for (j = 0; j <= 20; j++) {
+        z = PALM_HALF * (j / 10 - 1); f = Math.pow(Math.abs(z / PALM_HALF), 3);
+        x = half * Math.pow(Math.max(0, 1 - f * Math.abs(z / PALM_HALF)), 0.25);
+        var qx = Math.pow(x / half, 3) / half, qz = f * (z < 0 ? -1 : 1) / PALM_HALF, ql = Math.sqrt(qx * qx + qz * qz) || 1;
+        put(x, Yp, z, qx / ql, 0, qz / ql, 1, 0); put(-x, Yp, z, -qx / ql, 0, qz / ql, 1, 0);
       }
     }
-    lights.forEach(function (L, n) {
-      var T = TIERS[L.tier], y = T[0] + (T[1] - T[0]) * L.at, r = (T[2] + (T[3] - T[2]) * L.at) * 1.16, turned = L.turn + spin;
-      if (L.ball || Math.sin(time * 3 + n * 1.7) > -0.3) plot(r * Math.cos(turned), y, r * Math.sin(turned) + 0.02, n, L.ball ? 5 : 3);
-    });
+    // A touch pad in the middle of the palm.
+    for (j = 0; j < 64; j++) put(0.03 + 0.1 * Math.cos(j / 64 * TAU), 0.2 + 0.1 * Math.sin(j / 64 * TAU), PALM_HALF + 0.004, 0, 0, 1, 4, j % 2);
+    // Four fingers, each of three links that turn about its knuckles.
+    for (k = 0; k < FINGERS.length; k++) {
+      var F = FINGERS[k], c = curlOf(k, time), lean = F[3], r = F[2];
+      var turns = [c * 1.2, c * 2.65, c * 3.6], at = [F[0], PALM + 0.012, 0], before = 0;
+      for (i = 0; i < 3; i++) {
+        var th = turns[i], d = [Math.sin(lean) * Math.cos(th), Math.cos(lean) * Math.cos(th), Math.sin(th)];
+        var end = [at[0] + d[0] * F[1][i], at[1] + d[1] * F[1][i], at[2] + d[2] * F[1][i]], mid = (before + th) / 2;
+        joint(at, r, [-Math.sin(lean) * Math.sin(mid), -Math.cos(lean) * Math.sin(mid), Math.cos(mid)], c);
+        link(at, end, r, r * 0.93, 0.14, i === 2 ? 1 : 0.88);
+        if (i === 2) ball(end, r * 0.93, 1);
+        at = end; before = th; r *= 0.93;
+      }
+    }
+    // The thumb sits low on the side of the palm and closes across it.
+    var ct = curlOf(4, time), tat = THUMB.at, tr = THUMB.r;
+    for (i = 0; i < 3; i++) {
+      var b = ct * THUMB.bend[i];
+      var td = unit([THUMB.open[0] + (THUMB.shut[0] - THUMB.open[0]) * b, THUMB.open[1] + (THUMB.shut[1] - THUMB.open[1]) * b, THUMB.open[2] + (THUMB.shut[2] - THUMB.open[2]) * b]);
+      var tend = [tat[0] + td[0] * THUMB.links[i], tat[1] + td[1] * THUMB.links[i], tat[2] + td[2] * THUMB.links[i]];
+      joint(tat, tr, [0, 0, 1], ct);
+      link(tat, tend, tr, tr * 0.93, 0.14, i === 2 ? 1 : 0.88);
+      if (i === 2) ball(tend, tr * 0.93, 1);
+      tat = tend; tr *= 0.93;
+    }
   }
   function cells() {
     var out = [];
     for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
       var i = r * cols + c, k = kb[i];
       if (!k) continue;
-      // Foliage is set in the words that also make up the name; the lit side reads brighter.
+      // The shell of the hand is set in the words that also make up the name; the lit side reads brighter.
       var w = stream[i % stream.length];
-      if (k === 1) out.push({ x: c * cw, y: r * ch, t: w.t, s: hues[w.hue], a: 0.6 + 0.4 * ib[i] / 11 });
-      else if (k === 2) out.push({ x: c * cw, y: r * ch, t: '|', s: token('--trunk'), a: 1 });
-      else if (k === 4) out.push({ x: c * cw, y: r * ch, t: ib[i] ? '~' : '-', s: token('--garland'), a: 0.95 });
-      else { var L3 = lights[ib[i]]; out.push({ x: c * cw, y: r * ch, t: k === 5 ? L3.glyph : 'o', s: hues[L3.hue], a: 1, glow: true }); }
+      if (k === 1) out.push({ x: c * cw, y: r * ch, t: w.t, s: hues[w.hue], a: 0.55 + 0.45 * ib[i] / 11 });
+      else if (k === 4) out.push({ x: c * cw, y: r * ch, t: ib[i] ? '~' : '-', s: tone.metal, a: 0.95 });
+      else out.push({ x: c * cw, y: r * ch, t: 'O', s: joints[ib[i]].s, a: 1, glow: true });
     }
     return out;
   }
@@ -218,19 +290,20 @@ footer{padding-block:24px 48px}
       ctx.fillStyle = token('--snow');
       snow.forEach(function (p) { p.y = (p.y + p.v / 60) % H; ctx.globalAlpha = p.a; ctx.fillText(p.c, p.x, p.y); });
       ctx.globalAlpha = 1;
-      frame(still ? 0.6 : time * 0.45, time);
+      // The hand swings from side to side, so the palm is never lost from view.
+      frame(still ? 0.3 : 0.55 * Math.sin(time * 0.5), time);
       list = cells();
       for (var i = 0; i < list.length; i++) {
         var it = list[i];
         ctx.globalAlpha = it.a; ctx.fillStyle = it.s;
-        // Bulbs and baubles glow in their own colour.
+        // The actuators glow in their own colour.
         if (it.glow) { ctx.shadowColor = it.s; ctx.shadowBlur = fs * 0.9; ctx.font = '700 ' + fs * 1.15 + 'px ' + token('--font-outlier'); }
         ctx.fillText(it.t, it.x, it.y);
         if (it.glow) { ctx.shadowBlur = 0; ctx.font = '500 ' + fs + 'px ' + token('--font-outlier'); }
       }
       ctx.globalAlpha = 1;
       ctx.font = '500 ' + gfs + 'px ' + token('--font-outlier');
-      // The greeting is coloured like the tree: the words flow through the letters, a light sweeps across them and each column sways a little.
+      // The greeting is coloured like the hand: the words flow through the letters, a light sweeps across them and each column sways a little.
       var flow = still ? 0 : Math.floor(time * 6), sway = still ? 0 : gfs * 0.35;
       for (var g = 0; g < greet.length; g++) {
         var G = greet[g], L2 = stream[((G.n + flow) % stream.length + stream.length) % stream.length];
@@ -239,8 +312,6 @@ footer{padding-block:24px 48px}
         ctx.fillStyle = G.s; ctx.fillText(G.t, G.x, G.y + Math.sin(time * 2 + G.x * 0.03) * sway);
       }
       ctx.globalAlpha = 1;
-      ctx.fillStyle = token('--star'); ctx.font = '700 ' + fs * 2.2 + 'px ' + token('--font-outlier');
-      ctx.textAlign = 'center'; ctx.fillText('*', W / 2, H * 0.07 - fs * 1.9); ctx.textAlign = 'start';
       if (!still) raf = requestAnimationFrame(paint);
     } else {
       // Every character leaves along the line from the middle of the tree through itself.
@@ -278,7 +349,7 @@ footer{padding-block:24px 48px}
     setTimeout(function () { if (!gate.hidden) finish(); }, 950);
   }
 
-  // The tree stays until it is touched, clicked or a key is pressed.
+  // The hand stays until it is touched, clicked or a key is pressed.
   ready = true; gate.classList.add('ready');
   gate.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
   gate.addEventListener('wheel', function (e) { e.preventDefault(); }, { passive: false });
