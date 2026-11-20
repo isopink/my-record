@@ -282,7 +282,7 @@ TITLE_OVERRIDE = {
     'interview-prep-agent': 'Job Interview Prep',
     'first-wrong-step': 'Pathfinder',
     'gangil-evacuation-simulation': 'Evacuation Simulation',
-    'object-finder-bot': "Where's My [\u00a0\u00a0]?",
+    'object-finder-bot': "Where's My [Watch]?",
     '3ddsg-drone-navigation': 'Indoor Autonomous Flight',
     'deep-report-pipeline': 'Deep Report Pipeline',
     'paper-review-deck': 'Paper Review Deck',
