@@ -227,10 +227,10 @@ PAGE_CSS = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'case.c
 
 def page(title, desc, body):
     return ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
-            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<meta name="theme-color" content="#101010">\n'
             '<title>%s</title>\n<meta name="description" content="%s">\n'
             '<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
-            '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">\n'
+            '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">\n'
             '<style>\n%s</style>\n</head>\n<body>\n%s\n</body>\n</html>\n') % (esc(title), esc(desc), PAGE_CSS, body)
 
 
@@ -443,7 +443,7 @@ for field, href, title, line, course in ROWS:
     if isinstance(badges, tuple):
         badges = [badges]
     if badges:
-        pills = ''.join('<span class="pill" style="--p:%s;--pi:%s">%s%s</span>' % (bg, fg, '<span class="pk">%s</span>' % esc(k) if k else '', esc(v)) for k, v, bg, fg in badges)
+        pills = ''.join('<span class="pill%s" style="--p:%s;--pi:%s">%s%s</span>' % (' live' if v == 'Live' else '', bg, fg, '<span class="pk">%s</span>' % esc(k) if k else '', esc(v)) for k, v, bg, fg in badges)
         name = '<span class="title">%s%s</span>' % (name, pills)
     out.append('<li>%s<span class="line">%s%s</span></li>' % (name, esc(line), tag))
 out += ['</ul></li>', '</ul>']
