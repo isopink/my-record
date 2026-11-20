@@ -270,9 +270,13 @@ def media(imgs):
 
 
 # Field names as the site shows them.
-FIELD_NAME = {'LLM agents': 'Agents'}
+FIELD_NAME = {'LLM agents': 'Agents', 'Startup': 'Extra'}
 # Projects shown under a different field from the one in their entry.md.
-FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Data'}
+FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Extra', 'deep-report-pipeline': 'Extra', 'paper-review-deck': 'Extra'}
+# Projects that keep a case page but are left off the main page list.
+HIDE_FROM_LIST = {'career-log'}
+# Projects listed last within their field.
+LIST_LAST = {'deep-report-pipeline', 'paper-review-deck'}
 # Projects shown under a different name from the one in their entry.md.
 TITLE_OVERRIDE = {
     'interview-prep-agent': 'Job Interview Prep',
@@ -412,15 +416,15 @@ def P(folder):
     return (FIELD_NAME.get(b['field'], b['field']), 'projects/%s/' % b['slug'], b['title'], LINE_OVERRIDE.get(b['slug'], b['line']), b['kind'] == 'coursework')
 
 
-ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))]
-FIELD_ORDER = ['Robotics', 'Agents', 'Startup', 'Data']
+ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md')) and c[0].split('/')[1] not in HIDE_FROM_LIST]
+FIELD_ORDER = ['Robotics', 'Data', 'Agents', 'Extra']
 def _has(href, word):
     badges = BADGES.get(href.split('/')[1]) or []
     return any(b[1] == word for b in ([badges] if isinstance(badges, tuple) else badges))
 def is_live(href):
     return _has(href, 'Live')
 def rank(href):
-    return 0 if _has(href, 'Live') else 2 if _has(href, 'Pending') else 1
+    return 3 if href.split('/')[1] in LIST_LAST else 0 if _has(href, 'Live') else 2 if _has(href, 'Pending') else 1
 
 
 # Fields in their set order; within a field, Live projects come first and Pending ones last.
