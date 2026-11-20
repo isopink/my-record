@@ -19,7 +19,7 @@
 --ink:#f2f2f2;--body:#bdbdbd;--muted:#8b949e;--grey:#5a5a5a;
 --red:#ff5a65;--blue:#4e94ff;--green:#34c759;
 --word-1:#f2f2f2;--word-2:#d6d6d6;--word-3:#ff5a65;--word-4:#f2f2f2;--word-5:#bdbdbd;--word-6:#4e94ff;
-
+--trunk:#5a5a5a;--snow:#8b949e;--garland:#8b949e;--star:#f2f2f2;--tree-hue:0;--tree-chroma:0;
 --font-display:"Noto Serif KR","AppleMyungjo","Batang",serif;--font-body:"Noto Serif KR","AppleMyungjo","Batang",serif;--font-outlier:"IBM Plex Mono",ui-monospace,monospace;
 --container:1360px;--gutter:max(16px,3vw);--gap:16px;
 color-scheme:dark;
@@ -99,206 +99,158 @@ footer{padding-block:24px 48px}
 @media (prefers-reduced-motion:reduce){.js .fade{transition:none}}
 </style>
 <div class="gate" id="gate">
-<canvas id="scene" aria-hidden="true"></canvas>
-<p class="hide">A figure drawn in letters stands in heavy rain with arms held out, head back, facing a warm light in the upper right.</p>
+<canvas id="tree" aria-hidden="true"></canvas>
+<p class="hide">A Christmas tree drawn in characters, turning slowly under falling snow.</p>
+<p class="hide">Miri Merry Christmas 2026</p>
 </div>
 <script>try { history.scrollRestoration = 'manual'; } catch (e) {} window.scrollTo(0, 0);</script>
 <script>
 (function () {
   var root = document.documentElement;
   root.classList.add('js', 'gated');
-  var gate = document.getElementById('gate'), canvas = document.getElementById('scene'), ctx = canvas.getContext('2d');
+  var gate = document.getElementById('gate'), canvas = document.getElementById('tree'), ctx = canvas.getContext('2d');
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var RAMP = '.,-~:;=!*#$@', TAU = Math.PI * 2;
+  // Four stacked cones: [top y, bottom y, top radius, bottom radius], y from 0 at the tip to 1 at the base.
+  var TIERS = [[0, 0.3, 0, 0.2], [0.2, 0.52, 0.07, 0.3], [0.42, 0.76, 0.13, 0.38], [0.64, 1, 0.19, 0.46]];
+  var W = 0, H = 0, fs = 0, cw = 0, ch = 0, cols = 0, rows = 0, zb, ib, kb, shades = [], hues = [], lights = [], snow = [];
+  var raf = 0, ready = false, leaving = false, burst = null, t0 = performance.now(), stream = [], greet = [], gfs = 7, treeSize = 0;
+  var GREETING = 'Miri Merry Christmas 2026';
   var WORDS = ['InterviewPrepAgent', 'Python', 'StepsBeforeCrashes', 'FastAPI', 'OpenDuckMini', 'SolarPro', 'IndoorAutonomousFlight', 'IsaacLab', 'PPO', 'SigmaEngine', 'Claude', 'RaspberryPi', 'ROS2', 'Jetson', 'ObjectFinderBot', 'CLIP', 'LightGBM', 'PoissonGLM', 'IFC', 'BIM', 'ONNX', 'Codex', 'Java', 'SceneGraph', 'SpatialStatistics', 'PublicData', 'Revit', 'Pathfinder', 'FDS', 'EvacuationSimulation', 'FirstWrongStep', 'FewShot', 'SymPy', 'SQLite', 'IbulAnbu', 'ImpactBridge', 'Enactus', 'Docker', 'PostgreSQL'];
-  var TAU = Math.PI * 2;
-  // Rain falls down and to the left, away from the light in the upper right.
-  var FALL = [-0.34, 0.94];
-  var W = 0, H = 0, fs = 0, cw = 0, ch = 0, cols = 0, rows = 0, S = 0, ox = 0, oy = 0, lx = 0, ly = 0, reach = 1, mono = '';
-  var mask = document.createElement('canvas'), m = mask.getContext('2d', { willReadFrequently: true });
-  var fig = null, body = [], edge = [], rain = [], sparks = [], stream = [], hues = [], bloom = '';
-  var raf = 0, ready = false, leaving = false, burst = null, last = 0, t0 = performance.now();
 
   function token(n) { return getComputedStyle(root).getPropertyValue(n).trim(); }
-  function ease(v) { v = Math.max(0, Math.min(1, v)); return v * v * (3 - 2 * v); }
-  // How much of the light reaches a point: strongest in the upper right, gone by the lower left and the bottom edge.
-  function light(x, y) {
-    var d = Math.sqrt((x - lx) * (x - lx) + (y - ly) * (y - ly)) / reach;
-    return Math.pow(Math.max(0, 1 - d), 1.35) * (1 - 0.8 * ease((y / H - 0.55) / 0.45));
-  }
-  function inside(x, y) {
-    var c = Math.floor(x / cw), r = Math.floor(y / ch);
-    return c >= 0 && r >= 0 && c < cols && r < rows && fig[r * cols + c] === 1;
-  }
-
-  // The figure as a flat shape, drawn again every frame straight onto the letter grid (one pixel per cell):
-  // seen from behind, back arched, head thrown back, arms flung out and up towards the light, legs braced apart.
-  // Units are its own height, x from its middle, y from the top of its head. It heaves, sways and reaches as time passes.
-  function figure(time) {
-    var breath = Math.sin(time * 2.7) + 0.4 * Math.sin(time * 5.4 + 1), lean = 0.03 * Math.sin(time * 0.62), reachL = Math.sin(time * 0.9), reachR = Math.sin(time * 0.75 + 1.3);
-    var grip = 0.8 + 0.2 * Math.sin(time * 1.6), flap = Math.sin(time * 3.1), flap2 = Math.sin(time * 3.7 + 1), roll = -0.95 + 0.13 * Math.sin(time * 0.8) - 0.03 * breath;
-    var sag = 0.012 * (0.5 + 0.5 * Math.sin(time * 0.45));
-    // Everything above the knees leans with the sway, lifts with each breath and sags as the legs give.
-    function X(x, y) { return (ox + (x + lean * Math.max(0, 0.78 - y) / 0.78) * S) / cw; }
-    function Y(y) { return (oy + (y - 0.009 * breath * Math.max(0, 0.45 - y) / 0.45 + sag * Math.max(0, 0.8 - y) / 0.8) * S) / ch; }
-    // A closed shape with rounded corners, through the given points.
-    function blob(p) {
-      var n = p.length / 2, i, ax, ay, bx, by;
-      m.beginPath();
-      for (i = 0; i <= n; i++) {
-        ax = X(p[(i % n) * 2], p[(i % n) * 2 + 1]); ay = Y(p[(i % n) * 2 + 1]);
-        bx = X(p[((i + 1) % n) * 2], p[((i + 1) % n) * 2 + 1]); by = Y(p[((i + 1) % n) * 2 + 1]);
-        if (!i) m.moveTo((ax + bx) / 2, (ay + by) / 2); else m.quadraticCurveTo(ax, ay, (ax + bx) / 2, (ay + by) / 2);
-      }
-      m.fill();
-    }
-    function poly(p) { m.beginPath(); for (var i = 0; i < p.length; i += 2) m[i ? 'lineTo' : 'moveTo'](X(p[i], p[i + 1]), Y(p[i + 1])); m.closePath(); m.fill(); }
-    // A limb is a row of discs, so it keeps its width whichever way it runs on the stretched grid.
-    function limb(x0, y0, x1, y1, w0, w1) {
-      for (var i = 0; i <= 16; i++) {
-        var f = i / 16, x = x0 + (x1 - x0) * f, y = y0 + (y1 - y0) * f, w = (w0 + ((w1 === undefined ? w0 : w1) - w0) * f) * S / 2;
-        m.beginPath(); m.ellipse(X(x, y), Y(y), w / cw, w / ch, 0, 0, TAU); m.fill();
-      }
-    }
-    m.setTransform(1, 0, 0, 1, 0, 0); m.clearRect(0, 0, cols, rows); m.fillStyle = '#fff';
-    // Head in profile, thrown right back, mouth open to the sky. Drawn facing right, then turned.
-    var hx = 0.03, hy = 0.098, hr = 0.066, cr = Math.cos(roll), sr = Math.sin(roll);
-    var face = [-0.2, -1, 0.55, -0.92, 0.98, -0.5, 1.02, -0.2, 1.3, 0.02, 1.02, 0.2, 0.98, 0.34, 0.5, 0.5, 0.95, 0.72, 0.84, 1.08, 0.3, 1.2, -0.3, 1.0, -1, 0.5, -1.05, -0.3, -0.7, -0.85], turned = [];
-    for (var k = 0; k < face.length; k += 2) turned.push(hx + (face[k] * cr - face[k + 1] * sr) * hr, hy + (face[k] * sr + face[k + 1] * cr) * hr);
-    poly(turned);
-    // Throat stretched tight between the jaw and the collar.
-    blob([-0.06, 0.15, -0.01, 0.09, 0.085, 0.125, 0.075, 0.215, -0.075, 0.225]);
-    // Back, arched and thin: shoulders dragged up and wide, ribs showing, waist drawn in.
-    var sw = 0.007 * breath;
-    blob([-0.17 - sw, 0.235, -0.1, 0.195, 0, 0.185, 0.1, 0.185, 0.172 + sw, 0.222, 0.165 + sw, 0.3, 0.128, 0.4, 0.092, 0.5, 0.112, 0.6, 0, 0.625, -0.108, 0.605, -0.086, 0.5, -0.125, 0.4, -0.162 - sw, 0.3]);
-    // Arms flung wide: the one nearer the light strains up towards it, the other trails lower. Both rise and sink back.
-    var la = [-0.145, 0.25, -0.31, 0.285 - 0.02 * reachL, -0.455, 0.262 - 0.045 * reachL, -0.512, 0.246 - 0.055 * reachL];
-    var ra = [0.148, 0.236, 0.3, 0.19 - 0.02 * reachR, 0.425, 0.092 - 0.045 * reachR, 0.468, 0.048 - 0.055 * reachR];
-    limb(la[0], la[1], la[2], la[3], 0.086, 0.062); limb(la[2], la[3], la[4], la[5], 0.058, 0.042); limb(la[4], la[5], la[6], la[7], 0.044, 0.04);
-    limb(ra[0], ra[1], ra[2], ra[3], 0.086, 0.062); limb(ra[2], ra[3], ra[4], ra[5], 0.058, 0.042); limb(ra[4], ra[5], ra[6], ra[7], 0.044, 0.04);
-    // Hands wide open, fingers clawing at the air.
-    [[-0.1, 0.03], [-0.102, -0.02], [-0.082, -0.062], [-0.046, -0.086], [0.012, -0.066]].forEach(function (f) { limb(la[6], la[7], la[6] + f[0] * grip, la[7] + f[1] * grip, 0.019, 0.012); });
-    [[0.1, -0.012], [0.09, -0.06], [0.058, -0.092], [0.016, -0.1], [-0.045, -0.052]].forEach(function (f) { limb(ra[6], ra[7], ra[6] + f[0] * grip, ra[7] + f[1] * grip, 0.019, 0.012); });
-    // What is left of the shirt: soaked strips hanging from the arms and off the back, whipped by the wind.
-    function strip(x, y, w, len, drift) { poly([x - w / 2, y, x + w / 2, y, x + drift + w * 0.3, y + len * 0.6, x + drift * 1.8, y + len]); }
-    var d1 = 0.02 * flap - 0.012, d2 = 0.018 * flap2 - 0.012;
-    strip(la[2] + 0.07, la[3] + 0.025, 0.05, 0.12, d1); strip(la[2] - 0.02, la[3] + 0.02, 0.04, 0.085, d2); strip(la[4] + 0.05, la[5] + 0.018, 0.034, 0.1, d1); strip(la[4] - 0.01, la[5] + 0.014, 0.026, 0.06, d2);
-    strip(ra[2] - 0.06, ra[3] + 0.04, 0.05, 0.115, d2); strip(ra[2] + 0.02, ra[3] + 0.02, 0.04, 0.09, d1); strip(ra[4] - 0.04, ra[5] + 0.03, 0.032, 0.1, d2);
-    poly([-0.07, 0.4, -0.135, 0.38, -0.185 + d1, 0.5, -0.2 + d1 * 1.8, 0.69, -0.15 + d2, 0.6, -0.125 + d2 * 1.5, 0.74, -0.07, 0.6]);
-    poly([0.07, 0.42, 0.13, 0.4, 0.165 + d2, 0.53, 0.16 + d2 * 1.8, 0.7, 0.125 + d1, 0.6, 0.07, 0.6]);
-    // Legs giving way: knees buckling in, feet wide, sinking into the dark.
-    var buckle = 0.016 * Math.sin(time * 0.45);
-    limb(-0.055, 0.6, -0.07 + buckle, 0.81, 0.13, 0.092); limb(-0.07 + buckle, 0.81, -0.2, 1.06, 0.088, 0.06);
-    limb(0.058, 0.598, 0.085 - buckle, 0.8, 0.13, 0.092); limb(0.085 - buckle, 0.8, 0.185, 1.06, 0.088, 0.06);
-  }
-
-  // Read the shape off the grid and give every cell of the figure a letter. The words run down the body like the
-  // water does. The figure is nearly dark, except along the edges that face the light.
-  function clothe(time) {
-    figure(time);
-    var data = m.getImageData(0, 0, cols, rows).data, r, c, i, flow = Math.floor(time * 9), n = stream.length;
-    for (i = 0; i < cols * rows; i++) fig[i] = data[i * 4 + 3] > 105 ? 1 : 0;
-    body.length = 0; edge.length = 0;
-    for (r = 0; r < rows; r++) for (c = 0; c < cols; c++) {
-      if (!fig[r * cols + c]) continue;
-      var x = c * cw, y = r * ch, dx = lx - x, dy = ly - y, dl = Math.sqrt(dx * dx + dy * dy), depth = 0;
-      for (var s = 1; s <= 6; s++) if (!inside(x + cw / 2 + dx / dl * ch * s, y + ch / 2 + dy / dl * ch * s)) { depth = s; break; }
-      var rimv = depth ? Math.pow(1 - (depth - 1) / 6, 2.2) : 0, L = light(x, y), sink = 1 - 0.95 * ease(((y - oy) / S - 0.6) / 0.4);
-      var w = stream[(r * cols + c + flow) % n], shimmer = 0.85 + 0.15 * Math.sin(time * 5 + c * 0.9 - r * 1.3);
-      body.push({ x: x, y: y, t: w.t, s: hues[w.hue], v: Math.min(1, (0.2 + 0.1 * L + rimv * (0.3 + 1.6 * L)) * sink * shimmer) });
-      if ((r === 0 || !fig[(r - 1) * cols + c]) && sink > 0.3) edge.push(x, y);
-    }
-  }
-
   function setup() {
     W = gate.clientWidth; H = gate.clientHeight;
     var dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 4, Math.sqrt(16e6 / (W * H))));
     canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     fs = Math.max(8, Math.min(13, Math.round(H / 70))); cw = fs * 0.6; ch = fs * 1.02;
-    cols = Math.ceil(W / cw); rows = Math.ceil(H / ch); mono = '500 ' + fs + 'px ' + token('--font-outlier');
-    mask.width = cols; mask.height = rows; fig = new Uint8Array(cols * rows);
-    // The page's own colours: greys, with one word in six red and one blue.
+    cols = Math.ceil(W / cw); rows = Math.ceil(H / ch);
+    zb = new Float32Array(cols * rows); ib = new Int8Array(cols * rows); kb = new Int8Array(cols * rows);
+    var hue = token('--tree-hue'), chroma = token('--tree-chroma');
+    shades = RAMP.split('').map(function (c, i) { return 'oklch(' + (34 + i * 4.6) + '% ' + chroma + ' ' + hue + ')'; });
     hues = [1, 2, 3, 4, 5, 6].map(function (n) { return token('--word-' + n); });
+    // Bulbs that twinkle and baubles that stay lit, spread over every tier.
+    if (!lights.length) for (var i = 0; i < 72; i++) lights.push({ tier: i % 4, at: (i % 4 ? 0.15 : 0.45) + ((i * 37) % 80) / 100 * (i % 4 ? 1 : 0.5), turn: (i * 2.399) % TAU, hue: i % 6, ball: i % 3 === 0, glyph: i % 6 === 0 ? '@' : 'O' });
     stream = [];
     WORDS.forEach(function (word, n) { word.split('').forEach(function (t) { stream.push({ t: t, hue: n % 6 }); }); });
-    var ink = token('--ink');
-    bloom = 'rgba(' + parseInt(ink.slice(1, 3), 16) + ',' + parseInt(ink.slice(3, 5), 16) + ',' + parseInt(ink.slice(5, 7), 16) + ',';
-    lx = W * 0.94; ly = -H * 0.06; reach = Math.sqrt(W * W + H * H) * 1.08;
-    S = Math.min(H * 0.84, W / 1.3); ox = W * 0.5; oy = Math.max(H * 0.13, (H - S) * 0.42);
-    // Each streak of rain is one of the words, in that word's colour.
-    rain = [];
-    var count = Math.min(1100, Math.round(W * H / 1050));
-    for (var n = 0; n < count; n++) {
-      var k = Math.floor(Math.random() * WORDS.length);
-      rain.push({ x: Math.random() * (W + H * 0.37 + 40) - 20, y: Math.random() * (H + 40) - 20, word: WORDS[k].slice(0, 12), s: hues[k % 6], v: 520 + Math.random() * 560, a: 0.35 + Math.random() * 0.65, front: Math.random() < 0.08 });
+    // The greeting is drawn once off screen, then every cell it covers takes a letter.
+    // On a narrow screen the greeting breaks into three lines so each letter stays large enough to read.
+    var lines = W < 700 ? ['Miri Merry', 'Christmas', '2026'] : ['Miri Merry Christmas', '2026'];
+    var gw = Math.min(W * 0.9, 860), size = 100, mask = document.createElement('canvas'), m = mask.getContext('2d'), widest = 0;
+    m.font = '700 ' + size + 'px ' + token('--font-display');
+    lines.forEach(function (l) { widest = Math.max(widest, m.measureText(l).width); });
+    size = Math.min(size * (gw - 12) / widest, H * 0.11);
+    var step = size * 1.12, gh = Math.ceil(step * lines.length + size * 0.25); mask.width = Math.ceil(gw); mask.height = gh;
+    m.font = '700 ' + size + 'px ' + token('--font-display'); m.textBaseline = 'top'; m.textAlign = 'center';
+    // The letters are thickened in the mask, so each stroke is several cells wide.
+    m.lineWidth = size * 0.04; m.lineJoin = 'round';
+    lines.forEach(function (l, n) { m.strokeText(l, gw / 2, size * 0.1 + n * step); m.fillText(l, gw / 2, size * 0.1 + n * step); });
+    treeSize = Math.min(H * 0.54, W * 0.95, (H * 0.84 - gh - H * 0.07) / 1.18);
+    var data = m.getImageData(0, 0, mask.width, gh).data, gx = (W - gw) / 2, gy = H * 0.07 + treeSize * 1.18 + fs;
+    // Small letters, about three across each stroke, so the strokes read as solid.
+    gfs = Math.max(4, Math.min(7, size * 0.06)); var gcw = gfs * 0.6, gch = gfs * 1.02, count = 0;
+    greet = [];
+    for (var r2 = 0; r2 < Math.floor(gh / gch); r2++) for (var c2 = 0; c2 < Math.floor(gw / gcw); c2++) {
+      if (data[(Math.floor(r2 * gch + gch / 2) * mask.width + Math.floor(c2 * gcw + gcw / 2)) * 4 + 3] < 128) continue;
+      var letter = stream[count % stream.length];
+      greet.push({ x: gx + c2 * gcw, y: gy + r2 * gch, n: count++, t: letter.t, s: hues[letter.hue], small: true });
     }
-    sparks = [];
+    snow = []; for (var s = 0; s < 90; s++) snow.push({ x: Math.random() * W, y: Math.random() * H, v: 12 + Math.random() * 26, c: Math.random() < 0.3 ? '*' : '.', a: 0.4 + Math.random() * 0.5 });
   }
 
-  // Every letter of rain on screen now. Rain behind the figure is hidden by it; a little falls in front.
-  function drops(front) {
-    var out = [], step = fs * 0.82;
-    for (var i = 0; i < rain.length; i++) {
-      var d = rain[i], len = d.word.length;
-      if (d.front !== front) continue;
-      for (var j = 0; j < len; j++) {
-        var x = d.x - FALL[0] * j * step, y = d.y - FALL[1] * j * step;
-        if (x < -cw || y < -ch || x > W || y > H) continue;
-        if (!front && inside(x + cw / 2, y + ch / 2)) continue;
-        var v = light(x, y) * d.a * (1 - 0.8 * j / len) * 1.7;
-        if (v < 0.04) continue;
-        // The word reads down the streak, its last letter leading.
-        out.push({ x: x, y: y, t: d.word.charAt(len - 1 - j), s: d.s, v: Math.min(1, v) });
+  // One point on the tree, turned by `spin`, written into the character grid if it is nearest.
+  function plot(x, y, z, shade, kind) {
+    var size = treeSize, cx = W / 2, top = H * 0.07;
+    var px = cx + x * size, py = top + (y + z * 0.13) * size;
+    var c = Math.round(px / cw), r = Math.round(py / ch);
+    if (c < 0 || r < 0 || c >= cols || r >= rows) return;
+    var i = r * cols + c;
+    if (z < zb[i]) return;
+    zb[i] = z; ib[i] = shade; kb[i] = kind;
+  }
+  function frame(spin, time) {
+    zb.fill(-9); kb.fill(0);
+    for (var t = 0; t < TIERS.length; t++) {
+      var T = TIERS[t];
+      for (var a = 0; a < 64; a++) {
+        var f = a / 63, y = T[0] + (T[1] - T[0]) * f, base = T[2] + (T[3] - T[2]) * f;
+        for (var b = 0; b < 150; b++) {
+          var th = b / 150 * TAU, r = base * (1 + 0.09 * Math.sin(th * 7 + t * 1.7)), turned = th + spin;
+          var nx = Math.cos(turned), nz = Math.sin(turned);
+          var lit = Math.max(0, (nx * -0.5 + 0.42 * 0.55 + nz * 0.68) / 1.09);
+          plot(r * nx, y, r * nz, Math.min(11, Math.floor(lit * 12)), 1);
+        }
       }
+    }
+    for (var k = 0; k < 40; k++) { var th2 = k / 40 * TAU; for (var q = 0; q < 8; q++) plot(0.055 * Math.cos(th2), 1 + q * 0.016, 0.055 * Math.sin(th2), 0, 2); }
+    // A gold garland winds round each tier, under the lights.
+    for (var g2 = 0; g2 < TIERS.length; g2++) {
+      var G2 = TIERS[g2];
+      for (var s2 = 0; s2 < 160; s2++) {
+        var f2 = 0.12 + 0.8 * s2 / 159, y2 = G2[0] + (G2[1] - G2[0]) * f2, r2 = (G2[2] + (G2[3] - G2[2]) * f2) * 1.1, a2 = f2 * TAU * 1.25 + g2 * 1.9 + spin;
+        plot(r2 * Math.cos(a2), y2 + 0.02 * Math.sin(f2 * TAU * 3), r2 * Math.sin(a2) + 0.005, s2 % 2, 4);
+      }
+    }
+    lights.forEach(function (L, n) {
+      var T = TIERS[L.tier], y = T[0] + (T[1] - T[0]) * L.at, r = (T[2] + (T[3] - T[2]) * L.at) * 1.16, turned = L.turn + spin;
+      if (L.ball || Math.sin(time * 3 + n * 1.7) > -0.3) plot(r * Math.cos(turned), y, r * Math.sin(turned) + 0.02, n, L.ball ? 5 : 3);
+    });
+  }
+  function cells() {
+    var out = [];
+    for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+      var i = r * cols + c, k = kb[i];
+      if (!k) continue;
+      // Foliage is set in the words that also make up the name; the lit side reads brighter.
+      var w = stream[i % stream.length];
+      if (k === 1) out.push({ x: c * cw, y: r * ch, t: w.t, s: hues[w.hue], a: 0.6 + 0.4 * ib[i] / 11 });
+      else if (k === 2) out.push({ x: c * cw, y: r * ch, t: '|', s: token('--trunk'), a: 1 });
+      else if (k === 4) out.push({ x: c * cw, y: r * ch, t: ib[i] ? '~' : '-', s: token('--garland'), a: 0.95 });
+      else { var L3 = lights[ib[i]]; out.push({ x: c * cw, y: r * ch, t: k === 5 ? L3.glyph : 'o', s: hues[L3.hue], a: 1, glow: true }); }
     }
     return out;
   }
-  function draw(list) {
-    for (var i = 0; i < list.length; i++) { var it = list[i]; ctx.globalAlpha = it.v; ctx.fillStyle = it.s; ctx.fillText(it.t, it.x, it.y); }
-    ctx.globalAlpha = 1;
-  }
   function paint(now) {
-    var dt = Math.min(0.05, (now - last) / 1000), time = still ? 1.2 : (now - t0) / 1000, i; last = now;
+    var time = (now - t0) / 1000, list;
     ctx.clearRect(0, 0, W, H);
-    ctx.font = mono; ctx.textBaseline = 'top';
+    ctx.font = '500 ' + fs + 'px ' + token('--font-outlier'); ctx.textBaseline = 'top';
     if (!burst) {
-      // The light itself: a faint bloom in the upper right.
-      var g = ctx.createRadialGradient(lx, ly, 0, lx, ly, reach * 0.6);
-      g.addColorStop(0, bloom + '0.16)'); g.addColorStop(0.45, bloom + '0.04)'); g.addColorStop(1, bloom + '0)');
-      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-      clothe(time);
-      if (!still) {
-        var span = W + H * 0.37 + 40;
-        for (i = 0; i < rain.length; i++) {
-          var d = rain[i], tail = d.word.length * fs;
-          d.x += FALL[0] * d.v * dt; d.y += FALL[1] * d.v * dt;
-          if (d.y - tail > H + 20) { d.y -= H + 40 + tail; d.x += (H + 40 + tail) * 0.362; }
-          // Keep the rain even across the whole screen: a streak that leaves one side comes back on the other.
-          if (d.x < -20) d.x += span; else if (d.x > span - 20) d.x -= span;
-        }
-        // Rain breaks on the head, shoulders and arms.
-        for (i = edge.length / 2 * dt * 2.5; i > 0; i--) if (Math.random() < i) {
-          var e = Math.floor(Math.random() * edge.length / 2) * 2;
-          sparks.push({ x: edge[e] + (Math.random() - 0.5) * cw, y: edge[e + 1], at: now, life: 140 + Math.random() * 200, t: ".'`:,"[Math.floor(Math.random() * 5)], lean: (Math.random() - 0.5) * 14 });
-        }
-      }
-      draw(drops(false));
-      draw(body);
-      ctx.fillStyle = hues[0];
-      for (i = sparks.length - 1; i >= 0; i--) {
-        var s = sparks[i], p = (now - s.at) / s.life;
-        if (p >= 1) { sparks.splice(i, 1); continue; }
-        ctx.globalAlpha = Math.min(1, light(s.x, s.y) * 2.4 + 0.25) * (1 - p * 0.6);
-        ctx.fillText(s.t, s.x + s.lean * p, s.y - ch * (0.5 + 1.1 * Math.sin(p * Math.PI * 0.75)));
+      ctx.fillStyle = token('--snow');
+      snow.forEach(function (p) { p.y = (p.y + p.v / 60) % H; ctx.globalAlpha = p.a; ctx.fillText(p.c, p.x, p.y); });
+      ctx.globalAlpha = 1;
+      frame(still ? 0.6 : time * 0.45, time);
+      list = cells();
+      for (var i = 0; i < list.length; i++) {
+        var it = list[i];
+        ctx.globalAlpha = it.a; ctx.fillStyle = it.s;
+        // Bulbs and baubles glow in their own colour.
+        if (it.glow) { ctx.shadowColor = it.s; ctx.shadowBlur = fs * 0.9; ctx.font = '700 ' + fs * 1.15 + 'px ' + token('--font-outlier'); }
+        ctx.fillText(it.t, it.x, it.y);
+        if (it.glow) { ctx.shadowBlur = 0; ctx.font = '500 ' + fs + 'px ' + token('--font-outlier'); }
       }
       ctx.globalAlpha = 1;
-      draw(drops(true));
+      ctx.font = '500 ' + gfs + 'px ' + token('--font-outlier');
+      // The greeting is coloured like the tree: the words flow through the letters, a light sweeps across them and each column sways a little.
+      var flow = still ? 0 : Math.floor(time * 6), sway = still ? 0 : gfs * 0.35;
+      for (var g = 0; g < greet.length; g++) {
+        var G = greet[g], L2 = stream[((G.n + flow) % stream.length + stream.length) % stream.length];
+        G.t = L2.t; G.s = hues[L2.hue];
+        ctx.globalAlpha = still ? 1 : 0.78 + 0.22 * (0.5 + 0.5 * Math.sin(time * 2.4 - (G.x + G.y * 0.6) * 0.015));
+        ctx.fillStyle = G.s; ctx.fillText(G.t, G.x, G.y + Math.sin(time * 2 + G.x * 0.03) * sway);
+      }
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = token('--star'); ctx.font = '700 ' + fs * 2.2 + 'px ' + token('--font-outlier');
+      ctx.textAlign = 'center'; ctx.fillText('*', W / 2, H * 0.07 - fs * 1.9); ctx.textAlign = 'start';
       if (!still) raf = requestAnimationFrame(paint);
     } else {
-      // Every letter leaves along the line from the middle of the figure through itself.
-      var q = Math.min(1, (now - burst.at) / 800), e2 = q * q;
-      for (i = 0; i < burst.list.length; i++) { var b = burst.list[i]; ctx.globalAlpha = b.v; ctx.fillStyle = b.s; ctx.fillText(b.t, b.x + b.dx * e2, b.y + b.dy * e2); }
-      ctx.globalAlpha = 1;
-      if (q < 1) raf = requestAnimationFrame(paint); else finish();
+      // Every character leaves along the line from the middle of the tree through itself.
+      var p = Math.min(1, (now - burst.at) / 800), e = p * p, small = false;
+      for (var j = 0; j < burst.list.length; j++) {
+        var b = burst.list[j];
+        if (b.small && !small) { small = true; ctx.font = '500 ' + gfs + 'px ' + token('--font-outlier'); }
+        ctx.fillStyle = b.s; ctx.fillText(b.t, b.x + b.dx * e, b.y + b.dy * e);
+      }
+      if (p < 1) raf = requestAnimationFrame(paint); else finish();
     }
   }
   function finish() {
@@ -316,24 +268,25 @@ footer{padding-block:24px 48px}
     if (!ready || leaving) return;
     leaving = true;
     if (still) { finish(); return; }
-    var cx = ox, cy = oy + S * 0.4, far0 = Math.sqrt(W * W + H * H);
-    var list = drops(false).concat(body, drops(true)).map(function (c) {
-      var turn = Math.atan2(c.y - cy, c.x - cx) + (Math.random() - 0.5) * 0.7, far = far0 * (0.75 + Math.random() * 0.6);
-      return { x: c.x, y: c.y, t: c.t, s: c.s, v: c.v, dx: Math.cos(turn) * far, dy: Math.sin(turn) * far };
+    var list = cells().concat(greet), cx = W / 2, cy = H * 0.07 + treeSize * 0.55, reach = Math.sqrt(W * W + H * H);
+    list.forEach(function (c) {
+      var turn = Math.atan2(c.y - cy, c.x - cx) + (Math.random() - 0.5) * 0.7, far = reach * (0.75 + Math.random() * 0.6);
+      c.dx = Math.cos(turn) * far; c.dy = Math.sin(turn) * far;
     });
+    [].forEach.call(gate.querySelectorAll('.greet,.enter'), function (el) { if (el.animate) el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: 'forwards' }); });
     burst = { at: performance.now(), list: list };
     setTimeout(function () { if (!gate.hidden) finish(); }, 950);
   }
 
-  // The scene stays until it is touched, clicked or a key is pressed.
+  // The tree stays until it is touched, clicked or a key is pressed.
   ready = true; gate.classList.add('ready');
   gate.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
   gate.addEventListener('wheel', function (e) { e.preventDefault(); }, { passive: false });
   gate.addEventListener('click', open);
   window.addEventListener('keydown', function (e) { if (!gate.hidden && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(); } });
-  window.addEventListener('resize', function () { if (!gate.hidden && !burst) { cancelAnimationFrame(raf); setup(); last = performance.now(); paint(last); } });
-  var fonts = document.fonts && document.fonts.load ? document.fonts.load('500 11px "IBM Plex Mono"') : Promise.resolve();
-  function begin() { setup(); last = performance.now(); paint(last); }
+  window.addEventListener('resize', function () { if (!gate.hidden && !burst) { cancelAnimationFrame(raf); setup(); paint(performance.now()); } });
+  var fonts = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('700 100px "Noto Serif KR"', GREETING), document.fonts.load('500 11px "IBM Plex Mono"')]) : Promise.resolve();
+  function begin() { setup(); paint(performance.now()); }
   Promise.race([fonts, new Promise(function (ok) { setTimeout(ok, 1200); })]).then(begin, begin);
 })();
 </script>
@@ -390,7 +343,7 @@ footer{padding-block:24px 48px}
   var canvas = document.getElementById('mark');
   var ctx = canvas.getContext('2d'), mark = canvas.parentElement, offX = 0, offY = 0, CW = 0, CH = 0;
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Letters of the project names in order, each in its word's colour.
+  // Letters of the project names in order, each in its word's colour, as in the greeting under the tree.
   var STREAM = [];
   WORDS.forEach(function (w, i) { w.split('').forEach(function (t) { STREAM.push({ t: t, hue: i % 6 }); }); });
   var cells = [], W = 0, H = 0, cw = 0, ch = 0, fs = 0, start = 0, raf = 0, played = false, DPR = 1, running = false, inside = false, px = -9999, py = -9999, REACH = 90;
@@ -465,7 +418,7 @@ footer{padding-block:24px 48px}
   }
 
   function paint(now) {
-    // Six colours, one per word in turn.
+    // The same six colours as the tree and greeting on the opening screen.
     var hues = [1, 2, 3, 4, 5, 6].map(function (n) { return token('--word-' + n); }), t = now - start, moving = false, stirred = false;
     ctx.clearRect(-offX, -offY, CW, CH);
     ctx.textBaseline = 'alphabetic';
