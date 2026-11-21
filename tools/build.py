@@ -443,7 +443,7 @@ for field, href, title, line, course in ROWS:
     if isinstance(badges, tuple):
         badges = [badges]
     if badges:
-        pills = ''.join('<span class="pill%s" style="--p:%s;--pi:%s">%s%s</span>' % (' live' if v == 'Live' else '', bg, fg, '<span class="pk">%s</span>' % esc(k) if k else '', esc(v)) for k, v, bg, fg in badges)
+        pills = ''.join('<span class="pill%s" style="--p:%s;--pi:%s">%s%s</span>' % (' live' if v == 'Live' else ' award' if k.startswith('Awarded') else '', bg, fg, '<span class="pk">%s</span>' % esc(k) if k else '', esc(v)) for k, v, bg, fg in badges)
         name = '<span class="title">%s%s</span>' % (name, pills)
     out.append('<li>%s<span class="line">%s%s</span></li>' % (name, esc(line), tag))
 out += ['</ul></li>', '</ul>']
