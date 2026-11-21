@@ -387,7 +387,7 @@ BADGES = {
     'deep-report-pipeline': ('Under review by', 'Anthropic', '#D97757', '#fff'),
     'impact-bridge': ('', 'Live', '#E5534B', '#fff'),
     'ibul-anbu': ('Awarded by', 'UOS', '#D4A72C', '#1b1b1b'),
-    'first-wrong-step': [('', 'ON SALE', '#2DA44E', '#fff'), ('', 'Top 0.01%', '#8957E5', '#fff')],
+    'first-wrong-step': [('', 'On sale', '#2DA44E', '#fff'), ('', 'Top 0.01%', '#8957E5', '#fff')],
 }
 
 
@@ -443,7 +443,7 @@ for field, href, title, line, course in ROWS:
     if isinstance(badges, tuple):
         badges = [badges]
     if badges:
-        pills = ''.join('<span class="pill%s" style="--p:%s;--pi:%s">%s%s</span>' % (' live' if v == 'Live' else ' award' if k.startswith('Awarded') else '', bg, fg, '<span class="pk">%s</span>' % esc(k) if k else '', esc(v)) for k, v, bg, fg in badges)
+        pills = ''.join('<span class="pill%s" style="--p:%s;--pi:%s">%s%s</span>' % (' live' if v == 'Live' else ' sale' if v == 'On sale' else ' award' if k.startswith('Awarded') or v.startswith('Top ') else '', bg, fg, '<span class="pk">%s</span>' % esc(k) if k else '', esc(v)) for k, v, bg, fg in badges)
         name = '<span class="title">%s%s</span>' % (name, pills)
     out.append('<li>%s<span class="line">%s%s</span></li>' % (name, esc(line), tag))
 out += ['</ul></li>', '</ul>']
