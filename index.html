@@ -3,99 +3,145 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#101010">
 <title>Isopink</title>
-<meta name="description" content="A record of things Isopink has built: robotics and data work.">
+<meta name="description" content="A record of things Isopink has built: agents, data work and robotics.">
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-/* One look with the Sigma Engine dashboard: near-black ground, flat cards with hairline borders, Noto Serif KR.
-   Greys only, plus its red and blue in the letters and one green dot for a project that is live. */
+/* Hallmark · v2.0.0 · theme: custom (by request: minimal, black and white, no pictures, no graph; colour only in the words of the name) · genre: modern-minimal · deal: manual · job: hire · shape: index-first · hero: banner · nav: edge-aligned · footer: colophon · signature: the name set out of the names of the projects and skills */
+/* Hallmark · pre-emit critique: P4 H5 E4 S5 R5 V5 · weakest: P, the page argues nothing beyond the list; kept that way on purpose, as a record */
 :root{
---canvas:#101010;--card:#161616;--line:#2a2a2a;--line-2:#3d3a39;--row:rgba(255,255,255,.07);
---ink:#f2f2f2;--body:#bdbdbd;--muted:#8b949e;--grey:#5a5a5a;
---red:#ff5a65;--blue:#4e94ff;--green:#34c759;
---word-1:#f2f2f2;--word-2:#d6d6d6;--word-3:#ff5a65;--word-4:#f2f2f2;--word-5:#bdbdbd;--word-6:#4e94ff;
---trunk:#5a5a5a;--snow:#8b949e;--garland:#8b949e;--star:#f2f2f2;--tree-hue:0;--tree-chroma:0;
---font-display:"Noto Serif KR","AppleMyungjo","Batang",serif;--font-body:"Noto Serif KR","AppleMyungjo","Batang",serif;--font-outlier:"IBM Plex Mono",ui-monospace,monospace;
---container:1360px;--gutter:max(16px,3vw);--gap:16px;
-color-scheme:dark;
+--color-paper:#fff;--color-paper-2:oklch(96% 0 0);
+--color-ink:#000;--color-ink-2:oklch(20% 0 0);--color-muted:oklch(32% 0 0);--color-soft:oklch(48% 0 0);
+--color-rule:oklch(0% 0 0 / 0.9);--color-rule-2:oklch(0% 0 0 / 0.28);
+--color-accent-ink:#fff;--color-focus:#000;
+--word-1:#8f1f8d;--word-2:#2a5fd6;--word-3:#2f8230;--word-4:#a06a00;--word-5:#c8372b;--word-6:#00709f;
+--font-display:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;--font-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;--font-outlier:"IBM Plex Mono",ui-monospace,monospace;
+--text-section:clamp(1.875rem,3.2vw,2.75rem);--text-lead:1.3125rem;--text-md:1rem;--text-sm:0.875rem;
+--space-xs:0.5rem;--space-sm:0.75rem;--space-md:1rem;--space-lg:1.5rem;--space-xl:2rem;--space-2xl:3rem;
+--section-gap-s:clamp(4rem,8.3vw,7.5rem);--section-gap:clamp(4.5rem,10vw,9rem);
+--container:90rem;--gutter:clamp(1rem,4.4vw,4rem);--gap-columns:2rem;
+--rule-hair:1px;--tracking-display:-0.022em;
+color-scheme:light;
 }
-*{box-sizing:border-box}
+/* One committed look: the page is always white with black text, whatever the viewer's theme. */
+:root,:root[data-theme="light"],:root[data-theme="dark"]{
+--color-paper:#fff;--color-paper-2:oklch(96% 0 0);
+--color-ink:#000;--color-ink-2:oklch(20% 0 0);--color-muted:oklch(32% 0 0);--color-soft:oklch(48% 0 0);
+--color-rule:oklch(0% 0 0 / 0.9);--color-rule-2:oklch(0% 0 0 / 0.28);
+--color-accent-ink:#fff;--color-focus:#000;
+--word-1:#8f1f8d;--word-2:#2a5fd6;--word-3:#2f8230;--word-4:#a06a00;--word-5:#c8372b;--word-6:#00709f;
+color-scheme:light;
+}
 /* No sideways scrolling on the page; vertical scroll and pinch-zoom still work. */
 html,body{overflow-x:hidden;overflow-x:clip;overscroll-behavior-x:none;max-width:100%}
-html{touch-action:pan-y pinch-zoom;background:var(--canvas)}
-body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-body);font-size:0.9375rem;line-height:1.55;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
-a{color:var(--ink);text-decoration-thickness:1px;text-underline-offset:0.2em}
-a:focus-visible{outline:2px solid #d6d6d6;outline-offset:3px}
-::selection{background:var(--ink);color:var(--canvas)}
+html{touch-action:pan-y pinch-zoom}
+body{margin:0;background:var(--color-paper);color:var(--color-ink);font-family:var(--font-body);font-size:var(--text-md);line-height:1.55}
+*{box-sizing:border-box}
+a{color:var(--color-ink);text-decoration-thickness:1px;text-underline-offset:0.2em}
+a:hover{text-decoration-color:transparent}
+a:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
+::selection{background:var(--color-ink);color:var(--color-accent-ink)}
 .wrap{max-width:var(--container);margin-inline:auto;padding-left:max(var(--gutter),env(safe-area-inset-left,0px));padding-right:max(var(--gutter),env(safe-area-inset-right,0px))}
-.hide{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-
-/* Opening screen */
-.gate{display:none}
-.js .gate{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;background:var(--canvas);touch-action:none;overflow:hidden}
-.js .gate[hidden]{display:none}
-.gate canvas{position:absolute;left:0;top:0;width:100%;height:100%}
-.gate.ready{cursor:pointer}
-.gated body{overflow:hidden}
-.js .fade{opacity:0;transition:opacity 1200ms ease-out}
-.js.entered .fade{opacity:1}
-
-/* Skills: hairline chips, as on the dashboard */
-.hero{padding-block:32px 72px}
-.skills{margin:0 0 48px;display:flex;flex-direction:column;row-gap:6px}
-.skills ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
-.skills li{flex:1 1 auto;display:flex}
-.badge{flex:1 1 auto;display:inline-flex;align-items:center;justify-content:center;column-gap:6px;height:26px;padding-inline:10px;border:1px solid var(--line-2);border-radius:2px;color:var(--body);font-size:12px;line-height:1;white-space:nowrap}
-.badge svg{width:12px;height:12px;fill:currentColor}
-
-/* The sentence, drawn in letters on a canvas */
+.nav{min-height:4.5rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;column-gap:var(--space-xl);font-size:var(--text-sm);font-weight:500}
+.nav a{display:inline-flex;align-items:center;min-height:3rem;white-space:nowrap}
+.hero{padding-block:var(--space-2xl) var(--section-gap-s)}
 .mark{position:relative;margin:0}
 .mark canvas{position:absolute;display:block;max-width:none;pointer-events:none}
 .mark span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-
-/* Projects: one card per field */
-.sec{padding-block:0 64px}
-.groups{list-style:none;margin:0;padding:0;display:grid;gap:var(--gap)}
-.group{min-width:0;display:flex;flex-direction:column;row-gap:8px;padding:20px;background:var(--card);border:1px solid var(--line);border-radius:8px}
-.group .field{display:flex;align-items:center;font-size:12px;font-weight:600;line-height:1.5;letter-spacing:2.2px;text-transform:uppercase;color:var(--muted)}
-.group .field::before{content:"";flex:none;width:4px;height:10px;margin-right:9px;background:var(--ink)}
+.lead{margin:var(--space-xl) 0 0;max-width:44ch;font-size:var(--text-lead);line-height:1.4;color:var(--color-ink-2);text-wrap:pretty}
+h2{margin:0;min-width:0;font-family:var(--font-display);font-weight:600;font-size:var(--text-section);line-height:1.08;letter-spacing:var(--tracking-display);text-wrap:balance;overflow-wrap:break-word}
+.cols{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gap-columns);row-gap:var(--space-xl)}
+.sec{padding-block:0 var(--section-gap)}
+.sec h2{grid-column:1 / span 3}
+.rows{list-style:none;margin:0;padding:0;border-top:var(--rule-hair) solid var(--color-rule)}
+.rows{border-bottom:var(--rule-hair) solid var(--color-rule-2)}
+.rows li{align-items:baseline;row-gap:var(--space-xs);padding-block:var(--space-lg) var(--space-sm);border-top:var(--rule-hair) solid var(--color-rule-2)}
+.rows li:first-child{border-top:0}
+.rows li.cont{padding-block:var(--space-sm);border-top:0}
+.rows li.cont .field{visibility:hidden}
+.rows li:last-child{padding-bottom:var(--space-lg)}
+.rows .field{grid-column:1 / span 2;font-size:var(--text-sm);color:var(--color-muted)}
+.rows .name{grid-column:3 / span 3;font-weight:600}
+.rows .line{grid-column:6 / span 7;color:var(--color-ink-2)}
+.rows .stack{grid-column:10 / span 3;display:flex;flex-wrap:wrap;gap:0.375rem;align-self:center}
+.badge{display:inline-flex;align-items:center;column-gap:0.375rem;height:1.5rem;padding-inline:0.5rem;background:var(--b,var(--color-badge));color:var(--color-badge-ink);font-size:0.8125rem;line-height:1;white-space:nowrap}
+.badge svg{width:0.875rem;height:0.875rem;fill:currentColor}
+.facts{grid-column:5 / span 8;margin:0;border-top:var(--rule-hair) solid var(--color-rule)}
+.facts > div{align-items:center;row-gap:0;padding-block:var(--space-sm);border-bottom:var(--rule-hair) solid var(--color-rule-2)}
+.facts dt{grid-column:1 / span 4;font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.facts dd{grid-column:5 / span 8;margin:0;min-height:3rem;display:flex;align-items:center}
+.fill{display:inline-block;padding:var(--space-xs) var(--space-sm);border:var(--rule-hair) dashed var(--color-muted);color:var(--color-muted)}
+footer{padding-block:var(--space-2xl)}
+.foot{display:flex;flex-direction:column;align-items:center;row-gap:var(--space-xs);text-align:center}
+.icons{display:flex;justify-content:center;column-gap:var(--space-md);margin-bottom:var(--space-xs)}
+.icons a,.icons span{display:inline-flex;align-items:center;justify-content:center;width:3rem;height:3rem;color:var(--color-ink)}
+.icons .pending{color:var(--color-soft)}
+.icons svg{width:1.75rem;height:1.75rem;fill:currentColor}
+.foot p{margin:0;max-width:none;font-size:var(--text-sm);color:var(--color-ink-2)}
+footer p{margin:0;max-width:65ch;font-size:var(--text-sm);color:var(--color-muted)}
+.gate{display:none}
+.js .gate{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;row-gap:var(--space-lg);padding:var(--space-lg) max(1rem,env(safe-area-inset-right,0px)) var(--space-lg) max(1rem,env(safe-area-inset-left,0px));background:var(--color-paper);overflow:auto}
+.js .gate[hidden]{display:none}
+.gated body{overflow:hidden}
+.tree{margin:0;font-family:var(--font-outlier);font-weight:500;font-size:clamp(0.6875rem,2.1svh,1.0625rem);line-height:1.22;text-align:center;color:var(--color-ink)}
+.tree span{display:inline-block;animation:pop 220ms ease-out both}
+.tree .k{color:var(--word-1)}.tree .f{color:var(--word-2)}.tree .s{color:var(--word-3)}.tree .n{color:var(--word-4)}.tree .p{color:var(--color-muted)}.tree .star{color:var(--word-4)}.tree .trunk{color:var(--word-5)}
+@keyframes pop{from{opacity:0;transform:translateY(-0.7em)}to{opacity:1;transform:none}}
+.greet{margin:0;font-family:var(--font-display);font-weight:600;font-size:var(--text-section);line-height:1.08;letter-spacing:var(--tracking-display);text-align:center;text-wrap:balance}
+.enter{height:3rem;padding-inline:var(--space-lg);border:0;background:none;color:var(--color-muted);font-family:inherit;font-size:var(--text-sm);font-weight:500;white-space:nowrap;cursor:pointer;opacity:0;transition:opacity 300ms ease-out}
+.gate.ready{cursor:pointer}
+.gate.ready .enter{opacity:1}
+.js .gate{touch-action:none;overflow:hidden}
+.js .fade{opacity:0;transition:opacity 1200ms ease-out}
+.js.entered .fade{opacity:1}
+.enter:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
+.hide{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.tablebox{overflow-x:auto}
+.work{width:100%;border-collapse:collapse}
+.work th,.work td{padding:var(--space-sm) var(--space-md);border:var(--rule-hair) solid var(--color-rule-2);text-align:left;vertical-align:middle}
+.work thead th{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
+.work .field{width:16%;font-size:var(--text-sm);font-weight:500;color:var(--color-muted);text-align:center}
+.work .name{width:28%;font-weight:600;white-space:nowrap}
+.work .line{color:var(--color-ink-2)}
+@media (max-width:40rem){.work .name{white-space:normal}.work th,.work td{padding:var(--space-xs) var(--space-sm)}}
+.badge{color:var(--bi,var(--color-badge-ink));box-shadow:inset 0 0 0 1px var(--color-rule-2)}
+.groups{list-style:none;margin:0;padding:0}
+.group{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,10fr);column-gap:var(--gap-columns);align-items:center;padding-block:var(--space-md)}
+.group .field{align-self:start;margin-top:calc(var(--space-xs) - var(--space-md));font-size:1.25rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;line-height:1.2;color:var(--color-ink)}
 .items{list-style:none;margin:0;padding:0}
-.items li{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,7fr);column-gap:32px;row-gap:2px;align-items:baseline;padding-block:12px;border-top:1px solid var(--row)}
-.items li:last-child{padding-bottom:0}
-.items .title{display:flex;flex-wrap:wrap;align-items:center;column-gap:8px;row-gap:4px}
-.items .name{font-size:1rem;font-weight:500;letter-spacing:-0.2px;text-decoration:none}
+.items li{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,7fr);column-gap:var(--gap-columns);row-gap:0.125rem;align-items:baseline;padding-block:var(--space-sm)}
+.items .name{font-weight:600;text-decoration:none}
+.items .title{display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--space-xs);row-gap:0.25rem}
+.pill{display:inline-flex;align-items:stretch;font-size:0.6875rem;font-weight:600;line-height:1.5;letter-spacing:0.02em;white-space:nowrap;vertical-align:0.12em;background:var(--p);color:var(--pi);padding-inline:0.375rem;border-radius:2px;overflow:hidden}
+.pill .pk{margin-left:-0.375rem;margin-right:0.375rem;padding-inline:0.375rem;background:oklch(36% 0.005 250);color:oklch(96% 0 0);font-weight:500}
 .items .name:hover{text-decoration:underline}
-.items .line{color:var(--body)}
-.pill{display:inline-flex;align-items:center;column-gap:6px;padding:1px 8px;border:1px solid var(--line-2);border-radius:2px;font-size:11px;font-weight:400;line-height:1.5;color:var(--body);white-space:nowrap}
-.pill .pk{color:var(--muted)}
-.pill.award{border-color:var(--red);background:rgba(255,90,101,.1);color:var(--red);font-weight:600}
-.pill.award .pk{color:var(--red);font-weight:400;opacity:.75}
-.pill.sale{border-color:var(--blue);background:rgba(78,148,255,.1);color:var(--blue);font-weight:600}
-.pill.live{color:var(--ink)}
-.pill.live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green)}
+.items .line{color:var(--color-muted)}
+.tag{display:inline-block;margin-left:var(--space-sm);padding:0 0.375rem;border:var(--rule-hair) solid var(--color-rule-2);font-size:0.75rem;color:var(--color-muted);vertical-align:0.1em;white-space:nowrap}
+.skills{margin:0 0 var(--space-2xl);display:flex;flex-direction:column;row-gap:0.3125rem}
+.skills ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:0.3125rem}
+.skills li{flex:1 1 auto;display:flex}
+.skills .badge{flex:1 1 auto;justify-content:center}
+.skills .badge{height:1.375rem;padding-inline:0.4375rem;column-gap:0.3125rem;font-size:0.75rem}
+.skills .badge svg{width:0.75rem;height:0.75rem}
+@media (max-width:40rem){.group{grid-template-columns:minmax(0,1fr);row-gap:var(--space-xs);padding-block:var(--space-md)}.items li{grid-template-columns:minmax(0,1fr)}.skills,.skills ul{gap:0.25rem}.skills .badge{height:1.25rem;padding-inline:0.375rem;font-size:0.6875rem}}
+@media (max-width:40rem){.hero{padding-block:var(--space-md) var(--space-2xl)}.skills{margin-bottom:var(--space-lg);flex-direction:row;flex-wrap:wrap;justify-content:center}.skills ul{display:contents}.skills li{flex:0 0 auto}}
+@media (max-width:60rem){.cols > *{grid-column:1 / -1 !important}}
+@media (max-width:40rem){.group{padding-block:var(--space-xs) var(--space-md)}.group .field{font-size:1.375rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;line-height:1.2;color:var(--color-ink);text-align:left;margin-top:var(--space-xs);padding-bottom:var(--space-xs)}.items li{row-gap:0.25rem;padding-block:var(--space-sm)}.items .name{font-size:1.0625rem;line-height:1.35}.items .line{font-size:0.9375rem;line-height:1.5}}
+/* Field names sit at the left, just above their rule. */
+.group{position:relative;grid-template-columns:minmax(0,1fr);padding-block:var(--space-md);margin-top:3rem}
+.group .field{position:absolute;left:0;right:auto;top:auto;bottom:100%;margin:0;padding:0 0 0.625rem;text-align:left;line-height:1}
+@media (prefers-reduced-motion:reduce){.tree span{animation:none}.enter,.js .fade{transition:none}}
+</style>
 
-footer{padding-block:24px 48px}
-.foot{display:flex;flex-direction:column;align-items:center;row-gap:8px;text-align:center}
-.foot p{margin:0;font-size:12px;color:var(--muted)}
-
-@media (max-width:40rem){
-.hero{padding-block:20px 48px}
-.skills{margin-bottom:24px;flex-direction:row;flex-wrap:wrap;justify-content:center;gap:4px}
-.skills ul{display:contents}
-.skills li{flex:0 0 auto}
-.badge{height:22px;padding-inline:7px;font-size:11px}
-.sec{padding-bottom:40px}
-.groups{gap:12px}
-.group{padding:16px}
-.items li{grid-template-columns:minmax(0,1fr);row-gap:4px}
-.items .line{font-size:0.875rem}
-}
-@media (prefers-reduced-motion:reduce){.js .fade{transition:none}}
+<style>
+:root{--color-badge:oklch(30% 0.01 250);--color-badge-ink:oklch(99% 0 0);--tree-hue:146;--tree-chroma:0.17;--trunk:oklch(52% 0.07 60);--snow:oklch(72% 0.01 250)}
+.js .gate{justify-content:flex-end;row-gap:var(--space-xs);padding-bottom:max(6svh,var(--space-xl))}
+.gate canvas{position:absolute;left:0;top:0;width:100%;height:100%}
+.gate .greet,.gate .enter{position:relative}
 </style>
 <div class="gate" id="gate">
 <canvas id="tree" aria-hidden="true"></canvas>
@@ -115,7 +161,7 @@ footer{padding-block:24px 48px}
   var W = 0, H = 0, fs = 0, cw = 0, ch = 0, cols = 0, rows = 0, zb, ib, kb, shades = [], hues = [], lights = [], snow = [];
   var raf = 0, ready = false, leaving = false, burst = null, t0 = performance.now(), stream = [], greet = [], gfs = 7, treeSize = 0;
   var GREETING = 'Miri Merry Christmas 2026';
-  var WORDS = ['InterviewPrepAgent', 'Python', 'StepsBeforeCrashes', 'FastAPI', 'OpenDuckMini', 'SolarPro', 'IndoorAutonomousFlight', 'IsaacLab', 'PPO', 'SigmaEngine', 'Claude', 'RaspberryPi', 'ROS2', 'Jetson', 'ObjectFinderBot', 'CLIP', 'LightGBM', 'PoissonGLM', 'IFC', 'BIM', 'ONNX', 'Codex', 'Java', 'SceneGraph', 'SpatialStatistics', 'PublicData', 'Revit', 'Pathfinder', 'FDS', 'EvacuationSimulation', 'FirstWrongStep', 'FewShot', 'SymPy', 'SQLite', 'IbulAnbu', 'ImpactBridge', 'Enactus', 'Docker', 'PostgreSQL'];
+  var WORDS = ['InterviewPrepAgent', 'Python', 'StepsBeforeCrashes', 'FastAPI', 'OpenDuckMini', 'SolarPro', 'IndoorAutonomousFlight', 'IsaacLab', 'DisasterLibraryWhitepaper', 'PPO', 'SigmaEngine', 'Claude', 'DeepReportPipeline', 'RaspberryPi', 'PaperReviewDeck', 'ROS2', 'CareerLog', 'Jetson', 'ObjectFinderBot', 'CLIP', 'LightGBM', 'PoissonGLM', 'IFC', 'BIM', 'ONNX', 'Codex', 'Java', 'SceneGraph', 'SpatialStatistics', 'PublicData', 'BrandingInSeongsu', 'Revit', 'Pathfinder', 'FDS', 'EvacuationSimulation', 'DigitalMedia', 'Grasshopper', 'Rhino', 'QGIS', 'ThankYouPlaque', 'Illustrator', 'FirstWrongStep', 'FewShot', 'SymPy', 'SQLite', 'IbulAnbu', 'ImpactBridge', 'Enactus', 'PMDecisionMaking', 'PRD', 'DataEngineering', 'Docker', 'PostgreSQL'];
 
   function token(n) { return getComputedStyle(root).getPropertyValue(n).trim(); }
   function setup() {
@@ -204,7 +250,7 @@ footer{padding-block:24px 48px}
       var w = stream[i % stream.length];
       if (k === 1) out.push({ x: c * cw, y: r * ch, t: w.t, s: hues[w.hue], a: 0.6 + 0.4 * ib[i] / 11 });
       else if (k === 2) out.push({ x: c * cw, y: r * ch, t: '|', s: token('--trunk'), a: 1 });
-      else if (k === 4) out.push({ x: c * cw, y: r * ch, t: ib[i] ? '~' : '-', s: token('--garland'), a: 0.95 });
+      else if (k === 4) out.push({ x: c * cw, y: r * ch, t: ib[i] ? '~' : '-', s: token('--word-4'), a: 0.95 });
       else { var L3 = lights[ib[i]]; out.push({ x: c * cw, y: r * ch, t: k === 5 ? L3.glyph : 'o', s: hues[L3.hue], a: 1, glow: true }); }
     }
     return out;
@@ -238,7 +284,7 @@ footer{padding-block:24px 48px}
         ctx.fillStyle = G.s; ctx.fillText(G.t, G.x, G.y + Math.sin(time * 2 + G.x * 0.03) * sway);
       }
       ctx.globalAlpha = 1;
-      ctx.fillStyle = token('--star'); ctx.font = '700 ' + fs * 2.2 + 'px ' + token('--font-outlier');
+      ctx.fillStyle = token('--word-4'); ctx.font = '700 ' + fs * 2.2 + 'px ' + token('--font-outlier');
       ctx.textAlign = 'center'; ctx.fillText('*', W / 2, H * 0.07 - fs * 1.9); ctx.textAlign = 'start';
       if (!still) raf = requestAnimationFrame(paint);
     } else {
@@ -284,7 +330,7 @@ footer{padding-block:24px 48px}
   gate.addEventListener('click', open);
   window.addEventListener('keydown', function (e) { if (!gate.hidden && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(); } });
   window.addEventListener('resize', function () { if (!gate.hidden && !burst) { cancelAnimationFrame(raf); setup(); paint(performance.now()); } });
-  var fonts = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('700 100px "Noto Serif KR"', GREETING), document.fonts.load('500 11px "IBM Plex Mono"')]) : Promise.resolve();
+  var fonts = document.fonts && document.fonts.load ? document.fonts.load('500 11px "IBM Plex Mono"') : Promise.resolve();
   function begin() { setup(); paint(performance.now()); }
   Promise.race([fonts, new Promise(function (ok) { setTimeout(ok, 1200); })]).then(begin, begin);
 })();
@@ -297,7 +343,7 @@ footer{padding-block:24px 48px}
 <ul><li><span class="badge" style="--b:#76B900"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.948 8.798v-1.43a6.7 6.7 0 0 1 .424-.018c3.922-.124 6.493 3.374 6.493 3.374s-2.774 3.851-5.75 3.851c-.398 0-.787-.062-1.158-.185v-4.346c1.528.185 1.837.857 2.747 2.385l2.04-1.714s-1.492-1.952-4-1.952a6.016 6.016 0 0 0-.796.035m0-4.735v2.138l.424-.027c5.45-.185 9.01 4.47 9.01 4.47s-4.08 4.964-8.33 4.964c-.37 0-.733-.035-1.095-.097v1.325c.3.035.61.062.91.062 3.957 0 6.82-2.023 9.593-4.408.459.371 2.34 1.263 2.73 1.652-2.633 2.208-8.772 3.984-12.253 3.984-.335 0-.653-.018-.971-.053v1.864H24V4.063zm0 10.326v1.131c-3.657-.654-4.673-4.46-4.673-4.46s1.758-1.944 4.673-2.262v1.237H8.94c-1.528-.186-2.73 1.245-2.73 1.245s.68 2.412 2.739 3.11M2.456 10.9s2.164-3.197 6.5-3.533V6.201C4.153 6.59 0 10.653 0 10.653s2.35 6.802 8.948 7.42v-1.237c-4.84-.6-6.492-5.936-6.492-5.936z"></path></svg>NVIDIA Jetson</span></li><li><span class="badge" style="--b:#A22846"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19.8955 10.8961-.1726-.3028c.0068-2.1746-1.0022-3.061-2.1788-3.7348.356-.0938.7237-.1711.8245-.6182.6118-.1566.7397-.4398.8011-.7398.16-.1066.6955-.4061.6394-.9211.2998-.2069.4669-.4725.3819-.8487.3222-.3515.407-.6419.2702-.9096.3868-.4805.2152-.7295.05-.9817.2897-.5254.0341-1.0887-.7758-.9944-.3221-.4733-1.0244-.3659-1.133-.3637-.1215-.1519-.2819-.2821-.7755-.219-.3197-.2851-.6771-.2364-1.0458-.0964-.4378-.3403-.7275-.0675-1.0584.0356-.53-.1706-.6513.0631-.9117.1583-.5781-.1203-.7538.1416-1.0309.4182l-.3224-.0063c-.8719.5061-1.305 1.5366-1.4585 2.0664-.1536-.5299-.5858-1.5604-1.4575-2.0664l-.3223.0063C9.942.5014 9.7663.2394 9.1883.3597 8.9279.2646 8.807.0309 8.2766.2015c-.2172-.0677-.417-.2084-.6522-.2012l.0004.0002C7.5017.0041 7.369.049 7.2185.166c-.3688-.1401-.7262-.1887-1.0459.0964-.4936-.0631-.654.0671-.7756.219C5.2887.4791 4.5862.3717 4.264.845c-.8096-.0943-1.0655.4691-.7756.9944-.1653.2521-.3366.5013.05.9819-.1367.2677-.0519.5581.2703.9096-.085.3763.0822.6418.3819.8487-.0561.515.4795.8144.6394.9211.0614.3001.1894.5832.8011.7398.1008.4472.4685.5244.8245.6183-1.1766.6737-2.1856 1.56-2.1788 3.7348l-.1724.3028c-1.3491.8082-2.5629 3.4056-.6648 5.5167.124.6609.3319 1.1355.5171 1.6609.2769 2.117 2.0841 3.1082 2.5608 3.2255.6984.524 1.4423 1.0212 2.449 1.3696.949.964 1.977 1.3314 3.0107 1.3308.0152 0 .0306.0002.0457 0 1.0337.0006 2.0618-.3668 3.0107-1.3308 1.0067-.3483 1.7506-.8456 2.4491-1.3696.4766-.1173 2.2838-1.1085 2.5607-3.2255.1851-.5253.3931-1 .517-1.6609 1.8981-2.1113.6843-4.7089-.6649-5.517zm-1.0386-.3715c-.0704.8759-4.6354-3.0504-3.8472-3.1808 2.1391-.3558 3.9191.896 3.8472 3.1808zm-2.0155 4.3649c-1.1481.7409-2.8025.2626-3.6953-1.0681-.8928-1.3306-.6858-3.0101.4623-3.7509 1.1481-.7409 2.8025-.2627 3.6953 1.068.8927 1.3307.6858 3.0101-.4623 3.751zM13.6591 1.3721c.0396.1967.0843.321.1354.3577.2537-.272.4611-.5506.7878-.8123.0011.1537-.0776.3205.1169.4425.1752-.2356.4119-.4459.7263-.6244-.1514.2611-.026.3404.0554.4486.24-.2059.4681-.4144.9109-.5759-.121.1474-.2902.2914-.1108.4607.2473-.1544.496-.3086 1.0833-.4183-.1323.1475-.4059.295-.2401.4426.3104-.1186.6539-.2047 1.034-.2546-.182.1496-.3337.2963-.1846.4122.3323-.1022.7899-.2398 1.2372-.1212l-.2832.2849c-.0314.0382.6623.0297 1.1202.0364-.167.2321-.3375.4562-.437.8548.0454.0459.2723.0204.4862 0-.2194.4618-.6004.5783-.6893.776.134.1015.32.075.5232.006-.158.3254-.4892.5484-.7509.8123.0662.047.1818.075.4555.0425-.2418.257-.5339.492-.8802.7032.0614.0708.2722.0681.4678.0727-.3136.3069-.7173.466-1.0955.6668.1885.1288.3234.0988.4678.097-.2676.2198-.7225.3342-1.1448.4668.0803.1249.1607.1589.3324.194-.447.2473-1.0873.1343-1.2679.2607.0435.1243.1665.2053.3139.2728-.7197.0418-2.6879-.0262-3.0652-1.5156.7367-.8094 2.0813-1.7593 4.394-2.934-1.7994.6022-3.4229 1.405-4.7817 2.5096-1.5978-.7436-.4965-2.6197.283-3.3645zm-1.6126 5.3718c1.1329-.0123 2.5356.8325 2.53 1.6286-.005.7027-.9851 1.2715-2.5213 1.2607-1.5043-.0177-2.5172-.7148-2.5137-1.3957.003-.5603 1.2282-1.5263 2.505-1.4936zm-5.7646-.6006c.1717-.0351.252-.0692.3323-.194-.4223-.1327-.8772-.247-1.1448-.4668.1444.0018.2792.0318.4678-.097-.3783-.2008-.782-.3599-1.0956-.6668.1955-.0048.4064-.002.4677-.0728-.3462-.2113-.6383-.4463-.8801-.7033.2738.0325.3893.0045.4555-.0425-.2617-.264-.593-.487-.7509-.8123.2032.069.3892.0954.5232-.006-.089-.1977-.47-.3142-.6894-.776.214.0204.4409.0459.4863 0-.0994-.3985-.2698-.6226-.4369-.8547.4579-.0067 1.1516.0018 1.1202-.0364l-.2831-.2849c.4472-.1186.9049.019 1.2371.1213.1492-.1159-.0026-.2626-.1847-.4123.3801.05.7236.1361 1.034.2547.1659-.1476-.1076-.2951-.24-.4426.5872.1097.8361.2639 1.0833.4183.1794-.1694.0103-.3133-.1108-.4607.4428.1615.6709.37.911.5759.0814-.1082.2068-.1875.0554-.4486.3143.1785.5511.3888.7263.6244.1945-.122.1159-.2888.1169-.4426.3267.2618.534.5404.7879.8124.0511-.0366.0959-.161.1354-.3577.7794.7448 1.8807 2.6208.2831 3.3646-1.3589-1.1039-2.9817-1.9064-4.78-2.5086 2.3115 1.174 3.6556 2.1239 4.392 2.9328-.3773 1.4895-2.3455 1.5575-3.0651 1.5157.1473-.0676.2703-.1485.3139-.2728-.1806-.1264-.8209-.0134-1.2679-.2607zm2.8175 1.1334c.7881.1304-3.7769 4.0567-3.8472 3.1809-.0719-2.2846 1.7079-3.5367 3.8472-3.1809zm-4.847 8.7567c-1.1094-.8789-1.4668-3.4529.5901-4.6097 1.2394-.3273.4184 5.051-.5901 4.6097zm4.2656 4.5989c-.6257.3719-2.1452.2187-3.2252-1.3095-.7283-1.2823-.6345-2.5872-.123-2.9705.7648-.4589 1.9464.1609 2.8559 1.2003.7923.9405 1.1536 2.5927.4923 3.0797zm-1.2415-5.6086c-1.1481-.7409-1.3551-2.4203-.4623-3.7511.8928-1.3307 2.5472-1.8089 3.6952-1.068 1.1481.7409 1.3551 2.4203.4623 3.7509-.8926 1.3308-2.5471 1.809-3.6952 1.0682zm4.7948 8.2279c-1.3763.0584-2.7258-1.1105-2.7081-1.5157-.0206-.594 1.6758-1.0578 2.782-1.0306 1.1131-.0479 2.6068.3531 2.6097.8851.0184.5166-1.3547 1.6838-2.6836 1.6612zm2.7584-5.8578c.0081 1.3899-1.226 2.5225-2.7562 2.5299-1.5302.0073-2.7773-1.1135-2.7854-2.5033v-.0265c-.008-1.3899 1.2259-2.5226 2.7562-2.5299 1.5302-.0073 2.7773 1.1134 2.7853 2.5033a.7794.7794 0 0 1 .0001.0265zm3.855 2.0029c-1.186 1.6208-2.7916 1.684-3.3896 1.2325-.6255-.5811-.148-2.3854.7094-3.3747v-.0003c.9812-1.0912 2.0302-1.8037 2.7609-1.2469.4919.4828.7805 2.3008-.0807 3.3894zm1.0724-3.4301c-1.0086.4413-1.8298-4.9372-.5901-4.61 2.0568 1.1569 1.6994 3.731.5901 4.61zm-.0256-8.3279h.2985v-.5304h.2986c.1502 0 .2053.0624.2262.2052.0152.1088.0113.2395.0477.3253h.2984c-.0533-.0763-.0515-.2358-.0571-.3213-.0097-.1373-.0513-.2796-.1977-.3176v-.0037c.1502-.061.2149-.1807.2149-.341 0-.2048-.1539-.3738-.3974-.3738h-.732v1.3573zm.2985-1.1255h.3269c.1333 0 .2054.0573.2054.188 0 .1369-.0721.1942-.2054.1942H20.03v-.3822zm-1.0337.4633c0 .7009.5682 1.2694 1.2695 1.2694s1.2695-.5684 1.2695-1.2694c0-.7013-.5683-1.2697-1.2695-1.2697-.7013 0-1.2695.5684-1.2695 1.2697zm2.3275 0c0 .5845-.4737 1.058-1.058 1.058s-1.058-.4735-1.058-1.058c0-.5849.4737-1.058 1.058-1.058s1.058.4731 1.058 1.058z"></path></svg>Raspberry Pi</span></li><li><span class="badge" style="--b:#0071C5"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.42 7.345v9.18h1.651v-9.18zM0 7.475v1.737h1.737V7.474zm9.78.352v6.053c0 .513.044.945.13 1.292.087.34.235.618.44.828.203.21.475.359.803.451.334.093.754.136 1.255.136h.216v-1.533c-.24 0-.445-.012-.593-.037a.672.672 0 0 1-.39-.173.693.693 0 0 1-.173-.377 4.002 4.002 0 0 1-.037-.606v-2.182h1.193v-1.416h-1.193V7.827zm-3.505 2.312c-.396 0-.76.08-1.082.241-.327.161-.6.384-.822.668l-.087.117v-.902H2.658v6.256h1.639v-3.214c.018-.588.16-1.02.433-1.299.29-.297.642-.445 1.044-.445.476 0 .841.149 1.082.433.235.284.359.686.359 1.2v3.324h1.663V12.97c.006-.89-.229-1.595-.686-2.09-.458-.495-1.1-.742-1.917-.742zm10.065.006a3.252 3.252 0 0 0-2.306.946c-.29.29-.525.637-.692 1.033a3.145 3.145 0 0 0-.254 1.273c0 .452.08.878.241 1.274.161.395.39.742.674 1.032.284.29.637.526 1.045.693.408.173.86.26 1.342.26 1.397 0 2.262-.637 2.782-1.23l-1.187-.904c-.248.297-.841.699-1.583.699-.464 0-.847-.105-1.138-.321a1.588 1.588 0 0 1-.593-.872l-.019-.056h4.915v-.587c0-.451-.08-.872-.235-1.267a3.393 3.393 0 0 0-.661-1.033 3.013 3.013 0 0 0-1.02-.692 3.345 3.345 0 0 0-1.311-.248zm-16.297.118v6.256h1.651v-6.256zm16.278 1.286c1.132 0 1.664.797 1.664 1.255l-3.32.006c0-.458.525-1.255 1.656-1.261zm7.073 3.814a.606.606 0 0 0-.606.606.606.606 0 0 0 .606.606.606.606 0 0 0 .606-.606.606.606 0 0 0-.606-.606zm-.008.105a.5.5 0 0 1 .002 0 .5.5 0 0 1 .5.501.5.5 0 0 1-.5.5.5.5 0 0 1-.5-.5.5.5 0 0 1 .498-.5zm-.233.155v.699h.13v-.285h.093l.173.285h.136l-.18-.297a.191.191 0 0 0 .118-.056c.03-.03.05-.074.05-.136 0-.068-.02-.117-.063-.154-.037-.038-.105-.056-.185-.056zm.13.099h.154c.019 0 .037.006.056.012a.064.064 0 0 1 .037.031c.013.013.012.031.012.056a.124.124 0 0 1-.012.055.164.164 0 0 1-.037.031c-.019.006-.037.013-.056.013h-.154Z"></path></svg>Intel RealSense</span></li><li><span class="badge" style="--b:#FA6831">3D printing</span></li><li><span class="badge" style="--b:#E51050"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.8672 1.0527v.0157L0 3.3848v17.914l3.8965-2.332h18.3398V2.3301c0-.702-.5773-1.2774-1.2793-1.2774H3.8672zm7.5058 4.0098h3.3008l2.9844 9.9512h-2.5879l-.5683-2.1895h-2.9844l-.5703 2.1621h-2.416l2.8417-9.9238zm11.8633.0273v14.877H4.172l-2.0684 1.2383v.4648c0 .702.5793 1.2774 1.2813 1.2774H24V5.0898h-.7637zM12.9668 6.6816l-.9941 4.3243h2.0468l-1.0527-4.3243z"></path></svg>AutoCAD</span></li><li><span class="badge" style="--b:#EE4C2C"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.005 0L4.952 7.053a9.865 9.865 0 000 14.022 9.866 9.866 0 0014.022 0c3.984-3.9 3.986-10.205.085-14.023l-1.744 1.743c2.904 2.905 2.904 7.634 0 10.538s-7.634 2.904-10.538 0-2.904-7.634 0-10.538l4.647-4.646.582-.665zm3.568 3.899a1.327 1.327 0 00-1.327 1.327 1.327 1.327 0 001.327 1.328A1.327 1.327 0 0016.9 5.226 1.327 1.327 0 0015.573 3.9z"></path></svg>PyTorch</span></li><li><span class="badge" style="--b:#D97757"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"></path></svg>Claude Code</span></li></ul>
 <ul><li><span class="badge" style="--b:#000000">MCP</span></li><li><span class="badge" style="--b:#FCC624;--bi:#1b1b1b"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 00-.088-.042c-.104-.045-.198-.064-.284-.133a1.312 1.312 0 00-.22-.066c.05-.06.146-.133.183-.198.053-.128.082-.264.088-.402v-.02a1.21 1.21 0 00-.061-.4c-.045-.134-.101-.2-.183-.333-.084-.066-.167-.132-.267-.132h-.016c-.093 0-.176.03-.262.132a.8.8 0 00-.205.334 1.18 1.18 0 00-.09.4v.019c.002.089.008.179.02.267-.193-.067-.438-.135-.607-.202a1.635 1.635 0 01-.018-.2v-.02a1.772 1.772 0 01.15-.768c.082-.22.232-.406.43-.533a.985.985 0 01.594-.2zm-2.962.059h.036c.142 0 .27.048.399.135.146.129.264.288.344.465.09.199.14.4.153.667v.004c.007.134.006.2-.002.266v.08c-.03.007-.056.018-.083.024-.152.055-.274.135-.393.2.012-.09.013-.18.003-.267v-.015c-.012-.133-.04-.2-.082-.333a.613.613 0 00-.166-.267.248.248 0 00-.183-.064h-.021c-.071.006-.13.04-.186.132a.552.552 0 00-.12.27.944.944 0 00-.023.33v.015c.012.135.037.2.08.334.046.134.098.2.166.268.01.009.02.018.034.024-.07.057-.117.07-.176.136a.304.304 0 01-.131.068 2.62 2.62 0 01-.275-.402 1.772 1.772 0 01-.155-.667 1.759 1.759 0 01.08-.668 1.43 1.43 0 01.283-.535c.128-.133.26-.2.418-.2zm1.37 1.706c.332 0 .733.065 1.216.399.293.2.523.269 1.052.468h.003c.255.136.405.266.478.399v-.131a.571.571 0 01.016.47c-.123.31-.516.643-1.063.842v.002c-.268.135-.501.333-.775.465-.276.135-.588.292-1.012.267a1.139 1.139 0 01-.448-.067 3.566 3.566 0 01-.322-.198c-.195-.135-.363-.332-.612-.465v-.005h-.005c-.4-.246-.616-.512-.686-.71-.07-.268-.005-.47.193-.6.224-.135.38-.271.483-.336.104-.074.143-.102.176-.131h.002v-.003c.169-.202.436-.47.839-.601.139-.036.294-.065.466-.065zm2.8 2.142c.358 1.417 1.196 3.475 1.735 4.473.286.534.855 1.659 1.102 3.024.156-.005.33.018.513.064.646-1.671-.546-3.467-1.089-3.966-.22-.2-.232-.335-.123-.335.59.534 1.365 1.572 1.646 2.757.13.535.16 1.104.021 1.67.067.028.135.06.205.067 1.032.534 1.413.938 1.23 1.537v-.043c-.06-.003-.12 0-.18 0h-.016c.151-.467-.182-.825-1.065-1.224-.915-.4-1.646-.336-1.77.465-.008.043-.013.066-.018.135-.068.023-.139.053-.209.064-.43.268-.662.669-.793 1.187-.13.533-.17 1.156-.205 1.869v.003c-.02.334-.17.838-.319 1.35-1.5 1.072-3.58 1.538-5.348.334a2.645 2.645 0 00-.402-.533 1.45 1.45 0 00-.275-.333c.182 0 .338-.03.465-.067a.615.615 0 00.314-.334c.108-.267 0-.697-.345-1.163-.345-.467-.931-.995-1.788-1.521-.63-.4-.986-.87-1.15-1.396-.165-.534-.143-1.085-.015-1.645.245-1.07.873-2.11 1.274-2.763.107-.065.037.135-.408.974-.396.751-1.14 2.497-.122 3.854a8.123 8.123 0 01.647-2.876c.564-1.278 1.743-3.504 1.836-5.268.048.036.217.135.289.202.218.133.38.333.59.465.21.201.477.335.876.335.039.003.075.006.11.006.412 0 .73-.134.997-.268.29-.134.52-.334.74-.4h.005c.467-.135.835-.402 1.044-.7zm2.185 8.958c.037.6.343 1.245.882 1.377.588.134 1.434-.333 1.791-.765l.211-.01c.315-.007.577.01.847.268l.003.003c.208.199.305.53.391.876.085.4.154.78.409 1.066.486.527.645.906.636 1.14l.003-.007v.018l-.003-.012c-.015.262-.185.396-.498.595-.63.401-1.746.712-2.457 1.57-.618.737-1.37 1.14-2.036 1.191-.664.053-1.237-.2-1.574-.898l-.005-.003c-.21-.4-.12-1.025.056-1.69.176-.668.428-1.344.463-1.897.037-.714.076-1.335.195-1.814.12-.465.308-.797.641-.984l.045-.022zm-10.814.049h.01c.053 0 .105.005.157.014.376.055.706.333 1.023.752l.91 1.664.003.003c.243.533.754 1.064 1.189 1.637.434.598.77 1.131.729 1.57v.006c-.057.744-.48 1.148-1.125 1.294-.645.135-1.52.002-2.395-.464-.968-.536-2.118-.469-2.857-.602-.369-.066-.61-.2-.723-.4-.11-.2-.113-.602.123-1.23v-.004l.002-.003c.117-.334.03-.752-.027-1.118-.055-.401-.083-.71.043-.94.16-.334.396-.4.69-.533.294-.135.64-.202.915-.47h.002v-.002c.256-.268.445-.601.668-.838.19-.201.38-.336.663-.336zm7.159-9.074c-.435.201-.945.535-1.488.535-.542 0-.97-.267-1.28-.466-.154-.134-.28-.268-.373-.335-.164-.134-.144-.333-.074-.333.109.016.129.134.199.2.096.066.215.2.36.333.292.2.68.467 1.167.467.485 0 1.053-.267 1.398-.466.195-.135.445-.334.648-.467.156-.136.149-.267.279-.267.128.016.034.134-.147.332a8.097 8.097 0 01-.69.468zm-1.082-1.583V5.64c-.006-.02.013-.042.029-.05.074-.043.18-.027.26.004.063 0 .16.067.15.135-.006.049-.085.066-.135.066-.055 0-.092-.043-.141-.068-.052-.018-.146-.008-.163-.065zm-.551 0c-.02.058-.113.049-.166.066-.047.025-.086.068-.14.068-.05 0-.13-.02-.136-.068-.01-.066.088-.133.15-.133.08-.031.184-.047.259-.005.019.009.036.03.03.05v.02h.003z"></path></svg>Linux</span></li><li><span class="badge" style="--b:#F05032"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.546 10.93L13.067.452c-.604-.603-1.582-.603-2.188 0L8.708 2.627l2.76 2.76c.645-.215 1.379-.07 1.889.441.516.515.658 1.258.438 1.9l2.658 2.66c.645-.223 1.387-.078 1.9.435.721.72.721 1.884 0 2.604-.719.719-1.881.719-2.6 0-.539-.541-.674-1.337-.404-1.996L12.86 8.955v6.525c.176.086.342.203.488.348.713.721.713 1.883 0 2.6-.719.721-1.889.721-2.609 0-.719-.719-.719-1.879 0-2.598.182-.18.387-.316.605-.406V8.835c-.217-.091-.424-.222-.6-.401-.545-.545-.676-1.342-.396-2.009L7.636 3.7.45 10.881c-.6.605-.6 1.584 0 2.189l10.48 10.477c.604.604 1.582.604 2.186 0l10.43-10.43c.605-.603.605-1.582 0-2.187"></path></svg>Git</span></li><li><span class="badge" style="--b:#2496ED"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.184-.186h-2.12a.186.186 0 00-.186.186v1.887c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 00-.75.748 11.376 11.376 0 00.692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 003.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288Z"></path></svg>Docker</span></li><li><span class="badge" style="--b:#009688"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .0387C5.3729.0384.0003 5.3931 0 11.9988c-.001 6.6066 5.372 11.9628 12 11.9625 6.628.0003 12.001-5.3559 12-11.9625-.0003-6.6057-5.3729-11.9604-12-11.96m-.829 5.4153h7.55l-7.5805 5.3284h5.1828L5.279 18.5436q2.9466-6.5444 5.892-13.0896"></path></svg>FastAPI</span></li><li><span class="badge" style="--b:#4169E1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5594 14.7228a.5269.5269 0 0 0-.0563-.1191c-.139-.2632-.4768-.3418-1.0074-.2321-1.6533.3411-2.2935.1312-2.5256-.0191 1.342-2.0482 2.445-4.522 3.0411-6.8297.2714-1.0507.7982-3.5237.1222-4.7316a1.5641 1.5641 0 0 0-.1509-.235C21.6931.9086 19.8007.0248 17.5099.0005c-1.4947-.0158-2.7705.3461-3.1161.4794a9.449 9.449 0 0 0-.5159-.0816 8.044 8.044 0 0 0-1.3114-.1278c-1.1822-.0184-2.2038.2642-3.0498.8406-.8573-.3211-4.7888-1.645-7.2219.0788C.9359 2.1526.3086 3.8733.4302 6.3043c.0409.818.5069 3.334 1.2423 5.7436.4598 1.5065.9387 2.7019 1.4334 3.582.553.9942 1.1259 1.5933 1.7143 1.7895.4474.1491 1.1327.1441 1.8581-.7279.8012-.9635 1.5903-1.8258 1.9446-2.2069.4351.2355.9064.3625 1.39.3772a.0569.0569 0 0 0 .0004.0041 11.0312 11.0312 0 0 0-.2472.3054c-.3389.4302-.4094.5197-1.5002.7443-.3102.064-1.1344.2339-1.1464.8115-.0025.1224.0329.2309.0919.3268.2269.4231.9216.6097 1.015.6331 1.3345.3335 2.5044.092 3.3714-.6787-.017 2.231.0775 4.4174.3454 5.0874.2212.5529.7618 1.9045 2.4692 1.9043.2505 0 .5263-.0291.8296-.0941 1.7819-.3821 2.5557-1.1696 2.855-2.9059.1503-.8707.4016-2.8753.5388-4.1012.0169-.0703.0357-.1207.057-.1362.0007-.0005.0697-.0471.4272.0307a.3673.3673 0 0 0 .0443.0068l.2539.0223.0149.001c.8468.0384 1.9114-.1426 2.5312-.4308.6438-.2988 1.8057-1.0323 1.5951-1.6698zM2.371 11.8765c-.7435-2.4358-1.1779-4.8851-1.2123-5.5719-.1086-2.1714.4171-3.6829 1.5623-4.4927 1.8367-1.2986 4.8398-.5408 6.108-.13-.0032.0032-.0066.0061-.0098.0094-2.0238 2.044-1.9758 5.536-1.9708 5.7495-.0002.0823.0066.1989.0162.3593.0348.5873.0996 1.6804-.0735 2.9184-.1609 1.1504.1937 2.2764.9728 3.0892.0806.0841.1648.1631.2518.2374-.3468.3714-1.1004 1.1926-1.9025 2.1576-.5677.6825-.9597.5517-1.0886.5087-.3919-.1307-.813-.5871-1.2381-1.3223-.4796-.839-.9635-2.0317-1.4155-3.5126zm6.0072 5.0871c-.1711-.0428-.3271-.1132-.4322-.1772.0889-.0394.2374-.0902.4833-.1409 1.2833-.2641 1.4815-.4506 1.9143-1.0002.0992-.126.2116-.2687.3673-.4426a.3549.3549 0 0 0 .0737-.1298c.1708-.1513.2724-.1099.4369-.0417.156.0646.3078.26.3695.4752.0291.1016.0619.2945-.0452.4444-.9043 1.2658-2.2216 1.2494-3.1676 1.0128zm2.094-3.988-.0525.141c-.133.3566-.2567.6881-.3334 1.003-.6674-.0021-1.3168-.2872-1.8105-.8024-.6279-.6551-.9131-1.5664-.7825-2.5004.1828-1.3079.1153-2.4468.079-3.0586-.005-.0857-.0095-.1607-.0122-.2199.2957-.2621 1.6659-.9962 2.6429-.7724.4459.1022.7176.4057.8305.928.5846 2.7038.0774 3.8307-.3302 4.7363-.084.1866-.1633.3629-.2311.5454zm7.3637 4.5725c-.0169.1768-.0358.376-.0618.5959l-.146.4383a.3547.3547 0 0 0-.0182.1077c-.0059.4747-.054.6489-.115.8693-.0634.2292-.1353.4891-.1794 1.0575-.11 1.4143-.8782 2.2267-2.4172 2.5565-1.5155.3251-1.7843-.4968-2.0212-1.2217a6.5824 6.5824 0 0 0-.0769-.2266c-.2154-.5858-.1911-1.4119-.1574-2.5551.0165-.5612-.0249-1.9013-.3302-2.6462.0044-.2932.0106-.5909.019-.8918a.3529.3529 0 0 0-.0153-.1126 1.4927 1.4927 0 0 0-.0439-.208c-.1226-.4283-.4213-.7866-.7797-.9351-.1424-.059-.4038-.1672-.7178-.0869.067-.276.1831-.5875.309-.9249l.0529-.142c.0595-.16.134-.3257.213-.5012.4265-.9476 1.0106-2.2453.3766-5.1772-.2374-1.0981-1.0304-1.6343-2.2324-1.5098-.7207.0746-1.3799.3654-1.7088.5321a5.6716 5.6716 0 0 0-.1958.1041c.0918-1.1064.4386-3.1741 1.7357-4.4823a4.0306 4.0306 0 0 1 .3033-.276.3532.3532 0 0 0 .1447-.0644c.7524-.5706 1.6945-.8506 2.802-.8325.4091.0067.8017.0339 1.1742.081 1.939.3544 3.2439 1.4468 4.0359 2.3827.8143.9623 1.2552 1.9315 1.4312 2.4543-1.3232-.1346-2.2234.1268-2.6797.779-.9926 1.4189.543 4.1729 1.2811 5.4964.1353.2426.2522.4522.2889.5413.2403.5825.5515.9713.7787 1.2552.0696.087.1372.1714.1885.245-.4008.1155-1.1208.3825-1.0552 1.717-.0123.1563-.0423.4469-.0834.8148-.0461.2077-.0702.4603-.0994.7662zm.8905-1.6211c-.0405-.8316.2691-.9185.5967-1.0105a2.8566 2.8566 0 0 0 .135-.0406 1.202 1.202 0 0 0 .1342.103c.5703.3765 1.5823.4213 3.0068.1344-.2016.1769-.5189.3994-.9533.6011-.4098.1903-1.0957.333-1.7473.3636-.7197.0336-1.0859-.0807-1.1721-.151zm.5695-9.2712c-.0059.3508-.0542.6692-.1054 1.0017-.055.3576-.112.7274-.1264 1.1762-.0142.4368.0404.8909.0932 1.3301.1066.887.216 1.8003-.2075 2.7014a3.5272 3.5272 0 0 1-.1876-.3856c-.0527-.1276-.1669-.3326-.3251-.6162-.6156-1.1041-2.0574-3.6896-1.3193-4.7446.3795-.5427 1.3408-.5661 2.1781-.463zm.2284 7.0137a12.3762 12.3762 0 0 0-.0853-.1074l-.0355-.0444c.7262-1.1995.5842-2.3862.4578-3.4385-.0519-.4318-.1009-.8396-.0885-1.2226.0129-.4061.0666-.7543.1185-1.0911.0639-.415.1288-.8443.1109-1.3505.0134-.0531.0188-.1158.0118-.1902-.0457-.4855-.5999-1.938-1.7294-3.253-.6076-.7073-1.4896-1.4972-2.6889-2.0395.5251-.1066 1.2328-.2035 2.0244-.1859 2.0515.0456 3.6746.8135 4.8242 2.2824a.908.908 0 0 1 .0667.1002c.7231 1.3556-.2762 6.2751-2.9867 10.5405zm-8.8166-6.1162c-.025.1794-.3089.4225-.6211.4225a.5821.5821 0 0 1-.0809-.0056c-.1873-.026-.3765-.144-.5059-.3156-.0458-.0605-.1203-.178-.1055-.2844.0055-.0401.0261-.0985.0925-.1488.1182-.0894.3518-.1226.6096-.0867.3163.0441.6426.1938.6113.4186zm7.9305-.4114c.0111.0792-.049.201-.1531.3102-.0683.0717-.212.1961-.4079.2232a.5456.5456 0 0 1-.075.0052c-.2935 0-.5414-.2344-.5607-.3717-.024-.1765.2641-.3106.5611-.352.297-.0414.6111.0088.6356.1851z"></path></svg>PostgreSQL</span></li></ul>
 </div>
-<h1 class="mark"><canvas id="mark" aria-hidden="true"></canvas><span>Hello there.</span></h1>
+<h1 class="mark"><canvas id="mark" aria-hidden="true"></canvas><span>I build things that interact with the real world and create real value.</span></h1>
 
 </div>
 </header>
@@ -306,21 +352,34 @@ footer{padding-block:24px 48px}
 <div class="wrap">
 <ul class="groups">
 <li class="group"><span class="field">Robotics</span><ul class="items">
-<li><span class="title"><a class="name" href="projects/open-duck-mini-v2/">Learn To Walk</a><span class="pill live" style="--p:#E5534B;--pi:#fff">Live</span></span><span class="line">A 3D-printed robot, taught to walk.</span></li>
-<li><span class="title"><a class="name" href="projects/object-finder-bot/">Where&#x27;s My [Watch]?</a><span class="pill live" style="--p:#E5534B;--pi:#fff">Live</span></span><span class="line">Ask where it is. It drives there.</span></li>
-<li><span class="title"><a class="name" href="projects/3ddsg-drone-navigation/">Indoor Autonomous Flight</a><span class="pill live" style="--p:#E5534B;--pi:#fff">Live</span></span><span class="line">Room to room by scene graph.</span></li>
+<li><span class="title"><a class="name" href="projects/open-duck-mini-v2/">Learn To Walk</a><span class="pill" style="--p:#E5534B;--pi:#fff">Live</span></span><span class="line">A 3D-printed robot, taught to walk.</span></li>
+<li><span class="title"><a class="name" href="projects/object-finder-bot/">Where&#x27;s My [&nbsp;&nbsp;]?</a><span class="pill" style="--p:#E5534B;--pi:#fff">Live</span></span><span class="line">Ask where it is. It drives there.</span></li>
+<li><span class="title"><a class="name" href="projects/3ddsg-drone-navigation/">Indoor Autonomous Flight</a><span class="pill" style="--p:#E5534B;--pi:#fff">Live</span></span><span class="line">Room to room by scene graph.</span></li>
+</ul></li>
+<li class="group"><span class="field">Agents</span><ul class="items">
+<li><span class="title"><a class="name" href="projects/sigma-engine/">Sigma Engine</a><span class="pill" style="--p:#E5534B;--pi:#fff">Live</span></span><span class="line">AI agents trade. Code holds the risk.</span></li>
+<li><span class="title"><a class="name" href="projects/interview-prep-agent/">Job Interview Prep</a><span class="pill" style="--p:#D4A72C;--pi:#1b1b1b"><span class="pk">Awarded by</span>Upstage</span></span><span class="line">Filings in, checked interview questions out.</span></li>
+<li><span class="title"><a class="name" href="projects/deep-report-pipeline/">Deep Report Pipeline</a><span class="pill" style="--p:#D97757;--pi:#fff"><span class="pk">Under review by</span>Anthropic</span></span><span class="line">Any topic to a checked A4 report.</span></li>
+<li><span class="title"><a class="name" href="projects/paper-review-deck/">Paper Review Deck</a><span class="pill" style="--p:#D97757;--pi:#fff"><span class="pk">Under review by</span>Anthropic</span></span><span class="line">Papers to a reproduced review talk.</span></li>
+<li><a class="name" href="projects/career-log/">Career Log</a><span class="line">Daily notes into career insight.</span></li>
+</ul></li>
+<li class="group"><span class="field">Startup</span><ul class="items">
+<li><span class="title"><a class="name" href="projects/impact-bridge/">Impact Bridge</a><span class="pill" style="--p:#E5534B;--pi:#fff">Live</span></span><span class="line">Student marketers for social enterprises.</span></li>
+<li><span class="title"><a class="name" href="projects/first-wrong-step/">Pathfinder</a><span class="pill" style="--p:#2DA44E;--pi:#fff">ON SALE</span><span class="pill" style="--p:#8957E5;--pi:#fff">Top 0.01%</span></span><span class="line">Homework checks and problem picks, automated for teachers.</span></li>
+<li><span class="title"><a class="name" href="projects/ibul-anbu/">Ibul Anbu</a><span class="pill" style="--p:#D4A72C;--pi:#1b1b1b"><span class="pk">Awarded by</span>UOS</span></span><span class="line">Fresh bedding for parents, paid by children.</span></li>
 </ul></li>
 <li class="group"><span class="field">Data</span><ul class="items">
-<li><span class="title"><a class="name" href="projects/rag-finetuning/">RAG-finetuning</a><span class="pill live" style="--p:#E5534B;--pi:#fff">Live</span></span><span class="line">Details to come.</span></li>
-<li><span class="title"><a class="name" href="projects/sigma-engine/">Sigma Engine</a><span class="pill live" style="--p:#E5534B;--pi:#fff">Live</span></span><span class="line">AI agents trade. Code holds the risk.</span></li>
-<li><span class="title"><a class="name" href="projects/interview-prep-agent/">Job Interview Prep</a><span class="pill award" style="--p:#D4A72C;--pi:#1b1b1b"><span class="pk">Awarded by</span>Upstage</span></span><span class="line">Filings in, checked interview questions out.</span></li>
+<li><span class="title"><a class="name" href="projects/rag-finetuning/">RAG-finetuning</a><span class="pill" style="--p:#E5534B;--pi:#fff">Live</span></span><span class="line">Details to come.</span></li>
+<li><span class="title"><a class="name" href="projects/gangil-evacuation-simulation/">Evacuation Simulation</a><span class="pill" style="--p:#E5534B;--pi:#fff">Live</span></span><span class="line">Smoke arrival vs. escape time.</span></li>
 <li><a class="name" href="projects/steps-before-crashes/">Steps Before Crashes</a><span class="line">Where Seoul&#x27;s older pedestrians get hit.</span></li>
+<li><a class="name" href="projects/disaster-library-whitepaper/">Disaster Library Whitepaper</a><span class="line">Old disaster news, new library handbooks.</span></li>
 </ul></li>
 <li class="group"><span class="field">Extra</span><ul class="items">
-<li><span class="title"><a class="name" href="projects/impact-bridge/">Impact Bridge</a><span class="pill live" style="--p:#E5534B;--pi:#fff">Live</span></span><span class="line">Student marketers for social enterprises.</span></li>
-<li><a class="name" href="projects/gangil-evacuation-simulation/">Evacuation Simulation</a><span class="line">Smoke arrival vs. escape time.</span></li>
-<li><span class="title"><a class="name" href="projects/first-wrong-step/">Pathfinder</a><span class="pill sale" style="--p:#2DA44E;--pi:#fff">On sale</span><span class="pill award" style="--p:#8957E5;--pi:#fff">Top 0.01%</span></span><span class="line">Homework checks and problem picks, automated for teachers.</span></li>
-<li><span class="title"><a class="name" href="projects/ibul-anbu/">Ibul Anbu</a><span class="pill award" style="--p:#D4A72C;--pi:#1b1b1b"><span class="pk">Awarded by</span>UOS</span></span><span class="line">Fresh bedding for parents, paid by children.</span></li>
+<li><a class="name" href="projects/branding-in-seongsu/">Branding In Seongsu</a><span class="line">A home for Seongsu&#x27;s vanishing leather craft.</span></li>
+<li><a class="name" href="projects/digital-media-ii/">Digital Media</a><span class="line">Rhino Python to a Seoul game board.</span></li>
+<li><a class="name" href="projects/thank-you-plaque/">Thank-You Plaque</a><span class="line">Students&#x27; thanks, set in a plaque.</span></li>
+<li><span class="title"><a class="name" href="projects/pm-decision-making/">PM Decision Making</a><span class="pill" style="--p:#6B6B6B;--pi:#fff">Pending</span></span><span class="line">Problem framing and MVP scoping.</span></li>
+<li><span class="title"><a class="name" href="projects/data-engineering-fundamentals/">Data Engineering Fundamentals</a><span class="pill" style="--p:#6B6B6B;--pi:#fff">Pending</span></span><span class="line">16 weeks, Python to Databricks.</span></li>
 </ul></li>
 </ul>
 </div>
@@ -328,13 +387,17 @@ footer{padding-block:24px 48px}
 
 <footer class="fade">
 <div class="wrap foot">
+<div class="icons">
+<a href="https://github.com/isopink" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg></a>
+<span class="pending" role="img" aria-label="LinkedIn, link to be added"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm2.2 6.6V18h2.6V9.6H6.2zm1.3-4.1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM10.6 9.6V18h2.6v-4.4c0-1.2.6-1.9 1.6-1.9s1.4.7 1.4 1.9V18h2.6v-4.9c0-2.3-1.2-3.7-3.2-3.7-1.1 0-1.9.5-2.4 1.2V9.6h-2.6z" fill-rule="evenodd"></path></svg></span>
+</div>
 <p>2sm9908@gmail.com</p>
 </div>
 </footer>
 
 <script>
 (function () {
-  var WORDS = ['InterviewPrepAgent', 'Python', 'StepsBeforeCrashes', 'FastAPI', 'OpenDuckMini', 'SolarPro', 'IndoorAutonomousFlight', 'IsaacLab', 'PPO', 'SigmaEngine', 'Claude', 'RaspberryPi', 'ROS2', 'Jetson', 'ObjectFinderBot', 'CLIP', 'LightGBM', 'PoissonGLM', 'IFC', 'BIM', 'ONNX', 'Codex', 'Java', 'SceneGraph', 'SpatialStatistics', 'PublicData', 'Revit', 'Pathfinder', 'FDS', 'EvacuationSimulation', 'FirstWrongStep', 'FewShot', 'SymPy', 'SQLite', 'IbulAnbu', 'ImpactBridge', 'Enactus', 'Docker', 'PostgreSQL'];
+  var WORDS = ['InterviewPrepAgent', 'Python', 'StepsBeforeCrashes', 'FastAPI', 'OpenDuckMini', 'SolarPro', 'IndoorAutonomousFlight', 'IsaacLab', 'DisasterLibraryWhitepaper', 'PPO', 'SigmaEngine', 'Claude', 'DeepReportPipeline', 'RaspberryPi', 'PaperReviewDeck', 'ROS2', 'CareerLog', 'Jetson', 'ObjectFinderBot', 'CLIP', 'LightGBM', 'PoissonGLM', 'IFC', 'BIM', 'ONNX', 'Codex', 'Java', 'SceneGraph', 'SpatialStatistics', 'PublicData', 'BrandingInSeongsu', 'Revit', 'Pathfinder', 'FDS', 'EvacuationSimulation', 'DigitalMedia', 'Grasshopper', 'Rhino', 'QGIS', 'ThankYouPlaque', 'Illustrator', 'FirstWrongStep', 'FewShot', 'SymPy', 'SQLite', 'IbulAnbu', 'ImpactBridge', 'Enactus', 'PMDecisionMaking', 'PRD', 'DataEngineering', 'Docker', 'PostgreSQL'];
   var canvas = document.getElementById('mark');
   var ctx = canvas.getContext('2d'), mark = canvas.parentElement, offX = 0, offY = 0, CW = 0, CH = 0;
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -345,7 +408,7 @@ footer{padding-block:24px 48px}
 
   function token(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 
-  var SENTENCE = 'Hello there.', msize = 60, mlines = [];
+  var SENTENCE = 'I build things that interact with the real world and create real value.', msize = 60, mlines = [];
   // Size the sentence to the width, break it into lines, and give the heading that height.
   function layout() {
     var w = mark.clientWidth, m = document.createElement('canvas').getContext('2d');
@@ -385,7 +448,7 @@ footer{padding-block:24px 48px}
     var mask = document.createElement('canvas'); mask.width = W; mask.height = H;
     var m = mask.getContext('2d'), nth = 0;
     m.font = '700 ' + msize + 'px ' + token('--font-display');
-    m.textBaseline = 'top'; m.lineWidth = msize * 0.06; m.lineJoin = 'round';
+    m.textBaseline = 'top'; m.lineWidth = msize * 0.04; m.lineJoin = 'round';
     mlines.forEach(function (line, row) {
       var x = 0;
       line.forEach(function (word) {
@@ -468,7 +531,7 @@ footer{padding-block:24px 48px}
   if (window.IntersectionObserver) new IntersectionObserver(function (es) { seen = es[0].isIntersecting; if (seen) wake(); }).observe(mark);
   function wake() { if (!running && !still) { running = true; raf = requestAnimationFrame(paint); } }
 
-  var ready = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('700 100px "Noto Serif KR"', SENTENCE), document.fonts.load('500 11px "IBM Plex Mono"')]) : Promise.resolve();
+  var ready = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('700 100px "IBM Plex Sans"'), document.fonts.load('500 11px "IBM Plex Mono"')]) : Promise.resolve();
   function go() {
     played = false;
     // The list comes up softly once the name has gathered.
