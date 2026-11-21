@@ -3,26 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101010">
 <title>Sigma Engine</title>
 <meta name="description" content="Claude Code agents debate Korean stocks; code sizes orders and enforces limits.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
 :root{
---color-paper:#fff;--color-paper-2:oklch(94% 0 0);
---color-ink:#000;--color-ink-2:oklch(20% 0 0);--color-muted:oklch(32% 0 0);--color-soft:oklch(48% 0 0);
---color-rule:oklch(0% 0 0 / 0.9);--color-rule-2:oklch(0% 0 0 / 0.28);
---color-accent-ink:#fff;--color-focus:#000;
---font-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;--font-mono:"IBM Plex Mono",ui-monospace,monospace;
+--color-paper:#101010;--color-paper-2:#161616;
+--color-ink:#f2f2f2;--color-ink-2:#bdbdbd;--color-muted:#8b949e;--color-soft:#5a5a5a;
+--color-rule:#3d3a39;--color-rule-2:#2a2a2a;
+--color-accent-ink:#101010;--color-focus:#d6d6d6;
+--font-body:"Noto Serif KR","AppleMyungjo","Batang",serif;--font-mono:"IBM Plex Mono",ui-monospace,monospace;
 --text-display:clamp(2.25rem,5vw,4rem);--text-section:clamp(1.5rem,2.4vw,2rem);--text-lead:1.25rem;--text-md:1rem;--text-sm:0.875rem;
 --space-xs:0.5rem;--space-sm:0.75rem;--space-md:1rem;--space-lg:1.5rem;--space-xl:2rem;--space-2xl:3rem;--space-3xl:4.5rem;
 --container:72rem;--gutter:clamp(1rem,4.4vw,4rem);
-color-scheme:light;
+color-scheme:dark;
 }
 html,body{overflow-x:clip}
+html{background:var(--color-paper)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--color-paper);color:var(--color-ink);font-family:var(--font-body);font-size:var(--text-md);line-height:1.6}
+body{margin:0;background:var(--color-paper);color:var(--color-ink);font-family:var(--font-body);font-size:var(--text-md);line-height:1.6;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
 a{color:var(--color-ink);text-decoration-thickness:1px;text-underline-offset:0.2em}
 a:hover{text-decoration-color:transparent}
 a:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
@@ -31,8 +33,8 @@ a:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
 .top{padding-block:var(--space-xl) var(--space-2xl);display:flex;flex-direction:column;align-items:flex-start;row-gap:var(--space-md)}
 .back{display:inline-flex;align-items:center;min-height:3rem;font-size:var(--text-sm);font-weight:500}
 .field{margin:var(--space-md) 0 0;font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
-.kind{margin-left:var(--space-sm);padding:0 0.375rem;border:1px solid var(--color-rule-2);font-size:0.75rem}
-h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;letter-spacing:-0.022em;text-wrap:balance;overflow-wrap:break-word;min-width:0}
+.kind{margin-left:var(--space-sm);padding:0 0.375rem;border:1px solid var(--color-rule);border-radius:2px;font-size:0.75rem}
+h1{margin:0;font-size:var(--text-display);font-weight:500;line-height:1.1;letter-spacing:-0.65px;text-wrap:balance;overflow-wrap:break-word;min-width:0}
 .paper-title{font-size:clamp(1.75rem,3.4vw,2.75rem);line-height:1.15;max-width:30ch}
 .lead{margin:0;max-width:none;font-size:var(--text-lead);line-height:1.4;color:var(--color-ink-2);text-wrap:pretty}
 .facts{margin:var(--space-md) 0 0;width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-md) var(--space-xl);border-top:1px solid var(--color-rule-2);padding-top:var(--space-md)}
@@ -48,7 +50,7 @@ h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;lette
 .gh:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
 .actions{display:flex;flex-wrap:wrap;gap:var(--space-sm)}
 .actions:empty{display:none}
-.btn{display:inline-flex;align-items:center;height:3rem;padding-inline:var(--space-lg);border:1px solid var(--color-ink);font-weight:500;text-decoration:none;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;height:3rem;padding-inline:var(--space-lg);border:1px solid var(--color-ink);border-radius:2px;font-weight:500;text-decoration:none;white-space:nowrap}
 .btn:first-child{background:var(--color-ink);color:var(--color-accent-ink)}
 .fig{margin:0;display:flex;flex-direction:column;row-gap:var(--space-xs)}
 .fig img,.fig video{display:block;width:100%;height:auto;border:1px solid var(--color-rule-2);background:var(--color-paper-2)}
@@ -60,21 +62,22 @@ h1{margin:0;font-size:var(--text-display);font-weight:600;line-height:1.05;lette
 .kv dt{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
 .kv dd{margin:0;color:var(--color-ink-2);font-size:0.9375rem}
 @media (max-width:48rem){.kv{grid-template-columns:minmax(0,1fr)}}
-.part{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,9fr);column-gap:var(--space-2xl);padding-block:var(--space-3xl);scroll-margin-top:3.5rem}
-.part h2{margin:0;font-size:var(--text-section);font-weight:600;line-height:1.15;letter-spacing:0.02em;text-transform:uppercase;overflow-wrap:anywhere}
+.part{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,9fr);column-gap:var(--space-2xl);padding-block:var(--space-2xl);border-top:1px solid var(--color-rule-2);scroll-margin-top:3.5rem}
+.part h2{margin:0.35rem 0 0;align-self:start;display:flex;align-items:center;font-size:0.8125rem;font-weight:600;line-height:1.5;letter-spacing:2.2px;text-transform:uppercase;color:var(--color-muted);overflow-wrap:anywhere}
+.part h2::before{content:"";flex:none;width:4px;height:10px;margin-right:9px;background:var(--color-ink)}
 .part-body{min-width:0;display:flex;flex-direction:column;row-gap:var(--space-lg)}
 .part-body p,.part-body li{max-width:68ch;color:var(--color-ink-2)}
 .part-body p{margin:0}
 .part-body > p:first-child{font-size:1.125rem;line-height:1.5;color:var(--color-ink)}
 .part-body ol,.part-body ul{margin:0;padding-left:1.25em;display:flex;flex-direction:column;row-gap:var(--space-sm)}
-.part-body h3{margin:var(--space-md) 0 0;font-size:1.125rem;font-weight:600}
+.part-body h3{margin:var(--space-md) 0 0;font-size:1.125rem;font-weight:500}
 .part-body code{font-family:var(--font-mono);font-size:0.8125rem;color:var(--color-muted);overflow-wrap:anywhere}
 .part-body blockquote{margin:0;padding-left:var(--space-md);border-left:1px solid var(--color-rule-2);color:var(--color-ink-2)}
 .tablebox{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:0.9375rem;font-variant-numeric:tabular-nums}
 th,td{padding:var(--space-sm) var(--space-md) var(--space-sm) 0;border-bottom:1px solid var(--color-rule-2);text-align:left;vertical-align:top}
 th{font-size:var(--text-sm);font-weight:500;color:var(--color-muted)}
-td:first-child{font-weight:600;color:var(--color-ink);white-space:nowrap}
+td:first-child{font-weight:500;color:var(--color-ink);white-space:nowrap}
 .paper .part-body > p:first-child{font-size:var(--text-md);color:var(--color-ink-2)}
 .intro p{max-width:68ch;color:var(--color-ink-2)}
 .foot{padding-block:var(--space-2xl)}
@@ -90,7 +93,7 @@ td:first-child{white-space:normal}
 .show .slide img,.show .slide video{display:block;width:auto;max-width:100%;max-height:160svh;border:1px solid var(--color-rule-2);background:var(--color-paper-2)}
 .show .slide figcaption{font-size:var(--text-sm);color:var(--color-muted)}
 .show .bar{display:flex;align-items:center;gap:var(--space-md);font-size:var(--text-sm);color:var(--color-muted)}
-.show button{border:1px solid var(--color-rule-2);background:none;color:var(--color-ink);font:inherit;width:2.5rem;height:2.5rem;cursor:pointer}
+.show button{border:1px solid var(--color-rule);border-radius:2px;background:none;color:var(--color-ink);font:inherit;width:2.5rem;height:2.5rem;cursor:pointer}
 .show button:focus-visible{outline:2px solid var(--color-focus);outline-offset:2px}
 </style>
 </head>

@@ -22,16 +22,11 @@ CASES = [
     ('Robotics/open-duck-mini-v2', None),
     ('Robotics/object-finder-bot', None),
     ('Robotics/3ddsg-drone-navigation', None),
-    ('Architecture/branding-in-seongsu', None),
     ('Architecture/gangil-evacuation-simulation', None),
-    ('Architecture/digital-media-ii', None),
-    ('Architecture/thank-you-plaque', None),
     ('Startup/first-wrong-step', None),
     ('Startup/ibul-anbu', None),
     # Photos show a third party's workplace; consent is still open, so the page goes out without them.
     ('Startup/impact-bridge', []),
-    ('Startup/pm-decision-making', None),
-    ('Data/data-engineering-fundamentals', None),
 ]
 GH_ICON = '<a class="gh" href="%s" aria-label="View on GitHub" title="View on GitHub"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>'
 # Fact labels the case pages do not show.
@@ -41,11 +36,8 @@ VIDEO_MAX_MB = 8
 # Hashtags under each title (what the case was built with).
 TAGS = {
     '3ddsg-drone-navigation': ['Crazyflie2.1', 'FlowDeckV2', 'Python3.12', 'MuJoCo', 'IFC', 'Neo4j', 'SceneGraph'],
-    'branding-in-seongsu': ['Rhino', 'AutoCAD', 'Illustrator', 'AfterEffects'],
     'career-log': ['OpenAI', 'gpt-4o-mini', 'Java17', 'SpringBoot', 'PostgreSQL', 'DockerCompose', 'AWSEC2'],
-    'data-engineering-fundamentals': ['Python3.14', 'venv', 'pip', 'Jupyter', 'VSCode'],
     'deep-report-pipeline': ['ClaudeSkill', 'Python', 'Nodejs', 'pdfjs', 'EditorialMonoDesignSystem'],
-    'digital-media-ii': ['Rhino7', 'Grasshopper', 'Weaverbird', 'Kangaroo2', 'Chromodoris', 'LunchBox', '@it', 'GhPython', 'QGIS'],
     'disaster-library-whitepaper': ['Python', 'rdflib', 'pandas', 'scikit-learn', 'DBSCAN'],
     'first-wrong-step': ['FewShotLearning', 'ClaudeOpus5.5API', 'Python', 'SymPy', 'SQLite'],
     'gangil-evacuation-simulation': ['Revit2027', 'Pathfinder2026', 'FDS6.11.1'],
@@ -55,10 +47,8 @@ TAGS = {
     'object-finder-bot': ['TurtleBot3WafflePi', 'JetsonXavierNX', 'ROS2', 'Nav2', 'OpenCLIP', 'ViT-B/32'],
     'open-duck-mini-v2': ['RaspberryPi', '14STS3215Servos', 'IsaacLab2.2', 'RSL-RL', 'PPO', 'ONNXRuntime'],
     'paper-review-deck': ['ClaudeSkill', 'Python', 'Playwright', 'pptxgenjs', 'KaTeX', 'alphaXiv', 'MCP'],
-    'pm-decision-making': ['GeminiNotebook', 'Notion', 'Claude', 'Zoom'],
     'sigma-engine': ['ClaudeCode', 'SubAgents', 'PreToolUseHook', 'MCPServer', 'KiwoomRESTAPI', 'Python', 'Supabase'],
     'steps-before-crashes': ['Python', 'geopandas', 'PySAL', 'esda', 'statsmodels'],
-    'thank-you-plaque': ['AdobeIllustrator28.7', 'H2gtrE'],
 }
 
 # Live pages linked from a case page.
@@ -237,10 +227,10 @@ PAGE_CSS = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'case.c
 
 def page(title, desc, body):
     return ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
-            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<meta name="theme-color" content="#101010">\n'
             '<title>%s</title>\n<meta name="description" content="%s">\n'
             '<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
-            '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">\n'
+            '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">\n'
             '<style>\n%s</style>\n</head>\n<body>\n%s\n</body>\n</html>\n') % (esc(title), esc(desc), PAGE_CSS, body)
 
 
@@ -280,24 +270,24 @@ def media(imgs):
 
 
 # Field names as the site shows them.
-FIELD_NAME = {'LLM agents': 'Agents', 'Architecture': 'Extra', 'Design': 'Extra'}
+FIELD_NAME = {'LLM agents': 'Data', 'Startup': 'Extra'}
 # Projects shown under a different field from the one in their entry.md.
-FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Data', 'pm-decision-making': 'Extra', 'data-engineering-fundamentals': 'Extra'}
+FIELD_OVERRIDE = {'gangil-evacuation-simulation': 'Extra', 'deep-report-pipeline': 'Extra', 'paper-review-deck': 'Extra'}
+# Projects that keep a case page but are left off the main page list.
+HIDE_FROM_LIST = {'career-log', 'deep-report-pipeline', 'paper-review-deck', 'disaster-library-whitepaper'}
+# Projects listed last within their field.
+LIST_LAST = {'deep-report-pipeline', 'paper-review-deck'}
 # Projects shown under a different name from the one in their entry.md.
 TITLE_OVERRIDE = {
     'interview-prep-agent': 'Job Interview Prep',
     'first-wrong-step': 'Pathfinder',
     'gangil-evacuation-simulation': 'Evacuation Simulation',
-    'object-finder-bot': "Where's My [\u00a0\u00a0]?",
+    'object-finder-bot': "Where's My [Watch]?",
     '3ddsg-drone-navigation': 'Indoor Autonomous Flight',
     'deep-report-pipeline': 'Deep Report Pipeline',
     'paper-review-deck': 'Paper Review Deck',
     'career-log': 'Career Log',
     'disaster-library-whitepaper': 'Disaster Library Whitepaper',
-    'data-engineering-fundamentals': 'Data Engineering Fundamentals',
-    'pm-decision-making': 'PM Decision Making',
-    'thank-you-plaque': 'Thank-You Plaque',
-    'branding-in-seongsu': 'Branding In Seongsu',
     'open-duck-mini-v2': 'Learn To Walk',
 }
 
@@ -396,11 +386,8 @@ BADGES = {
     'paper-review-deck': ('Under review by', 'Anthropic', '#D97757', '#fff'),
     'deep-report-pipeline': ('Under review by', 'Anthropic', '#D97757', '#fff'),
     'impact-bridge': ('', 'Live', '#E5534B', '#fff'),
-    'gangil-evacuation-simulation': ('', 'Live', '#E5534B', '#fff'),
-    'pm-decision-making': ('', 'Pending', '#6B6B6B', '#fff'),
-    'data-engineering-fundamentals': ('', 'Pending', '#6B6B6B', '#fff'),
     'ibul-anbu': ('Awarded by', 'UOS', '#D4A72C', '#1b1b1b'),
-    'first-wrong-step': [('', 'ON SALE', '#2DA44E', '#fff'), ('', 'Top 0.01%', '#8957E5', '#fff')],
+    'first-wrong-step': [('', 'On sale', '#2DA44E', '#fff'), ('', 'Top 0.01%', '#8957E5', '#fff')],
 }
 
 
@@ -416,15 +403,10 @@ LINE_OVERRIDE = {
     'career-log': 'Daily notes into career insight.',
     'steps-before-crashes': "Where Seoul's older pedestrians get hit.",
     'disaster-library-whitepaper': 'Old disaster news, new library handbooks.',
-    'data-engineering-fundamentals': '16 weeks, Python to Databricks.',
     'gangil-evacuation-simulation': 'Smoke arrival vs. escape time.',
     'impact-bridge': 'Student marketers for social enterprises.',
     'first-wrong-step': 'Homework checks and problem picks, automated for teachers.',
     'ibul-anbu': 'Fresh bedding for parents, paid by children.',
-    'pm-decision-making': 'Problem framing and MVP scoping.',
-    'branding-in-seongsu': "A home for Seongsu's vanishing leather craft.",
-    'digital-media-ii': 'Rhino Python to a Seoul game board.',
-    'thank-you-plaque': "Students' thanks, set in a plaque.",
 }
 
 
@@ -433,15 +415,15 @@ def P(folder):
     return (FIELD_NAME.get(b['field'], b['field']), 'projects/%s/' % b['slug'], b['title'], LINE_OVERRIDE.get(b['slug'], b['line']), b['kind'] == 'coursework')
 
 
-ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md'))]
-FIELD_ORDER = ['Robotics', 'Agents', 'Startup', 'Data', 'Extra']
+ROWS = [P(c[0]) for c in CASES if os.path.exists(os.path.join(SRC, c[0], 'entry.md')) and c[0].split('/')[1] not in HIDE_FROM_LIST]
+FIELD_ORDER = ['Robotics', 'Data', 'Extra']
 def _has(href, word):
     badges = BADGES.get(href.split('/')[1]) or []
     return any(b[1] == word for b in ([badges] if isinstance(badges, tuple) else badges))
 def is_live(href):
     return _has(href, 'Live')
 def rank(href):
-    return 0 if _has(href, 'Live') else 2 if _has(href, 'Pending') else 1
+    return 3 if href.split('/')[1] in LIST_LAST else 0 if _has(href, 'Live') else 2 if _has(href, 'Pending') else 1
 
 
 # Fields in their set order; within a field, Live projects come first and Pending ones last.
@@ -461,7 +443,7 @@ for field, href, title, line, course in ROWS:
     if isinstance(badges, tuple):
         badges = [badges]
     if badges:
-        pills = ''.join('<span class="pill" style="--p:%s;--pi:%s">%s%s</span>' % (bg, fg, '<span class="pk">%s</span>' % esc(k) if k else '', esc(v)) for k, v, bg, fg in badges)
+        pills = ''.join('<span class="pill%s" style="--p:%s;--pi:%s">%s%s</span>' % (' live' if v == 'Live' else ' sale' if v == 'On sale' else ' award' if k.startswith('Awarded') or v.startswith('Top ') else '', bg, fg, '<span class="pk">%s</span>' % esc(k) if k else '', esc(v)) for k, v, bg, fg in badges)
         name = '<span class="title">%s%s</span>' % (name, pills)
     out.append('<li>%s<span class="line">%s%s</span></li>' % (name, esc(line), tag))
 out += ['</ul></li>', '</ul>']
@@ -478,9 +460,7 @@ if '.tag{' not in idx:
                       '.items .line{color:var(--color-ink-2)}\n.tag{display:inline-block;margin-left:var(--space-sm);padding:0 0.375rem;border:var(--rule-hair) solid var(--color-rule-2);font-size:0.75rem;color:var(--color-muted);vertical-align:0.1em;white-space:nowrap}', 1)
 
 # Words the opening tree and the sentence are set in: every project title and the tools in its entry.
-NEW_WORDS = ['BrandingInSeongsu', 'Revit', 'Pathfinder', 'FDS', 'EvacuationSimulation', 'DigitalMedia', 'Grasshopper', 'Rhino',
-             'QGIS', 'ThankYouPlaque', 'Illustrator', 'FirstWrongStep', 'FewShot', 'SymPy', 'SQLite', 'IbulAnbu', 'ImpactBridge',
-             'Enactus', 'PMDecisionMaking', 'PRD', 'DataEngineering', 'Docker', 'PostgreSQL']
+NEW_WORDS = ['Revit', 'Pathfinder', 'FDS', 'EvacuationSimulation', 'FirstWrongStep', 'FewShot', 'SymPy', 'SQLite', 'IbulAnbu', 'ImpactBridge', 'Enactus', 'Docker', 'PostgreSQL']
 for m in list(re.finditer(r"var WORDS = \[(.*?)\];", idx)):
     have = re.findall(r"'([^']+)'", m.group(1))
     add = [w for w in NEW_WORDS if w not in have]
